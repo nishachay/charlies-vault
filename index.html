@@ -2057,8 +2057,20 @@ const SONGS = [
       }
       if (currentSort === 'title') list.sort((a,b) => a.title.localeCompare(b.title));
       else if (currentSort === 'title-desc') list.sort((a,b) => b.title.localeCompare(a.title));
-      else if (currentSort === 'shortest') list.sort((a,b) => (a.duration||0) - (b.duration||0));
-      else if (currentSort === 'longest') list.sort((a,b) => (b.duration||0) - (a.duration||0));
+      else if (currentSort === 'shortest') {
+        list.sort((a,b) => {
+          const aDur = isDummy(a.duration) ? Infinity : a.duration;
+          const bDur = isDummy(b.duration) ? Infinity : b.duration;
+          return aDur - bDur;
+        });
+      }
+      else if (currentSort === 'longest') {
+        list.sort((a,b) => {
+          const aDur = isDummy(a.duration) ? -Infinity : a.duration;
+          const bDur = isDummy(b.duration) ? -Infinity : b.duration;
+          return bDur - aDur;
+        });
+      }
 
       currentSongs = list;
       if (currentSongId) curIdxInCurrentList = currentSongs.findIndex(s => s.youtubeId === currentSongId);
