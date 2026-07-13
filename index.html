@@ -153,20 +153,20 @@
 
     .about-btn {
       height: 36px; padding: 0 16px; border-radius: 100px; font-size: 13px; font-weight: 600;
-      background: transparent; border: 1px solid var(--border); color: var(--text);
+      background: transparent; border: none; color: var(--text-dim);
       display: flex; align-items: center; justify-content: center;
-      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .about-btn:hover { background: var(--surface-dim); }
+    .about-btn:hover { background: var(--surface-dim); color: var(--text); }
     
     .icon-btn {
       width: 36px; height: 36px; border-radius: 50%; background: transparent;
-      border: 1px solid var(--border);
+      border: none;
       display: flex; align-items: center; justify-content: center;
-      color: var(--text);
-      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      color: var(--text-dim);
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .icon-btn:hover { background: var(--surface-dim); }
+    .icon-btn:hover { background: var(--surface-dim); color: var(--text); }
 
     /* ── ACTIVE STATES ── */
     .filter-tab:active, .sort-select:active, .about-btn:active, .icon-btn:active {
@@ -228,6 +228,8 @@
     .track-row.active.playing .play-indicator { animation: pulse 1s infinite alternate; }
     @keyframes pulse { from { opacity: 0.4; } to { opacity: 1; } }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes spin-loader { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .spinner { animation: spin-loader 0.8s linear infinite; }
     #yt-mount { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0.001; pointer-events: none; bottom: 0; left: 0; }
 
     /* ── RIGHT: PLAYER ── */
@@ -625,6 +627,7 @@
             <button class="ctrl-btn play-btn" id="btnPlay">
               <svg id="pIconPlay" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
               <svg id="pIconPause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              <svg id="pIconLoading" class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="display:none; width: 22px; height: 22px;"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity="0.2" fill="none"></circle><path d="M4 12a8 8 0 0 1 8-8" stroke="currentColor" fill="none"></path></svg>
             </button>
             <button class="ctrl-btn" id="btnNext"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg></button>
           </div>
@@ -648,6 +651,7 @@
       <button class="mp-play-btn" id="mpPlayBtn" aria-label="Play/Pause">
         <svg id="mpIconPlay" width="14" height="14" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         <svg id="mpIconPause" width="14" height="14" viewBox="0 0 24 24" style="display:none;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <svg id="mpIconLoading" class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="display:none; width: 14px; height: 14px;"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity="0.2" fill="none"></circle><path d="M4 12a8 8 0 0 1 8-8" stroke="currentColor" fill="none"></path></svg>
       </button>
       <div class="mp-chevron">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
@@ -2376,6 +2380,7 @@ const SONGS = [
       renderLikeStates();
       refreshActiveState();
       updatePlayerState(true);
+      setLoadingState(true);
 
       if (window.innerWidth <= 1000 && !$('playerCol').classList.contains('open')) {
         $('miniPlayer').classList.add('visible');
@@ -2395,17 +2400,33 @@ const SONGS = [
 
     function updatePlayerState(playing) {
       isPlaying = playing;
+      isLoading = false;
+      
       $('pIconPlay').style.display = playing ? 'none' : 'block';
       $('pIconPause').style.display = playing ? 'block' : 'none';
+      $('pIconLoading').style.display = 'none';
       
       $('mpIconPlay').style.display = playing ? 'none' : 'block';
       $('mpIconPause').style.display = playing ? 'block' : 'none';
+      $('mpIconLoading').style.display = 'none';
       
       $('vinylRecord').classList.toggle('spin', playing);
       $('turntable').classList.toggle('playing', playing);
       
       refreshActiveState();
       playing ? startTimer() : stopTimer();
+    }
+
+    function setLoadingState(loading) {
+      isLoading = loading;
+      
+      $('pIconPlay').style.display = (loading || isPlaying) ? 'none' : 'block';
+      $('pIconPause').style.display = (!loading && isPlaying) ? 'block' : 'none';
+      $('pIconLoading').style.display = loading ? 'block' : 'none';
+      
+      $('mpIconPlay').style.display = (loading || isPlaying) ? 'none' : 'block';
+      $('mpIconPause').style.display = (!loading && isPlaying) ? 'block' : 'none';
+      $('mpIconLoading').style.display = loading ? 'block' : 'none';
     }
 
     function updateProgress(c, d) {
@@ -2475,6 +2496,7 @@ const SONGS = [
           onStateChange(ev) {
             const S = YT.PlayerState;
             if (ev.data === S.PLAYING) {
+              setLoadingState(false);
               updatePlayerState(true);
               if (curIdxInCurrentList !== -1 && ytP.getDuration) {
                 const real = ytP.getDuration();
@@ -2486,8 +2508,16 @@ const SONGS = [
                   refreshActiveState();
                 }
               }
-            } else if (ev.data === S.PAUSED) { updatePlayerState(false); }
-            else if (ev.data === S.ENDED) { updatePlayerState(false); next(); }
+            } else if (ev.data === S.BUFFERING) {
+              setLoadingState(true);
+            } else if (ev.data === S.PAUSED) {
+              setLoadingState(false);
+              updatePlayerState(false);
+            } else if (ev.data === S.ENDED) {
+              setLoadingState(false);
+              updatePlayerState(false);
+              next();
+            }
           }
         }
       });
