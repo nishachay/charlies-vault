@@ -338,7 +338,7 @@
       .about-btn { padding: 0 12px; }
 
       .main-grid { flex-direction: column; overflow-y: auto; overflow-x: hidden; gap: 32px; padding: 0; }
-      .library-col { max-width: none; display: flex; flex: none; height: auto; overflow: visible; padding-bottom: 40px; }
+      .library-col { max-width: none; display: flex; flex: none; height: auto; overflow: visible; padding-bottom: 96px; }
       .track-list { overflow: visible; }
       
       .player-col {
@@ -381,6 +381,87 @@
       }
       .close-player:active {
         transform: scale(0.92);
+      }
+    }
+
+    /* ── MINI PLAYER FOR MOBILE ── */
+    .mini-player {
+      display: none !important;
+    }
+
+    @media (max-width: 1000px) {
+      .mini-player {
+        display: none !important;
+        position: fixed;
+        bottom: 16px;
+        left: 16px;
+        right: 16px;
+        height: 64px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        z-index: 1000;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        cursor: pointer;
+        transform: translateY(120%);
+        transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s;
+        opacity: 0;
+      }
+      .mini-player.visible {
+        display: flex !important;
+        transform: translateY(0);
+        opacity: 1;
+      }
+      
+      .mp-info {
+        flex: 1;
+        min-width: 0;
+        margin-right: 16px;
+      }
+      
+      .mp-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 2px;
+      }
+      
+      .mp-artist {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--text-dim);
+      }
+      
+      .mp-controls {
+        display: flex;
+        align-items: center;
+      }
+      
+      .mp-play-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: var(--app-bg);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s;
+        padding: 0;
+      }
+      .mp-play-btn:active {
+        transform: scale(0.9);
+      }
+      .mp-play-btn svg {
+        fill: currentColor;
       }
     }
   </style>
@@ -471,6 +552,20 @@
 
     </div>
 
+  </div>
+
+  <!-- MINI PLAYER FOR MOBILE -->
+  <div class="mini-player" id="miniPlayer">
+    <div class="mp-info" id="miniInfo">
+      <div class="mp-title" id="mpTitle">Not Playing</div>
+      <div class="mp-artist">Charlie Puth</div>
+    </div>
+    <div class="mp-controls">
+      <button class="mp-play-btn" id="mpPlayBtn" aria-label="Play/Pause">
+        <svg id="mpIconPlay" width="14" height="14" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <svg id="mpIconPause" width="14" height="14" viewBox="0 0 24 24" style="display:none;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      </button>
+    </div>
   </div>
 
   <!-- ABOUT MODAL -->
@@ -2131,6 +2226,7 @@ const SONGS = [
           else {
             if (window.innerWidth <= 1000) {
               $('playerCol').classList.add('open');
+              $('miniPlayer').classList.remove('visible');
             }
             if(listIdx === curIdxInCurrentList) {
               togglePlay();
@@ -2185,6 +2281,7 @@ const SONGS = [
       isPlaying = true;
       
       $('pTitle').textContent = s.title;
+      $('mpTitle').textContent = s.title;
       $('pTimeTot').textContent = isDummy(s.duration) ? '--:--' : fmt(s.duration);
       $('pTimeCur').textContent = '0:00';
       
@@ -2192,6 +2289,10 @@ const SONGS = [
       renderLikeStates();
       refreshActiveState();
       updatePlayerState(true);
+
+      if (window.innerWidth <= 1000 && !$('playerCol').classList.contains('open')) {
+        $('miniPlayer').classList.add('visible');
+      }
 
       if (s.youtubeId && ytReady && ytP) ytP.loadVideoById(s.youtubeId);
     }
@@ -2209,6 +2310,9 @@ const SONGS = [
       isPlaying = playing;
       $('pIconPlay').style.display = playing ? 'none' : 'block';
       $('pIconPause').style.display = playing ? 'block' : 'none';
+      
+      $('mpIconPlay').style.display = playing ? 'none' : 'block';
+      $('mpIconPause').style.display = playing ? 'block' : 'none';
       
       $('vinylRecord').classList.toggle('spin', playing);
       $('turntable').classList.toggle('playing', playing);
@@ -2256,8 +2360,24 @@ const SONGS = [
     $('btnNext').addEventListener('click', next);
     $('btnPrev').addEventListener('click', prev);
     $('pLikeBtn').addEventListener('click', () => { if(curIdxInCurrentList > -1) toggleLike(currentSongs[curIdxInCurrentList]); });
-    $('closePlayerBtn').addEventListener('click', () => { $('playerCol').classList.remove('open'); });
+    $('closePlayerBtn').addEventListener('click', () => {
+      $('playerCol').classList.remove('open');
+      if (curIdxInCurrentList !== -1) {
+        $('miniPlayer').classList.add('visible');
+      }
+    });
     $('turntable').addEventListener('click', togglePlay);
+
+    $('miniPlayer').addEventListener('click', (e) => {
+      if (e.target.closest('#mpPlayBtn')) return;
+      $('playerCol').classList.add('open');
+      $('miniPlayer').classList.remove('visible');
+    });
+
+    $('mpPlayBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePlay();
+    });
 
     window.onYouTubeIframeAPIReady = function() {
       ytP = new YT.Player('yt-player', {
