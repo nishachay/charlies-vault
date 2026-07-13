@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+  window.addEventListener('error', function(e) {
+    const div = document.createElement('div');
+    div.className = 'debug-error-banner';
+    div.style.position = 'fixed';
+    div.style.top = '0';
+    div.style.left = '0';
+    div.style.right = '0';
+    div.style.background = '#ef4444';
+    div.style.color = '#fff';
+    div.style.padding = '15px';
+    div.style.zIndex = '99999';
+    div.style.fontFamily = 'monospace';
+    div.style.fontSize = '12px';
+    div.style.whiteSpace = 'pre-wrap';
+    div.innerHTML = '<strong>JS Error:</strong> ' + e.message + ' at ' + e.filename + ':' + e.lineno + ':' + e.colno;
+    document.body.appendChild(div);
+  });
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charlie Puth — Curation Dashboard</title>
+  <meta name="description" content="Database manager and curation workspace for unreleased tracks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=3.8">
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+
+<!-- MAIN DASHBOARD -->
+<div class="dashboard">
+
+  <!-- Header -->
+  <header class="db-header">
+    <div class="header-left">
+      <div class="eyebrow">Curator Workspace</div>
+      <h1 class="db-title">CP UNRELEASED ARCHIVE</h1>
+    </div>
+    
+    <!-- Metrics Progress Bar -->
+    <div class="progress-panel">
+      <div class="metrics-row">
+        <span>Reviewed: <strong id="valReviewed">0/0</strong></span>
+        <span>Kept: <strong class="color-green" id="valKept">0</strong></span>
+        <span>Cut: <strong class="color-red" id="valCut">0</strong></span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="valProgressFill"></div>
+      </div>
+    </div>
+
+    <!-- DB Save Command -->
+    <div class="header-right">
+      <button class="btn-save" id="btnSaveDB" title="Write edits back to songs.js file">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        SAVE TO DATABASE
+      </button>
+    </div>
+  </header>
+
+  <!-- Toolbar Filters & Searches -->
+  <div class="db-toolbar">
+    <div class="toolbar-left">
+      <div class="filter-group">
+        <button class="filter-tab active" data-filter="all">All Tracks (<span id="cntAll">0</span>)</button>
+        <button class="filter-tab" data-filter="unreviewed">Unreviewed (<span id="cntUnreviewed">0</span>)</button>
+        <button class="filter-tab" data-filter="kept">Kept (<span id="cntKept">0</span>)</button>
+        <button class="filter-tab" data-filter="cut">Cut (<span id="cntCut">0</span>)</button>
+        <button class="filter-tab" data-filter="duplicates">Potential Duplicates (<span id="cntDupes">0</span>)</button>
+      </div>
+    </div>
+    
+    <div class="toolbar-right">
+      <div class="search-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Search song name or ID…">
+      </div>
+      <button class="btn-add-track" id="btnAddTrack">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Link
+      </button>
+      <button class="btn-add-track" id="btnUploadFile">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Upload File
+      </button>
+    </div>
+  </div>
+
+  <!-- Database Grid Table -->
+  <div class="table-container">
+    <table class="db-table">
+      <thead>
+        <tr>
+          <th width="50" style="text-align: center;">Play</th>
+          <th width="50" style="text-align: center;">#</th>
+          <th width="150" style="text-align: center;">Curation Decision</th>
+          <th>Song Title (Click text to edit name)</th>
+          <th width="180">YouTube ID</th>
+          <th width="100">Length</th>
+          <th width="60" style="text-align: center;">Delete</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Injected dynamically by JS -->
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- COMPACT FLOATING MUSIC PLAYER -->
+<div class="floating-player-widget" id="playerWidget" style="display:none">
+  <div class="fp-title-row">
+    <div class="fp-title-wrap">
+      <div class="fp-title" id="fpTitle">Song Title</div>
+      <div class="fp-subtitle">Charlie Puth — Unreleased</div>
+    </div>
+    <button class="fp-close" id="fpCloseBtn" title="Close player">&times;</button>
+  </div>
+  
+  <div class="fp-timeline-row">
+    <span class="fp-time" id="fpCurrentTime">0:00</span>
+    <div class="fp-track" id="fpTrack">
+      <div class="fp-fill" id="fpFill"></div>
+    </div>
+    <span class="fp-time" id="fpTotalTime">3:00</span>
+  </div>
+
+  <div class="fp-controls-row">
+    <button class="fp-ctrl" id="fpPrevBtn" title="Previous (←)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg></button>
+    <button class="fp-play-btn" id="fpPlayBtn" title="Play/Pause (Space)">
+      <svg class="play-svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="pause-svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
+    <button class="fp-ctrl" id="fpNextBtn" title="Next (→)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+    
+    <div class="fp-volume-wrap">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
+      <input type="range" id="fpVolumeSlider" min="0" max="100" value="80">
+    </div>
+  </div>
+</div>
+
+<!-- Add Track Modal -->
+<div class="modal-overlay" id="addTrackModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add Video Link</h3>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <input type="text" class="modal-input" id="modalUrl" placeholder="YouTube Video URL or Direct MP3 link">
+    <input type="text" class="modal-input" id="modalTitle" placeholder="Track title (optional)">
+    <div class="modal-actions">
+      <button class="btn-ghost" id="modalCancel">Cancel</button>
+      <button class="btn-primary" id="modalAdd">Add to list</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden upload elements -->
+<input type="file" id="fileInput" accept="audio/*" multiple hidden>
+<div class="drag-overlay" id="dragOverlay">
+  <div class="drag-inner">Drop audio files to upload into database</div>
+</div>
+
+<!-- MOUNT TARGET FOR YOUTUBE IFRAME -->
+<div id="ytPlayer"></div>
+
+<script src="songs.js?v=3.8"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="player.js?v=3.8"></script>
+</body>
+</html>

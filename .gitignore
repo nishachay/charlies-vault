@@ -1,0 +1,32 @@
+# AI agent config (not project code)
+.agents/
+
+
+local_uploads/
+
+# Node
+node_modules/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Scratch/utility scripts (used during dev, not needed in repo)
+parse_playlist.js
+generate_playlist_json.js
+read_markdown_dump.js
+find_yt_initial_data.js
+print_ids_and_titles.js
+dump_json_keys.js
+check_kept_cut_contradiction.js
+check_kept_cut_distribution.js
+check_kept_changes.js
+check_duplicates.js
+extract_all_metadata.js
+export_final.js
+fetch_durations.js
+yt_data.json
+skills-lock.json
