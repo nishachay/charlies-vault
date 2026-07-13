@@ -1083,7 +1083,7 @@ const SONGS = [
   },
   {
     "id": "IKAIX6G_IGE",
-    "title": "POWER (Full Higuality)",
+    "title": "Power",
     "artist": "Charlie Puth",
     "youtubeId": "IKAIX6G_IGE",
     "url": null,
