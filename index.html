@@ -229,7 +229,7 @@
     @keyframes pulse { from { opacity: 0.4; } to { opacity: 1; } }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes spin-loader { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .spinner { animation: spin-loader 0.8s linear infinite; }
+    .spinner { animation: spin-loader 0.8s linear infinite; fill: none !important; transform-origin: center; }
     #yt-mount { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0.001; pointer-events: none; bottom: 0; left: 0; }
 
     /* ── RIGHT: PLAYER ── */
@@ -2190,6 +2190,7 @@ const SONGS = [
     let curIdxInCurrentList = -1; 
     let currentSongId = null;     
     let isPlaying = false;
+    let isLoading = false;
     let ytP = null, ytReady = false, progressTimer = null, isScrubbing = false;
 
     let showOnlyLiked = false;
