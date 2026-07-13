@@ -625,10 +625,10 @@
           const listIdx = +row.dataset.listidx;
           if(btn) { e.stopPropagation(); toggleLike(currentSongs[listIdx]); } 
           else {
+            if (window.innerWidth <= 1000) {
+              $('playerCol').classList.add('open');
+            }
             if(listIdx === curIdxInCurrentList) {
-              if (window.innerWidth <= 1000) {
-                $('playerCol').classList.add('open');
-              }
               togglePlay();
             } else {
               playTrack(listIdx);
@@ -675,13 +675,6 @@
     function playTrack(listIdx) {
       if (listIdx < 0 || listIdx >= currentSongs.length) return;
 
-      if (listIdx === curIdxInCurrentList) {
-        if (window.innerWidth <= 1000) {
-          $('playerCol').classList.add('open');
-        }
-        return;
-      }
-
       curIdxInCurrentList = listIdx;
       const s = currentSongs[listIdx];
       currentSongId = s.youtubeId;
@@ -695,10 +688,6 @@
       renderLikeStates();
       refreshActiveState();
       updatePlayerState(true);
-
-      if (window.innerWidth <= 1000) {
-        $('playerCol').classList.add('open');
-      }
 
       if (s.youtubeId && ytReady && ytP) ytP.loadVideoById(s.youtubeId);
     }
