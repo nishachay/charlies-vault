@@ -384,6 +384,37 @@
       .close-player:active {
         transform: scale(0.92);
       }
+
+      /* Small width devices (iPhone SE, small Androids) */
+      @media (max-width: 375px) {
+        #app { padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom); }
+        .brand h1 { font-size: 24px; }
+        .top-controls { justify-content: center; gap: 6px; flex-wrap: wrap; }
+        .filter-tab { padding: 0 8px; font-size: 13px; }
+        .sort-select { padding: 0 16px 0 8px; font-size: 13px; }
+        .about-btn { padding: 0 8px; font-size: 13px; }
+        .icon-btn { width: 36px; height: 36px; }
+        .track-row { padding: 8px 12px; }
+        .t-title { font-size: 14px; }
+        
+        .mini-player {
+          left: 8px;
+          right: 8px;
+          height: 56px;
+          padding: 0 12px;
+        }
+        .mp-title { font-size: 13px; }
+      }
+
+      /* Short viewport devices (iPhone SE vertical stack preservation) */
+      @media (max-height: 667px) {
+        .player-col { padding: 24px 16px; justify-content: center; }
+        .turntable { width: min(260px, 65vw, 35vh); margin-bottom: 16px !important; }
+        .p-header { margin-bottom: 12px !important; }
+        .p-title { font-size: 20px !important; }
+        .progress-container { margin-bottom: 16px !important; }
+        .close-player { top: 12px; left: 12px; }
+      }
     }
 
     /* ── MINI PLAYER FOR MOBILE ── */
