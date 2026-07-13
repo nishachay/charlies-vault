@@ -1,179 +1,799 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <script>
-  window.addEventListener('error', function(e) {
-    const div = document.createElement('div');
-    div.className = 'debug-error-banner';
-    div.style.position = 'fixed';
-    div.style.top = '0';
-    div.style.left = '0';
-    div.style.right = '0';
-    div.style.background = '#ef4444';
-    div.style.color = '#fff';
-    div.style.padding = '15px';
-    div.style.zIndex = '99999';
-    div.style.fontFamily = 'monospace';
-    div.style.fontSize = '12px';
-    div.style.whiteSpace = 'pre-wrap';
-    div.innerHTML = '<strong>JS Error:</strong> ' + e.message + ' at ' + e.filename + ':' + e.lineno + ':' + e.colno;
-    document.body.appendChild(div);
-  });
-  </script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Charlie Puth — Curation Dashboard</title>
-  <meta name="description" content="Database manager and curation workspace for unreleased tracks.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Charlie's Vault</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3.8">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --app-bg: #e5e7eb;
+      --site-bg: #09090b;
+      --text: #111827;
+      --text-dim: #6b7280;
+      --accent: #000000;
+      --surface: #ffffff;
+      --surface-dim: rgba(255,255,255,0.5);
+      --border: rgba(0,0,0,0.06);
+      --red: #ef4444;
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+      --shadow-lg: 0 24px 48px rgba(0,0,0,0.1);
+    }
+
+    [data-theme="dark"] {
+      --app-bg: #18181b;
+      --site-bg: #000000;
+      --text: #f9fafb;
+      --text-dim: #9ca3af;
+      --accent: #ffffff;
+      --surface: #27272a;
+      --surface-dim: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.06);
+      --shadow-lg: 0 24px 48px rgba(0,0,0,0.6);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; margin: 8px 0; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+    [data-theme="dark"] ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+    
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: var(--site-bg);
+      color: var(--text);
+      overflow: hidden;
+      height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      transition: background 0.3s;
+    }
+
+    h1, h2, h3, .brand, .p-title, .modal-title, .signature span {
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -0.02em;
+    }
+
+    button { background: none; border: none; color: inherit; cursor: pointer; font-family: inherit; }
+
+    /* ── SINGLE APP CANVAS ── */
+    #app {
+      width: 100%;
+      max-width: 1600px;
+      height: 100%;
+      background: var(--app-bg);
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg), inset 0 2px 4px rgba(255,255,255,0.5);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 32px 0 32px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    [data-theme="dark"] #app { box-shadow: var(--shadow-lg), inset 0 2px 4px rgba(255,255,255,0.05); }
+
+    /* ── CLOSE BUTTON FOR MOBILE DRAWER ── */
+    .close-player {
+      display: none;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      flex-shrink: 0; margin-bottom: 24px; padding: 0;
+      position: relative; z-index: 2;
+    }
+    
+    .top-left {
+      display: flex; align-items: center; gap: 40px; flex: 1;
+    }
+
+    .brand { flex: 0 0 auto; }
+    .brand h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; text-transform: uppercase; }
+
+    .search-wrapper { position: relative; flex: 0 1 320px; }
+    .search-input {
+      width: 100%; height: 36px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 100px; padding: 0 20px 0 42px;
+      font-family: inherit; font-size: 13px; font-weight: 500; color: var(--text);
+      outline: none; box-shadow: var(--shadow-sm);
+      transition: border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .search-input:focus { box-shadow: 0 4px 16px rgba(0,0,0,0.1); border-color: var(--text-dim); }
+    .search-icon {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      color: var(--text-dim); pointer-events: none;
+    }
+
+    .top-controls {
+      display: flex; align-items: center; gap: 12px; margin-left: auto; flex-shrink: 0;
+    }
+    
+    .filters { 
+      display: flex; gap: 2px; align-items: center; 
+      background: var(--surface-dim); padding: 4px; border-radius: 100px;
+      height: 36px;
+    }
+    .filter-tab {
+      height: 28px; padding: 0 16px; border-radius: 100px; font-size: 13px; font-weight: 600;
+      background: transparent; color: var(--text-dim); border: none;
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .filter-tab.active {
+      background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm);
+    }
+    .filter-tab svg { width: 14px; height: 14px; }
+    .filter-tab.active svg { fill: var(--red); stroke: var(--red); }
+
+    .sort-select {
+      height: 36px; padding: 0 32px 0 16px; border-radius: 100px;
+      background: transparent; border: 1px solid var(--border); color: var(--text);
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      outline: none; cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .sort-select:hover { background-color: var(--surface-dim); }
+    .sort-select option { background: var(--surface); color: var(--text); }
+
+    .about-btn {
+      height: 36px; padding: 0 16px; border-radius: 100px; font-size: 13px; font-weight: 600;
+      background: transparent; border: 1px solid var(--border); color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .about-btn:hover { background: var(--surface-dim); }
+    
+    .icon-btn {
+      width: 36px; height: 36px; border-radius: 50%; background: transparent;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text);
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .icon-btn:hover { background: var(--surface-dim); }
+
+    /* ── ACTIVE STATES ── */
+    .filter-tab:active, .sort-select:active, .about-btn:active, .icon-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main-grid {
+      flex: 1; display: flex; gap: 60px; min-height: 0;
+      width: 100%; justify-content: space-between;
+      padding: 0;
+      position: relative; z-index: 2;
+    }
+
+    /* ── LEFT: LIBRARY ── */
+    .library-col {
+      flex: 1; display: flex; flex-direction: column; min-width: 0;
+    }
+    
+    .track-list {
+      flex: 1; overflow-y: auto; padding-right: 8px; margin-right: -8px;
+      display: flex; flex-direction: column; gap: 4px; padding-bottom: 0px;
+    }
+
+    .track-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px; border-radius: 12px; cursor: pointer;
+      background: transparent; transition: background 0.2s, box-shadow 0.2s;
+    }
+    .track-row:hover { background: var(--surface-dim); }
+    .track-row.active {
+      background: var(--surface); box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+
+    .t-num { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); width: 28px; text-align: center; flex-shrink: 0; }
+    .t-info { flex: 1; min-width: 0; }
+    .t-title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em; }
+    .t-artist { font-size: 12px; font-weight: 500; color: var(--text-dim); margin-top: 2px; }
+    
+    .t-dur { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); width: 44px; text-align: right; flex-shrink: 0; }
+
+    .like-btn {
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      color: var(--text-dim); border-radius: 50%; flex-shrink: 0;
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .like-btn:hover { color: var(--red); background: var(--surface); }
+    .like-btn.liked { color: var(--red); }
+    .like-btn svg { fill: none; transition: fill 0.2s; }
+    .like-btn.liked svg { fill: var(--red); }
+    .like-btn:active { transform: scale(0.92); }
+
+    .play-indicator { display: none; width: 14px; height: 14px; margin: 0 auto; fill: var(--accent); }
+    .track-row.active .t-num span { display: none; }
+    .track-row.active .play-indicator { display: block; }
+    .track-row.active.playing .play-indicator { animation: pulse 1s infinite alternate; }
+    @keyframes pulse { from { opacity: 0.4; } to { opacity: 1; } }
+
+    /* ── RIGHT: PLAYER ── */
+    .player-col {
+      flex: 0 0 400px; margin: 0 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+
+    .turntable {
+      width: min(400px, 100%, 45vh); height: auto; aspect-ratio: 1;
+      background: linear-gradient(135deg, #f8f9fa, #e2e4e9);
+      border-radius: 20px;
+      box-shadow: inset 0 2px 4px #fff, inset 0 -2px 4px rgba(0,0,0,0.05), 0 24px 48px rgba(0,0,0,0.15);
+      border: 1px solid rgba(255,255,255,0.5);
+      position: relative; margin-bottom: 32px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    [data-theme="dark"] .turntable {
+      background: linear-gradient(135deg, #2a2a2e, #1a1a1d);
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), inset 0 -2px 4px rgba(0,0,0,0.5), 0 24px 48px rgba(0,0,0,0.6);
+      border-color: rgba(255,255,255,0.05);
+    }
+
+    .vinyl-record {
+      width: 86%; height: 86%; background: #111; border-radius: 50%;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.4), inset 0 0 0 4px #222;
+      position: relative; display: flex; align-items: center; justify-content: center;
+      background-image: repeating-radial-gradient( #111, #111 4px, #1a1a1a 5px, #111 6px );
+      animation: spin 4s linear infinite paused; will-change: transform;
+    }
+    .vinyl-record.spin { animation-play-state: running; }
+    .vinyl-record::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: conic-gradient(from 0deg, rgba(255,255,255,0.05) 0deg, transparent 45deg, rgba(255,255,255,0.05) 90deg, transparent 135deg, rgba(255,255,255,0.05) 180deg, transparent 225deg, rgba(255,255,255,0.05) 270deg, transparent 315deg, rgba(255,255,255,0.05) 360deg);
+      pointer-events: none;
+    }
+    .vinyl-label { width: 32%; height: 32%; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 0 2px #000; }
+    .vinyl-hole { width: 14%; height: 14%; background: var(--app-bg); border-radius: 50%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.6); }
+
+    .tonearm {
+      position: absolute; top: 8%; right: 6%; width: 20%; height: 50%;
+      transform-origin: center 15%; transform: rotate(-15deg); transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;
+    }
+    .playing .tonearm { transform: rotate(15deg); }
+    .tonearm-base { width: 70%; aspect-ratio: 1; background: #e5e7eb; border-radius: 50%; position: absolute; top: 0; right: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 2px 4px #fff; border: 1px solid #ccc; }
+    [data-theme="dark"] .tonearm-base { background: #374151; border-color: #1f2937; box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 2px 2px rgba(255,255,255,0.2); }
+    .tonearm-rod { width: 10%; height: 95%; background: #cbd5e1; position: absolute; top: 15%; right: 30%; border-radius: 4px; box-shadow: -2px 2px 4px rgba(0,0,0,0.2); }
+    [data-theme="dark"] .tonearm-rod { background: #6b7280; box-shadow: -2px 2px 4px rgba(0,0,0,0.5); }
+    .tonearm-head { width: 45%; height: 25%; background: #475569; position: absolute; bottom: 0; right: 12%; border-radius: 4px; transform: rotate(25deg); box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+
+    .p-header { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 24px; padding: 0 8px; flex-shrink: 0; }
+    .p-info { flex: 1; min-width: 0; }
+    .p-title { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; margin-bottom: 4px; }
+    .p-artist { font-size: 14px; font-weight: 500; color: var(--text-dim); }
+
+    .progress-container {
+      width: 100%; height: 4px; background: var(--border); border-radius: 2px;
+      margin-bottom: 24px; cursor: pointer; position: relative; touch-action: none;
+    }
+    .progress-fill {
+      height: 100%; background: var(--text); border-radius: 2px; width: 0%;
+      pointer-events: none; transition: width 0.1s linear;
+    }
+    
+    .p-bottom-row {
+      display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0 8px; flex-shrink: 0;
+    }
+    .wf-time { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); width: 44px; }
+    
+    .p-controls { display: flex; align-items: center; justify-content: center; gap: 20px; }
+    .ctrl-btn { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text); transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .ctrl-btn:hover { background: var(--surface-dim); }
+    .ctrl-btn:active { transform: scale(0.94); }
+    .ctrl-btn svg { width: 22px; height: 22px; }
+    
+    .play-btn { width: 56px; height: 56px; background: var(--accent); color: var(--app-bg); box-shadow: 0 8px 24px var(--shadow-sm); }
+    .play-btn:hover { transform: scale(1.05); }
+    .play-btn:active { transform: scale(0.95); }
+    .play-btn svg { width: 26px; height: 26px; }
+
+    /* ── ABOUT MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center; z-index: 1000;
+      opacity: 0; pointer-events: none; transition: 0.3s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal-content {
+      background: var(--app-bg); width: 90%; max-width: 440px; border-radius: 24px;
+      padding: 32px; box-shadow: var(--shadow-lg); position: relative;
+      transform: translateY(20px); transition: 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      border: 1px solid var(--border);
+    }
+    .modal-overlay.open .modal-content { transform: translateY(0); }
+    .close-modal {
+      position: absolute; top: 24px; right: 24px; width: 32px; height: 32px;
+      border-radius: 50%; background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; color: var(--text);
+    }
+    .modal-title { font-size: 24px; font-weight: 700; margin-bottom: 16px; }
+    .modal-body { font-size: 15px; color: var(--text-dim); line-height: 1.6; }
+    .modal-body p { margin-bottom: 16px; }
+
+    /* ── MOBILE OVERRIDES ── */
+    @media (max-width: 1000px) {
+      body { padding: 0; }
+      #app { width: 100%; height: 100%; border-radius: 0; padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom); display: flex; flex-direction: column; }
+      .top-bar { flex-direction: column; align-items: stretch; gap: 16px; margin-top: 16px; margin-bottom: 20px; padding: 0; }
+      .top-left { flex-direction: column; align-items: stretch; gap: 16px; }
+      .top-controls { margin-left: 0; gap: 8px; justify-content: space-between; }
+      .search-wrapper { display: none; }
+      
+      .filter-tab { padding: 0 12px; }
+      .sort-select { padding: 0 24px 0 12px; }
+      .about-btn { padding: 0 12px; }
+
+      .main-grid { flex-direction: column; overflow-y: auto; overflow-x: hidden; gap: 32px; padding: 0; }
+      .library-col { max-width: none; display: flex; flex: none; height: auto; overflow: visible; padding-bottom: 40px; }
+      .track-list { overflow: visible; }
+      
+      .player-col {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100dvh;
+        background: var(--app-bg);
+        z-index: 2000;
+        margin: 0;
+        padding: 40px 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+      }
+      .player-col.open {
+        transform: translateY(0);
+      }
+
+      .close-player {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        color: var(--text);
+        background: var(--surface-dim);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 2010;
+        transition: transform 0.2s;
+      }
+      .close-player:active {
+        transform: scale(0.92);
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="noise-overlay"></div>
+  <div id="app">
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <div class="top-left">
+        <div class="brand"><h1>Charlie's Vault</h1></div>
+        
+        <div class="search-wrapper">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search for songs..." autocomplete="off">
+        </div>
+      </div>
 
-<!-- MAIN DASHBOARD -->
-<div class="dashboard">
+      <div class="top-controls">
+          <div class="filters">
+            <button class="filter-tab active" id="tabAll">All Tracks</button>
+            <button class="filter-tab" id="tabLiked">Liked <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+          </div>
+          <select class="sort-select" id="sortSelect">
+            <option value="title">A-Z</option>
+            <option value="title-desc">Z-A</option>
+            <option value="shortest">Shortest</option>
+            <option value="longest">Longest</option>
+          </select>
+          <button class="about-btn" id="aboutBtn">About</button>
+          <button class="icon-btn" id="themeBtn" aria-label="Toggle Theme">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          </button>
+        </div>
+      </div>
 
-  <!-- Header -->
-  <header class="db-header">
-    <div class="header-left">
-      <div class="eyebrow">Curator Workspace</div>
-      <h1 class="db-title">CP UNRELEASED ARCHIVE</h1>
+    <!-- MAIN CONTENT -->
+    <div class="main-grid">
+      
+      <!-- LEFT: LIBRARY -->
+      <div class="library-col">
+        <div class="track-list" id="trackList"></div>
+      </div>
+
+      <!-- RIGHT: PLAYER -->
+      <div class="player-col" id="playerCol">
+        <button class="close-player" id="closePlayerBtn" aria-label="Close Player">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        
+        <div class="turntable" id="turntable">
+          <div class="vinyl-record" id="vinylRecord">
+            <div class="vinyl-label" id="vinylLabel"><div class="vinyl-hole"></div></div>
+          </div>
+          <div class="tonearm"><div class="tonearm-base"></div><div class="tonearm-rod"></div><div class="tonearm-head"></div></div>
+        </div>
+
+        <div class="p-header">
+          <div class="p-info">
+            <div class="p-title" id="pTitle">Charlie's Vault</div>
+            <div class="p-artist">Charlie Puth</div>
+          </div>
+          <button class="icon-btn" id="pLikeBtn" style="flex-shrink: 0; box-shadow: none; border-color: transparent; background: transparent;">
+            <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+
+        <div class="progress-container" id="progressBar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="p-bottom-row">
+          <div class="wf-time" id="pTimeCur" style="text-align: left;">0:00</div>
+          
+          <div class="p-controls">
+            <button class="ctrl-btn" id="btnPrev"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg></button>
+            <button class="ctrl-btn play-btn" id="btnPlay">
+              <svg id="pIconPlay" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="pIconPause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="ctrl-btn" id="btnNext"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg></button>
+          </div>
+
+          <div class="wf-time" id="pTimeTot" style="text-align: right;">--:--</div>
+        </div>
+
+      </div>
+
     </div>
+
+  </div>
+
+  <!-- ABOUT MODAL -->
+  <div class="modal-overlay" id="aboutModal">
+    <div class="modal-content">
+      <button class="close-modal" id="closeAboutBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      <div class="modal-title">Charlie's Vault</div>
+      <div class="modal-body">
+        <p>A private listening archive of unreleased Charlie Puth tracks — featuring demos, early conceptual versions, acoustic sessions, and songs that never made it to the official studio albums.</p>
+        <p>Built from the ground up to provide a bespoke, zero-distraction listening experience.</p>
+        <p style="margin-top: 24px; font-size: 12px; color: var(--text-dim); font-weight: 500;">Designed & Developed by <strong>Nishachay</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="yt-mount"><div id="yt-player"></div></div>
+
+  <script src="final_songs.js"></script>
+  <script>
+  (() => {
+    'use strict';
+
+    const cleanTitle = title => title.replace(/^Charlie Puth\s*-\s*/i, '').trim();
+    const originalSongs = (typeof SONGS !== 'undefined' ? SONGS : []).map((s, i) => ({ ...s, _i: i, title: cleanTitle(s.title) }));
+    let currentSongs = [...originalSongs];
     
-    <!-- Metrics Progress Bar -->
-    <div class="progress-panel">
-      <div class="metrics-row">
-        <span>Reviewed: <strong id="valReviewed">0/0</strong></span>
-        <span>Kept: <strong class="color-green" id="valKept">0</strong></span>
-        <span>Cut: <strong class="color-red" id="valCut">0</strong></span>
-      </div>
-      <div class="progress-bar-track">
-        <div class="progress-bar-fill" id="valProgressFill"></div>
-      </div>
-    </div>
+    const DUR_KEY = 'vault_dur_v4';
+    let durCache = {};
+    try { durCache = JSON.parse(localStorage.getItem(DUR_KEY) || '{}'); } catch(e) {}
+    originalSongs.forEach(s => { if (s.youtubeId && durCache[s.youtubeId]) s.duration = durCache[s.youtubeId]; });
+    const saveDurCache = () => { try { localStorage.setItem(DUR_KEY, JSON.stringify(durCache)); } catch(e) {} };
+    const isDummy = d => !d || d <= 3;
 
-    <!-- DB Save Command -->
-    <div class="header-right">
-      <button class="btn-save" id="btnSaveDB" title="Write edits back to songs.js file">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        SAVE TO DATABASE
-      </button>
-    </div>
-  </header>
-
-  <!-- Toolbar Filters & Searches -->
-  <div class="db-toolbar">
-    <div class="toolbar-left">
-      <div class="filter-group">
-        <button class="filter-tab active" data-filter="all">All Tracks (<span id="cntAll">0</span>)</button>
-        <button class="filter-tab" data-filter="unreviewed">Unreviewed (<span id="cntUnreviewed">0</span>)</button>
-        <button class="filter-tab" data-filter="kept">Kept (<span id="cntKept">0</span>)</button>
-        <button class="filter-tab" data-filter="cut">Cut (<span id="cntCut">0</span>)</button>
-        <button class="filter-tab" data-filter="duplicates">Potential Duplicates (<span id="cntDupes">0</span>)</button>
-      </div>
-    </div>
+    const LIKES_KEY = 'vault_likes_v1';
+    let likes = new Set();
+    try { const ls = JSON.parse(localStorage.getItem(LIKES_KEY) || '[]'); ls.forEach(id => likes.add(id)); } catch(e) {}
+    const saveLikes = () => { try { localStorage.setItem(LIKES_KEY, JSON.stringify([...likes])); } catch(e) {} };
+    const isLiked = s => s.youtubeId && likes.has(s.youtubeId);
     
-    <div class="toolbar-right">
-      <div class="search-wrap">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="searchInput" placeholder="Search song name or ID…">
-      </div>
-      <button class="btn-add-track" id="btnAddTrack">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Link
-      </button>
-      <button class="btn-add-track" id="btnUploadFile">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Upload File
-      </button>
-    </div>
-  </div>
+    let curIdxInCurrentList = -1; 
+    let currentSongId = null;     
+    let isPlaying = false;
+    let ytP = null, ytReady = false, progressTimer = null, isScrubbing = false;
 
-  <!-- Database Grid Table -->
-  <div class="table-container">
-    <table class="db-table">
-      <thead>
-        <tr>
-          <th width="50" style="text-align: center;">Play</th>
-          <th width="50" style="text-align: center;">#</th>
-          <th width="150" style="text-align: center;">Curation Decision</th>
-          <th>Song Title (Click text to edit name)</th>
-          <th width="180">YouTube ID</th>
-          <th width="100">Length</th>
-          <th width="60" style="text-align: center;">Delete</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-        <!-- Injected dynamically by JS -->
-      </tbody>
-    </table>
-  </div>
+    let showOnlyLiked = false;
+    let currentSort = 'title';
+    let currentSearch = '';
 
-</div>
-
-<!-- COMPACT FLOATING MUSIC PLAYER -->
-<div class="floating-player-widget" id="playerWidget" style="display:none">
-  <div class="fp-title-row">
-    <div class="fp-title-wrap">
-      <div class="fp-title" id="fpTitle">Song Title</div>
-      <div class="fp-subtitle">Charlie Puth — Unreleased</div>
-    </div>
-    <button class="fp-close" id="fpCloseBtn" title="Close player">&times;</button>
-  </div>
-  
-  <div class="fp-timeline-row">
-    <span class="fp-time" id="fpCurrentTime">0:00</span>
-    <div class="fp-track" id="fpTrack">
-      <div class="fp-fill" id="fpFill"></div>
-    </div>
-    <span class="fp-time" id="fpTotalTime">3:00</span>
-  </div>
-
-  <div class="fp-controls-row">
-    <button class="fp-ctrl" id="fpPrevBtn" title="Previous (←)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg></button>
-    <button class="fp-play-btn" id="fpPlayBtn" title="Play/Pause (Space)">
-      <svg class="play-svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-      <svg class="pause-svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-    </button>
-    <button class="fp-ctrl" id="fpNextBtn" title="Next (→)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+    const $ = id => document.getElementById(id);
+    const fmt = s => (!s || !isFinite(s) || s <= 0) ? '--:--' : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+    const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     
-    <div class="fp-volume-wrap">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
-      <input type="range" id="fpVolumeSlider" min="0" max="100" value="80">
-    </div>
-  </div>
-</div>
+    let theme = localStorage.getItem('vault_theme') || 'dark';
+    const html = document.documentElement;
+    const themeBtn = $('themeBtn');
+    html.setAttribute('data-theme', theme);
+    const updateThemeIcon = () => {
+      themeBtn.innerHTML = theme === 'light' 
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+    };
+    updateThemeIcon();
+    
+    themeBtn.addEventListener('click', () => {
+      theme = theme === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('vault_theme', theme);
+      updateThemeIcon();
+    });
 
-<!-- Add Track Modal -->
-<div class="modal-overlay" id="addTrackModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Add Video Link</h3>
-      <button class="modal-close" id="modalClose">&times;</button>
-    </div>
-    <input type="text" class="modal-input" id="modalUrl" placeholder="YouTube Video URL or Direct MP3 link">
-    <input type="text" class="modal-input" id="modalTitle" placeholder="Track title (optional)">
-    <div class="modal-actions">
-      <button class="btn-ghost" id="modalCancel">Cancel</button>
-      <button class="btn-primary" id="modalAdd">Add to list</button>
-    </div>
-  </div>
-</div>
+    /* ABOUT MODAL */
+    $('aboutBtn').addEventListener('click', () => $('aboutModal').classList.add('open'));
+    $('closeAboutBtn').addEventListener('click', () => $('aboutModal').classList.remove('open'));
+    $('aboutModal').addEventListener('click', e => { if(e.target === $('aboutModal')) $('aboutModal').classList.remove('open'); });
 
-<!-- Hidden upload elements -->
-<input type="file" id="fileInput" accept="audio/*" multiple hidden>
-<div class="drag-overlay" id="dragOverlay">
-  <div class="drag-inner">Drop audio files to upload into database</div>
-</div>
+    const trackList = $('trackList');
+    const progressBar = $('progressBar');
+    const progressFill = $('progressFill');
+    
+    const hashStr = str => { let h = 0; for(let i=0; i<str.length; i++) h = Math.imul(31, h) + str.charCodeAt(i) | 0; return Math.abs(h); };
 
-<!-- MOUNT TARGET FOR YOUTUBE IFRAME -->
-<div id="ytPlayer"></div>
+    function updateWaveformVisuals(song) {
+      const seed = hashStr(song.title);
+      progressFill.style.width = '0%';
+      $('vinylLabel').style.backgroundColor = `hsl(${seed % 360}, 65%, 55%)`;
+    }
 
-<script src="songs.js?v=3.8"></script>
-<script src="https://www.youtube.com/iframe_api"></script>
-<script src="player.js?v=3.8"></script>
+    function applyFiltersAndSort() {
+      let list = [...originalSongs];
+      if (showOnlyLiked) list = list.filter(isLiked);
+      if (currentSearch) {
+        const terms = currentSearch.toLowerCase().split(/\s+/);
+        list = list.filter(s => terms.every(t => s.title.toLowerCase().includes(t)));
+      }
+      if (currentSort === 'title') list.sort((a,b) => a.title.localeCompare(b.title));
+      else if (currentSort === 'title-desc') list.sort((a,b) => b.title.localeCompare(a.title));
+      else if (currentSort === 'shortest') list.sort((a,b) => (a.duration||0) - (b.duration||0));
+      else if (currentSort === 'longest') list.sort((a,b) => (b.duration||0) - (a.duration||0));
+
+      currentSongs = list;
+      if (currentSongId) curIdxInCurrentList = currentSongs.findIndex(s => s.youtubeId === currentSongId);
+      else curIdxInCurrentList = -1;
+
+      renderList();
+      refreshActiveState();
+    }
+
+    function toggleLike(s) {
+      if(!s.youtubeId) return;
+      if (likes.has(s.youtubeId)) likes.delete(s.youtubeId); else likes.add(s.youtubeId);
+      saveLikes();
+      if(showOnlyLiked) applyFiltersAndSort(); 
+      else renderLikeStates();
+    }
+
+    function renderList() {
+      if(!currentSongs.length) {
+        trackList.innerHTML = '<div style="padding:40px 20px;text-align:center;color:var(--text-dim);font-weight:500;">No tracks found</div>';
+        return;
+      }
+      
+      const listHtml = currentSongs.map((s, vi) => {
+        const d = isDummy(s.duration) ? '--:--' : fmt(s.duration);
+        const lkd = isLiked(s) ? ' liked' : '';
+        return `
+          <div class="track-row" data-listidx="${vi}">
+            <div class="t-num">
+              <span>${vi + 1}</span>
+              <svg class="play-indicator" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <div class="t-info">
+              <div class="t-title">${esc(s.title)}</div>
+              <div class="t-artist">Charlie Puth</div>
+            </div>
+            <button class="like-btn${lkd}" aria-label="Like">
+              <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <div class="t-dur" id="dur-${s.youtubeId}">${d}</div>
+          </div>
+        `;
+      }).join('');
+      
+      const sig = `
+        <div style="padding: 32px 0; text-align: center; font-size: 12px; color: var(--text-dim); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.4;">
+          Curated by Nishachay
+        </div>
+      `;
+      trackList.innerHTML = listHtml + sig;
+
+      trackList.querySelectorAll('.track-row').forEach(row => {
+        row.addEventListener('click', (e) => {
+          const btn = e.target.closest('.like-btn');
+          const listIdx = +row.dataset.listidx;
+          if(btn) { e.stopPropagation(); toggleLike(currentSongs[listIdx]); } 
+          else {
+            if(listIdx === curIdxInCurrentList) {
+              if (window.innerWidth <= 1000) {
+                $('playerCol').classList.add('open');
+              }
+              togglePlay();
+            } else {
+              playTrack(listIdx);
+            }
+          }
+        });
+      });
+    }
+
+    function renderLikeStates() {
+      trackList.querySelectorAll('.track-row').forEach(row => {
+        const idx = +row.dataset.listidx;
+        const btn = row.querySelector('.like-btn');
+        if(btn) btn.classList.toggle('liked', isLiked(currentSongs[idx]));
+      });
+      if (curIdxInCurrentList > -1 && currentSongs[curIdxInCurrentList]) {
+        const pBtn = $('pLikeBtn');
+        if (isLiked(currentSongs[curIdxInCurrentList])) {
+          pBtn.querySelector('svg').style.fill = 'var(--red)';
+          pBtn.querySelector('svg').style.stroke = 'var(--red)';
+        } else {
+          pBtn.querySelector('svg').style.fill = 'none';
+          pBtn.querySelector('svg').style.stroke = 'currentColor';
+        }
+      }
+    }
+
+    function refreshActiveState() {
+      trackList.querySelectorAll('.track-row').forEach(row => {
+        const idx = +row.dataset.listidx;
+        row.classList.toggle('active', idx === curIdxInCurrentList);
+        row.classList.toggle('playing', idx === curIdxInCurrentList && isPlaying);
+        const s = currentSongs[idx];
+        const durEl = row.querySelector('.t-dur');
+        if(durEl) durEl.textContent = isDummy(s.duration) ? '--:--' : fmt(s.duration);
+      });
+    }
+
+    $('searchInput').addEventListener('input', e => { currentSearch = e.target.value.trim(); applyFiltersAndSort(); });
+    $('tabAll').addEventListener('click', () => { showOnlyLiked = false; $('tabAll').classList.add('active'); $('tabLiked').classList.remove('active'); applyFiltersAndSort(); });
+    $('tabLiked').addEventListener('click', () => { showOnlyLiked = true; $('tabLiked').classList.add('active'); $('tabAll').classList.remove('active'); applyFiltersAndSort(); });
+    $('sortSelect').addEventListener('change', e => { currentSort = e.target.value; applyFiltersAndSort(); });
+
+    function playTrack(listIdx) {
+      if (listIdx < 0 || listIdx >= currentSongs.length) return;
+
+      if (listIdx === curIdxInCurrentList) {
+        if (window.innerWidth <= 1000) {
+          $('playerCol').classList.add('open');
+        }
+        return;
+      }
+
+      curIdxInCurrentList = listIdx;
+      const s = currentSongs[listIdx];
+      currentSongId = s.youtubeId;
+      isPlaying = true;
+      
+      $('pTitle').textContent = s.title;
+      $('pTimeTot').textContent = isDummy(s.duration) ? '--:--' : fmt(s.duration);
+      $('pTimeCur').textContent = '0:00';
+      
+      updateWaveformVisuals(s);
+      renderLikeStates();
+      refreshActiveState();
+      updatePlayerState(true);
+
+      if (window.innerWidth <= 1000) {
+        $('playerCol').classList.add('open');
+      }
+
+      if (s.youtubeId && ytReady && ytP) ytP.loadVideoById(s.youtubeId);
+    }
+
+    function togglePlay() {
+      if (curIdxInCurrentList === -1) return playTrack(0);
+      if (!ytReady || !ytP) return;
+      isPlaying ? ytP.pauseVideo() : ytP.playVideo();
+    }
+    
+    function next() { if(currentSongs.length) playTrack((curIdxInCurrentList + 1) % currentSongs.length); }
+    function prev() { if(currentSongs.length) playTrack((curIdxInCurrentList - 1 + currentSongs.length) % currentSongs.length); }
+
+    function updatePlayerState(playing) {
+      isPlaying = playing;
+      $('pIconPlay').style.display = playing ? 'none' : 'block';
+      $('pIconPause').style.display = playing ? 'block' : 'none';
+      
+      $('vinylRecord').classList.toggle('spin', playing);
+      $('turntable').classList.toggle('playing', playing);
+      
+      refreshActiveState();
+      playing ? startTimer() : stopTimer();
+    }
+
+    function updateProgress(c, d) {
+      $('pTimeCur').textContent = fmt(c);
+      if (d > 0) {
+        progressFill.style.width = `${(c / d) * 100}%`;
+      }
+    }
+
+    function startTimer() {
+      stopTimer();
+      progressTimer = setInterval(() => {
+        if (!ytReady || !ytP?.getCurrentTime || isScrubbing) return;
+        const c = ytP.getCurrentTime() || 0;
+        const d = ytP.getDuration() || 0;
+        updateProgress(c, d);
+      }, 250);
+    }
+    function stopTimer() { clearInterval(progressTimer); }
+
+    function scrub(e) {
+      if (curIdxInCurrentList === -1 || !ytReady || !ytP) return;
+      e.preventDefault(); 
+      const rect = progressBar.getBoundingClientRect();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      const pct = Math.max(0, Math.min(1, x / rect.width));
+      const d = ytP.getDuration() || 0;
+      if (d > 0) { ytP.seekTo(pct * d, true); updateProgress(pct * d, d); }
+    }
+
+    progressBar.addEventListener('mousedown', e => { isScrubbing = true; scrub(e); });
+    progressBar.addEventListener('touchstart', e => { isScrubbing = true; scrub(e); }, {passive: false});
+    document.addEventListener('mousemove', e => { if (isScrubbing) scrub(e); });
+    document.addEventListener('touchmove', e => { if (isScrubbing) scrub(e); }, {passive: false});
+    document.addEventListener('mouseup', () => { isScrubbing = false; });
+    document.addEventListener('touchend', () => { isScrubbing = false; });
+
+    $('btnPlay').addEventListener('click', togglePlay);
+    $('btnNext').addEventListener('click', next);
+    $('btnPrev').addEventListener('click', prev);
+    $('pLikeBtn').addEventListener('click', () => { if(curIdxInCurrentList > -1) toggleLike(currentSongs[curIdxInCurrentList]); });
+    $('closePlayerBtn').addEventListener('click', () => { $('playerCol').classList.remove('open'); });
+
+    window.onYouTubeIframeAPIReady = function() {
+      ytP = new YT.Player('yt-player', {
+        height: '1', width: '1', videoId: '',
+        playerVars: { playsinline: 1, controls: 0, rel: 0, disablekb: 1 },
+        events: {
+          onReady() { ytReady = true; ytP.setVolume(100); },
+          onStateChange(ev) {
+            const S = YT.PlayerState;
+            if (ev.data === S.PLAYING) {
+              updatePlayerState(true);
+              if (curIdxInCurrentList !== -1 && ytP.getDuration) {
+                const real = ytP.getDuration();
+                const s = currentSongs[curIdxInCurrentList];
+                if (real > 3 && isDummy(s.duration)) {
+                  s.duration = real;
+                  $('pTimeTot').textContent = fmt(real);
+                  if (s.youtubeId) { durCache[s.youtubeId] = real; saveDurCache(); }
+                  refreshActiveState();
+                }
+              }
+            } else if (ev.data === S.PAUSED) { updatePlayerState(false); }
+            else if (ev.data === S.ENDED) { updatePlayerState(false); next(); }
+          }
+        }
+      });
+    };
+
+    applyFiltersAndSort();
+  })();
+  </script>
+  <script src="https://www.youtube.com/iframe_api" async defer></script>
 </body>
 </html>
