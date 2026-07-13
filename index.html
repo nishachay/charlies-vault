@@ -221,6 +221,7 @@
     .track-row.active .play-indicator { display: block; }
     .track-row.active.playing .play-indicator { animation: pulse 1s infinite alternate; }
     @keyframes pulse { from { opacity: 0.4; } to { opacity: 1; } }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
     /* ── RIGHT: PLAYER ── */
     .player-col {
@@ -763,6 +764,7 @@
     $('btnPrev').addEventListener('click', prev);
     $('pLikeBtn').addEventListener('click', () => { if(curIdxInCurrentList > -1) toggleLike(currentSongs[curIdxInCurrentList]); });
     $('closePlayerBtn').addEventListener('click', () => { $('playerCol').classList.remove('open'); });
+    $('turntable').addEventListener('click', togglePlay);
 
     window.onYouTubeIframeAPIReady = function() {
       ytP = new YT.Player('yt-player', {
