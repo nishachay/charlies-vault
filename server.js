@@ -85,8 +85,6 @@ const server = http.createServer((req, res) => {
   // Root serves The Vault final site; old dashboard at /dashboard
   let filePath;
   if (cleanUrl === '/') {
-    filePath = path.join(__dirname, 'vault.html');
-  } else if (cleanUrl === '/dashboard') {
     filePath = path.join(__dirname, 'index.html');
   } else {
     filePath = path.join(__dirname, cleanUrl);
