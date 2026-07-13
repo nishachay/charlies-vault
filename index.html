@@ -222,6 +222,7 @@
     .track-row.active.playing .play-indicator { animation: pulse 1s infinite alternate; }
     @keyframes pulse { from { opacity: 0.4; } to { opacity: 1; } }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    #yt-mount { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0.001; pointer-events: none; bottom: 0; left: 0; }
 
     /* ── RIGHT: PLAYER ── */
     .player-col {
@@ -2247,7 +2248,7 @@ const SONGS = [
 
     window.onYouTubeIframeAPIReady = function() {
       ytP = new YT.Player('yt-player', {
-        height: '1', width: '1', videoId: '',
+        height: '1', width: '1', videoId: SONGS[0] ? SONGS[0].youtubeId : '',
         playerVars: { playsinline: 1, controls: 0, rel: 0, disablekb: 1 },
         events: {
           onReady() { ytReady = true; ytP.setVolume(100); },
