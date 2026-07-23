@@ -3,7 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'unsafe-inline' https://www.youtube.com https://s.ytimg.com;
+    style-src 'unsafe-inline' https://fonts.googleapis.com;
+    font-src https://fonts.gstatic.com;
+    frame-src https://www.youtube.com https://www.youtube-nocookie.com;
+    img-src 'self' https://img.youtube.com https://i.ytimg.com data:;
+    connect-src 'self';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'none';
+  ">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <!-- SEO & Social -->
   <title>Charlie's Vault</title>
+  <meta name="description" content="A simple listening archive of unreleased Charlie Puth tracks — demos, early concepts, and acoustic recordings not found on official albums.">
+  <meta property="og:title" content="Charlie's Vault">
+  <meta property="og:description" content="Unreleased Charlie Puth tracks — demos, early concepts, and acoustic recordings.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">

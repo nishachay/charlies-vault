@@ -1,7 +1,7 @@
-# AI agent config (not project code)
+# AI agent config (internal tooling, not project code)
 .agents/
 
-
+# Local development only
 local_uploads/
 
 # Node
@@ -13,6 +13,8 @@ node_modules/
 # OS
 .DS_Store
 Thumbs.db
+.env
+.env.*
 
 # Scratch/utility scripts (used during dev, not needed in repo)
 parse_playlist.js
@@ -28,5 +30,9 @@ check_duplicates.js
 extract_all_metadata.js
 export_final.js
 fetch_durations.js
+
+# Raw scraped data (large file, not needed by users)
 yt_data.json
+
+# Internal tooling lock file
 skills-lock.json
