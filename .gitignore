@@ -4,6 +4,13 @@
 # Local development only
 local_uploads/
 
+# Old dev dashboard files (replaced by index.html, not needed in repo)
+player.js
+style.css
+final_songs.js
+songs.js
+
+
 # Node
 node_modules/
 

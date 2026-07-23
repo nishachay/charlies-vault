@@ -29,6 +29,19 @@ Stack: plain HTML, CSS, JavaScript. YouTube IFrame API for playback. Node.js for
 
 ---
 
+## Files
+
+```
+charlies-vault/
+├── index.html      # The whole app — CSS, JS, and song list all inlined
+├── server.js       # Local dev server. Not deployed.
+├── LICENSE
+├── SECURITY.md
+└── CONTRIBUTING.md
+```
+
+---
+
 ## Licensing
 
 2 things in this repo, 2 different legal statuses.
