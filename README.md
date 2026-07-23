@@ -4,7 +4,10 @@ A listening archive of unreleased Charlie Puth tracks. Demos, acoustic recording
 
 Built by [Nishachay](https://github.com/nishachay) — [charlies-vault.vercel.app](https://charlies-vault.vercel.app)
 
+![Charlie's Vault — app preview](charlies-vault.png)
+
 ---
+
 
 ## What it does
 
