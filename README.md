@@ -1,131 +1,93 @@
-# Charlie's Vault 🎵
+# Charlie's Vault
 
-> A minimal listening archive of unreleased Charlie Puth tracks — demos, early concepts, and acoustic recordings not found on official albums.
+A listening archive of unreleased Charlie Puth tracks. Demos, acoustic recordings, early versions, things that never made it to an album.
 
-Built with focus on minimal design and smooth playback.  
-**Built by [Nishachay](https://github.com/nishachay)**
-
----
-
-## Live Site
-
-🔗 **[charlies-vault.vercel.app](https://charlies-vault.vercel.app)**
+Built by [Nishachay](https://github.com/nishachay).
 
 ---
 
-## Features
+## Live
 
-- 🎵 Stream tracks via the YouTube IFrame API — no audio files stored or hosted
-- 🎚 Vinyl-deck player with real-time progress scrubbing
-- 📱 Fully responsive — floating mini-player on mobile
-- ❤️ Like/save tracks (persisted in `localStorage`)
-- 🔍 Search, filter (All / Liked), and sort tracks
-- 🌙 Dark mode by default with light mode toggle
-- ⚡ Single-file deployment — no build step, no framework
+[charlies-vault.vercel.app](https://charlies-vault.vercel.app)
+
+---
+
+## What it does
+
+Stream ~99 unreleased Charlie Puth tracks through a vinyl-deck player. No downloads, no stored audio files. Everything plays via YouTube's IFrame API.
+
+On desktop you get the full turntable UI. On mobile, a floating mini-player sits at the bottom so you can browse the list while something's playing. You can like tracks, search, sort A-Z, and toggle dark/light mode. All preferences save to localStorage.
+
+Single HTML file. No build step, no framework, no dependencies.
 
 ---
 
 ## Stack
 
-| Layer | Technology |
-|-------|-----------| 
-| Structure | Plain HTML5 |
-| Styling | Vanilla CSS (CSS variables, Grid, Flexbox) |
-| Logic | Vanilla JavaScript (ES6+) |
-| Playback | YouTube IFrame Player API |
-| Hosting | Vercel (static) |
-| Dev server | Node.js (local only) |
+Plain HTML, CSS, JavaScript. YouTube IFrame API for playback. Vercel for hosting. Node.js only for a local dev server (never deployed to production).
 
 ---
 
-## Running Locally
+## Run it locally
 
 ```bash
 git clone https://github.com/nishachay/charlies-vault.git
 cd charlies-vault
 node server.js
-# Open http://localhost:8080
+# http://localhost:8080
 ```
-
-> **Node.js is only required for local development.** The deployed site is a single `index.html` file — no server required.
 
 ---
 
-## Project Structure
+## Files
 
 ```
 charlies-vault/
-├── index.html      # The entire application (inlined CSS + JS + song list)
-├── server.js       # Local dev server only — not deployed to production
-├── final_songs.js  # Song metadata source file (reference copy)
-├── songs.js        # Full track metadata database
-├── LICENSE         # MIT License (applies to code only — see Legal section)
-├── SECURITY.md     # Security policy and responsible disclosure
-└── CONTRIBUTING.md # Contribution guidelines
+├── index.html      # The whole app — CSS, JS, and song list all inlined
+├── server.js       # Local dev server. Not deployed.
+├── final_songs.js  # Song metadata source (reference copy)
+├── songs.js        # Full track database
+├── LICENSE
+├── SECURITY.md
+└── CONTRIBUTING.md
 ```
 
 ---
 
-## ⚖️ Legal & Licensing — Please Read
+## Licensing — please read this
 
-This project has **two separate things** with different legal status. It is important to understand both.
+Two different things are in this repo with 2 different legal statuses.
 
-### 1. The Code — MIT Licensed
+**The code is MIT licensed.** The HTML, CSS, and JavaScript are mine. You can copy it, fork it, build your own player with it, use it commercially. Just keep the copyright notice. That's the whole deal.
 
-The source code of this project (the HTML structure, CSS styling, JavaScript player logic, and UI) is written by Nishachay and released under the **MIT License**.
+**The music belongs to Charlie Puth.** Every track you hear comes from a publicly available YouTube video, streamed through YouTube's official IFrame API. There are no audio files in this repo. No files on any server I control. If a video gets taken down on YouTube, it stops playing here automatically.
 
-This means you are free to:
-- Copy, use, and modify the code for your own projects
-- Build your own music archive or player using this as a base
-- Use it commercially (with attribution)
+I don't own any of this music and I'm not claiming to. This is a fan-made listening interface, built for people who want to hear the demos.
 
-The MIT License **only covers the code**. It does not apply to any music or media content.
-
-### 2. The Music — NOT Owned by This Project
-
-All audio content streamed through this player belongs entirely to **Charlie Puth** and/or the respective rights holders.
-
-**This project:**
-- Does ❌ NOT own, host, store, download, or distribute any audio files
-- Does ❌ NOT claim any rights over any music
-- Does ✅ stream audio by embedding publicly available YouTube videos via the [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference), which is YouTube's officially provided and permitted embedding method
-
-The song list in this project contains YouTube video IDs that point to videos publicly available on YouTube. We do not control the availability of these videos. If a video is taken down on YouTube, it stops playing here automatically.
-
-### Rights Holder Contact
-
-If you are Charlie Puth, his management, or a rights holder and have any concerns about this project, please:
-
-- Open a [GitHub Issue](https://github.com/nishachay/charlies-vault/issues) and it will be addressed promptly
-- Or use [GitHub's private contact](https://github.com/nishachay/charlies-vault/security/advisories/new)
-
-This is a non-commercial fan project. Any takedown requests will be respected immediately.
+If you're a rights holder with a concern, open an issue or use [GitHub's private advisory system](https://github.com/nishachay/charlies-vault/security/advisories/new). Takedown requests get actioned within 24 hours.
 
 ---
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
 ## Security
 
-See [SECURITY.md](SECURITY.md) for responsible disclosure.
+See [SECURITY.md](SECURITY.md).
 
 ---
 
-## License
+## Credits
 
-[MIT](LICENSE) © 2025 Nishachay  
-*(Code only — music rights belong to respective owners. See Legal section above.)*
+- Charlie Puth, for the music that made this worth building
+- YouTube IFrame Player API, for the official embedding API used for playback
+- Google Fonts (Space Grotesk, Outfit, JetBrains Mono)
+- Vercel, for free hosting
+- Built with help from Google Antigravity
 
 ---
 
-## Credits & Acknowledgements
-
-- **Charlie Puth** — for the music that inspired this project
-- **YouTube IFrame Player API** — for providing the official embedding API used for playback
-- **Google Fonts** — Space Grotesk, Outfit, JetBrains Mono
-- **Vercel** — for free static hosting
-- Built with the assistance of **Google Antigravity (AI coding assistant)**
+MIT © 2025 Nishachay — code only. Music rights belong to their respective owners.

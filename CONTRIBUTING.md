@@ -1,53 +1,49 @@
-# Contributing to Charlie's Vault
+# Contributing
 
-Thanks for your interest in contributing! This is a small fan project, but all thoughtful contributions are welcome.
-
----
-
-## Ways to Contribute
-
-- 🐛 **Bug reports** — Found a layout bug or broken playback? Open an issue.
-- 💡 **Feature ideas** — Have a UI/UX suggestion? Open a discussion or issue.
-- 🎵 **Missing tracks** — Know of an unreleased Charlie Puth track that should be included? Open an issue with the YouTube link.
-- 🔐 **Security issues** — See [SECURITY.md](SECURITY.md) for responsible disclosure.
+Bugs, track suggestions, and UI fixes are welcome. Here's how.
 
 ---
 
-## Getting Started
+## Ways to contribute
+
+**Found a bug?** Open an issue. Include your device, browser, and what you expected vs. what actually happened.
+
+**Know a missing track?** Open an issue with the YouTube link and track title. Only publicly available YouTube videos of genuine Charlie Puth unreleased or demo recordings, please.
+
+**Security issue?** See [SECURITY.md](SECURITY.md).
+
+---
+
+## Setup
 
 ```bash
 git clone https://github.com/nishachay/charlies-vault.git
 cd charlies-vault
 node server.js
-# Open http://localhost:8080
+# http://localhost:8080
 ```
 
-Node.js is required only for the local dev server. The app itself is a single `index.html`.
-
 ---
 
-## Making a Pull Request
+## Submitting a PR
 
-1. Fork the repository
+1. Fork the repo
 2. Create a branch: `git checkout -b fix/your-fix-name`
-3. Make your changes in `index.html` (the entire app lives here)
-4. Test in both dark mode and light mode, on both desktop and mobile viewport
-5. Open a PR with a clear description of what changed and why
+3. Make changes in `index.html` (the whole app lives here)
+4. Test on desktop and mobile, dark and light mode
+5. Open a PR with a short description of what changed and why
 
 ---
 
-## Code Style
+## Code style
 
-- No build tools, no frameworks — keep it plain HTML/CSS/JS
-- Inline styles go in the `<style>` block inside `index.html`
-- JavaScript goes in the `<script>` block at the bottom of `index.html`
-- Prefer CSS variables for colors — avoid hardcoding hex values
+No build tools, no frameworks. Keep it plain HTML/CSS/JS. Use CSS variables for colors, don't hardcode hex values. Styles go in the `<style>` block. JS goes in the `<script>` block at the bottom of `index.html`.
 
 ---
 
-## Adding a Track
+## Adding a track
 
-Song data is inlined directly in `index.html` as a `const SONGS = [...]` array. Each entry looks like:
+The song list is a `const SONGS = [...]` array inlined in `index.html`. Each entry looks like this:
 
 ```json
 {
@@ -65,10 +61,6 @@ Song data is inlined directly in `index.html` as a `const SONGS = [...]` array. 
 }
 ```
 
-> Please only submit tracks that are publicly available on YouTube and are genuine Charlie Puth unreleased/demo recordings.
-
 ---
 
-## Code of Conduct
-
-Be respectful and constructive. This is a fan project — keep it fun and collaborative.
+Be respectful. This is a fan project.

@@ -1,71 +1,55 @@
-# Security Policy
+# Security policy
 
-## Supported Versions
+## What's supported
 
-This is a static, client-side web application with no backend when deployed. The following version is actively maintained:
-
-| Version | Supported |
-|---------|-----------|
-| Latest (`main` branch) | ✅ Yes |
-| All older commits | ❌ No |
+The `main` branch. Older commits aren't actively maintained.
 
 ---
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-**Please do not open a public GitHub issue for security vulnerabilities.**
+Don't open a public issue for security bugs. Use [GitHub's private vulnerability reporting](https://github.com/nishachay/charlies-vault/security/advisories/new) instead.
 
-If you discover a security issue, please report it responsibly by using [GitHub's private vulnerability reporting](https://github.com/nishachay/charlies-vault/security/advisories/new).
+In your report, include what you found, how to reproduce it, and what you think the impact is. A suggested fix is optional but always welcome.
 
-### What to include in your report
-
-- A clear description of the vulnerability
-- Steps to reproduce the issue
-- Potential impact or attack scenario
-- Any suggested fixes (optional but appreciated)
-
-### What to expect
-
-- **Acknowledgement** within 48 hours
-- **Status update** within 7 days
-- **Fix or mitigation** shipped as soon as possible
-
-All reporters who responsibly disclose valid vulnerabilities will be credited in the release notes (unless they prefer anonymity).
+You'll get a response within 48 hours and a status update within a week. If you want credit in the release notes, say so. If you'd rather stay anonymous, that's fine.
 
 ---
 
-## Content / DMCA / Takedown Requests
+## DMCA and takedown requests
 
-This project streams music by embedding YouTube videos via the [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference). **No audio files are hosted or stored in this repository or on any server this project controls.**
+This project streams music by embedding YouTube videos through the [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference). No audio files are hosted or stored anywhere this project controls.
 
-If you are a music rights holder (Charlie Puth, management, label, or authorized representative) and have concerns about a specific track appearing in this project's song list:
+If you're a rights holder (Charlie Puth, his management, his label, or anyone authorized to act on his behalf) and want a track removed:
 
-1. Open a [GitHub Issue](https://github.com/nishachay/charlies-vault/issues) with the track title and your contact information, **or**
-2. Use [GitHub's private advisory system](https://github.com/nishachay/charlies-vault/security/advisories/new) for a private channel
+1. Open a [GitHub issue](https://github.com/nishachay/charlies-vault/issues) with the track name, or
+2. Use the [private advisory channel](https://github.com/nishachay/charlies-vault/security/advisories/new) if you'd prefer a private conversation
 
-All takedown requests from verified rights holders will be actioned **within 24 hours**. This is a non-commercial fan project with no monetization whatsoever.
+This is a non-commercial fan project. No ads, no monetization, nothing. Takedown requests get actioned within 24 hours.
 
 ---
 
-## Security Architecture
+## Security architecture
 
-This project is designed to have a minimal attack surface:
+This is a static site. No backend in production. The attack surface is small by design.
 
 | Area | Status |
 |------|--------|
-| Server-side code on production | ✅ None — deployed as a static file on Vercel |
-| User authentication | ✅ None — no passwords or tokens anywhere |
-| Database | ✅ None — all data is inlined in `index.html` |
-| External API keys | ✅ None — YouTube IFrame API requires no credentials |
-| `eval()` or `innerHTML` with user input | ✅ None — search uses plain `.filter()` string matching |
-| File uploads on production | ✅ None — upload endpoint only exists in local `server.js` |
-| Data collected from users | ✅ None — `localStorage` only stores liked track IDs and theme preference (no PII) |
-| Content Security Policy | ✅ Set via meta tag — restricts unauthorized script/resource loading |
+| Server-side code in production | None. Vercel serves a single HTML file. |
+| User authentication | None. No passwords, no accounts. |
+| Database | None. All data lives in `index.html`. |
+| External API keys | None. YouTube IFrame API needs no credentials. |
+| `eval()` or `innerHTML` with user input | None. Search runs as a plain `.filter()` string match. |
+| File uploads in production | None. The upload endpoint only exists in `server.js`, which never deploys. |
+| User data collected | None. `localStorage` stores liked track IDs and theme preference. That's it. |
+| Content Security Policy | Set via meta tag. Restricts what external resources can load. |
 
 ---
 
-## Known Intentional Limitations
+## Known intentional limits
 
-- `server.js` uses `CORS: *` — this is intentional for local development only and is **never deployed**
-- The local `/api/save` endpoint writes to disk — this is a developer tool that is **never deployed** to production
-- `unsafe-inline` is required in the CSP because all CSS and JS is inlined in a single HTML file
+`server.js` uses `CORS: *`. Intentional for local development. Never sees production.
+
+The local `/api/save` endpoint writes to disk. Developer tool only, never deployed.
+
+The CSP requires `unsafe-inline` because all CSS and JS is inlined in a single HTML file. No external scripts load except YouTube's API.
