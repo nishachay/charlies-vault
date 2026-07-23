@@ -1,12 +1,11 @@
 # Charlie's Vault
 
-A listening archive of unreleased Charlie Puth tracks. Demos, acoustic recordings, early versions, things that never made it to an album.
-
-Built by [Nishachay](https://github.com/nishachay) — [charlies-vault.vercel.app](https://charlies-vault.vercel.app)
+A listening archive of unreleased Charlie Puth tracks. Demos, acoustic recordings, early versions, things that never made it to an album — [charlies-vault.vercel.app](https://charlies-vault.vercel.app)
 
 ![Charlie's Vault — app preview](charlies-vault.png)
 
 ---
+
 
 
 ## What it does
