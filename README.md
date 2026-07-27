@@ -12,7 +12,11 @@ Live App: [charlies-vault.vercel.app](https://charlies-vault.vercel.app)
 
 ---
 
-![Charlie's Vault App Preview](charlies-vault.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="charlies-vault.png">
+  <source media="(prefers-color-scheme: light)" srcset="charlies-vault-light.png">
+  <img alt="Charlie's Vault App Preview" src="charlies-vault.png">
+</picture>
 
 ---
 
@@ -48,12 +52,13 @@ Note: Node.js is only for local dev. The deployed app on Vercel is static index.
 
 ```
 charlies-vault/
-├── index.html      # Entire app (HTML, CSS, JS, track list)
-├── server.js       # Local dev server
-├── charlies-vault.png # App preview screenshot
-├── LICENSE         # MIT license
-├── SECURITY.md     # Security policy & takedown contact
-└── CONTRIBUTING.md # Contribution guide
+├── index.html               # Entire app (HTML, CSS, JS, track list)
+├── server.js                # Local dev server
+├── charlies-vault.png       # Dark mode preview screenshot
+├── charlies-vault-light.png # Light mode preview screenshot
+├── LICENSE                  # MIT license
+├── SECURITY.md              # Security policy & takedown contact
+└── CONTRIBUTING.md          # Contribution guide
 ```
 
 ---
