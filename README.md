@@ -74,4 +74,4 @@ Rights holders can submit takedown inquiries via [GitHub Private Advisory](https
 
 ---
 
-[CONTRIBUTING.md](CONTRIBUTING.md) | [SECURITY.md](SECURITY.md) | MIT (c) 2025 Nishachay
+[CONTRIBUTING.md](CONTRIBUTING.md) | [SECURITY.md](SECURITY.md) | MIT (c) 2026 Nishachay
