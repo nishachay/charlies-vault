@@ -1,61 +1,71 @@
-# Charlie's Vault
+# Charlie's Vault 🎵
 
-A listening archive of unreleased Charlie Puth tracks. Demos, acoustic recordings, early versions, things that never made it to an album — [charlies-vault.vercel.app](https://charlies-vault.vercel.app)
+A listening archive of 99 unreleased Charlie Puth tracks — acoustic takes, early demos, and unreleased cuts.
 
-![Charlie's Vault — app preview](charlies-vault.png)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Deploy: Vercel](https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white)](https://charlies-vault.vercel.app)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?logo=javascript&logoColor=black)](index.html)
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](index.html)
+[![Playback: YouTube API](https://img.shields.io/badge/Playback-YouTube%20API-FF0000?logo=youtube&logoColor=white)](https://developers.google.com/youtube/iframe_api_reference)
 
----
-
-
-
-## What it does
-
-Stream ~99 unreleased Charlie Puth tracks through a vinyl-deck player. No downloads, no stored audio. Everything plays via YouTube's IFrame API.
-
-Desktop gets the full turntable UI. Mobile gets a floating mini-player at the bottom so you can browse while something's playing. Like tracks, search, sort, toggle dark/light mode. Preferences save to localStorage.
-
-Single HTML file. No build step, no framework, no dependencies.
+🔗 **Live App:** [charlies-vault.vercel.app](https://charlies-vault.vercel.app)
 
 ---
 
-## Run it locally
+![Charlie's Vault App Preview](charlies-vault.png)
+
+---
+
+## Features
+
+- 🎵 **99 Unreleased Tracks** — Streamed live via YouTube's official IFrame API. No audio files stored on any server.
+- 🎚 **Turntable UI** — Vinyl deck with tonearm motion and real-time scrubber.
+- 📱 **Mobile Mini-Player** — Docked player drawer at the bottom of the viewport for smaller screens.
+- ❤️ **Favorites** — Like tracks and keep them saved in `localStorage`.
+- 🔍 **Instant Search & Filters** — Fast track filtering, A-Z/duration sorting, and Liked-only view.
+- 🌙 **Dark & Light Mode** — Theme toggle persisted across sessions.
+- ⚡ **Zero Dependencies** — Single HTML file with vanilla CSS and JavaScript.
+
+---
+
+## Local Setup
+
+Clone the repo and start the local development server:
 
 ```bash
 git clone https://github.com/nishachay/charlies-vault.git
 cd charlies-vault
 node server.js
-# http://localhost:8080
+# Open http://localhost:8080
 ```
 
-Stack: plain HTML, CSS, JavaScript. YouTube IFrame API for playback. Node.js for local dev only — never deployed.
+> Note: Node.js is only for local dev. The deployed app on Vercel is static `index.html`.
 
 ---
 
-## Files
+## Repository Files
 
 ```
 charlies-vault/
-├── index.html      # The whole app — CSS, JS, and song list all inlined
-├── server.js       # Local dev server. Not deployed.
-├── LICENSE
-├── SECURITY.md
-└── CONTRIBUTING.md
+├── index.html      # Entire app (HTML, CSS, JS, track list)
+├── server.js       # Local dev server
+├── charlies-vault.png # App preview screenshot
+├── LICENSE         # MIT license
+├── SECURITY.md     # Security policy & takedown contact
+└── CONTRIBUTING.md # Contribution guide
 ```
 
 ---
 
-## Licensing
+## Licensing & Rights
 
-2 things in this repo, 2 different legal statuses.
+This repository has two clear legal boundaries:
 
-**The code is MIT licensed.** The HTML, CSS, and JavaScript are mine. Copy it, fork it, build your own player with it. Just keep the copyright notice.
+- **Source Code (MIT License):** The HTML structure, CSS styling, and JavaScript logic are free to copy, modify, or fork.
+- **Audio Content:** Belongs to Charlie Puth and respective rights holders. All playback streams through publicly accessible YouTube videos using the official YouTube IFrame API.
 
-**The music belongs to Charlie Puth.** Every track comes from a publicly available YouTube video, streamed via YouTube's official IFrame API. No audio files in this repo. No files on any server I control. If a video gets taken down on YouTube, it stops playing here automatically.
-
-I don't own any of this music and I'm not claiming to. This is a fan-made listening interface.
-
-Rights holder with a concern? Open an issue or use [GitHub's private advisory](https://github.com/nishachay/charlies-vault/security/advisories/new). Takedown requests get actioned within 24 hours.
+Rights holders can submit takedown inquiries via [GitHub Private Advisory](https://github.com/nishachay/charlies-vault/security/advisories/new) or by opening an issue. Takedowns get processed within 24 hours.
 
 ---
 
-[CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) · MIT © 2025 Nishachay (code only)
+[CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) · MIT © 2025 Nishachay
