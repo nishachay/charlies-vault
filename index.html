@@ -383,21 +383,21 @@
     /* ── HOME & DISCOVER VIEW ── */
     .home-view {
       flex: 1; display: flex; flex-direction: column; min-height: 0;
-      overflow-y: auto; padding-right: 8px; margin-right: -8px; gap: 24px;
-      position: relative; z-index: 2; padding-bottom: 32px;
+      overflow-y: auto; padding-right: 8px; margin-right: -8px; gap: 32px;
+      position: relative; z-index: 2; padding-bottom: 40px;
     }
     .home-view.hidden { display: none !important; }
     .main-grid.hidden { display: none !important; }
 
     .nav-tabs {
-      display: flex; gap: 2px; align-items: center; 
+      display: flex; gap: 4px; align-items: center; 
       background: var(--surface-dim); padding: 4px; border-radius: 100px;
-      height: 36px;
+      height: 36px; border: 1px solid var(--border);
     }
     .nav-btn {
       height: 28px; padding: 0 16px; border-radius: 100px; font-size: 13px; font-weight: 600;
       background: transparent; color: var(--text-dim); border: none;
-      transition: background-color 0.2s, color 0.2s;
+      transition: background-color 0.2s, color 0.2s; cursor: pointer;
     }
     .nav-btn.active {
       background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm);
@@ -405,7 +405,7 @@
 
     .hero-spotlight {
       background: linear-gradient(135deg, var(--surface) 0%, rgba(255,255,255,0.02) 100%);
-      border: 1px solid var(--border); border-radius: 20px; padding: 28px 32px;
+      border: 1px solid var(--border); border-radius: 20px; padding: 32px 36px;
       position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 12px;
       box-shadow: var(--shadow-sm);
     }
@@ -414,15 +414,15 @@
       letter-spacing: 0.1em; color: #10b981; text-transform: uppercase;
     }
     .hero-title {
-      font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700;
       letter-spacing: -0.02em; text-transform: uppercase; color: var(--text);
     }
     .hero-desc {
-      font-size: 14px; color: var(--text-dim); max-width: 560px; line-height: 1.5;
+      font-size: 14px; color: var(--text-dim); max-width: 580px; line-height: 1.6;
     }
-    .hero-actions { display: flex; gap: 12px; margin-top: 8px; }
+    .hero-actions { display: flex; gap: 12px; margin-top: 12px; }
     .hero-btn {
-      height: 40px; padding: 0 20px; border-radius: 100px; font-size: 13px; font-weight: 700;
+      height: 40px; padding: 0 22px; border-radius: 100px; font-size: 13px; font-weight: 700;
       display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s;
     }
     .hero-btn.primary { background: var(--text); color: var(--site-bg); border: none; }
@@ -434,52 +434,69 @@
       display: flex; justify-content: space-between; align-items: center; margin-top: 8px;
     }
     .section-title {
-      font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700;
       letter-spacing: -0.02em; text-transform: uppercase; color: var(--text);
     }
 
-    .category-pills { display: flex; gap: 6px; }
+    .category-pills { display: flex; gap: 8px; }
     .cat-pill {
-      height: 30px; padding: 0 14px; border-radius: 100px; font-size: 12px; font-weight: 600;
+      height: 32px; padding: 0 16px; border-radius: 100px; font-size: 12px; font-weight: 600;
       background: transparent; color: var(--text-dim); border: 1px solid var(--border);
       transition: all 0.2s; cursor: pointer;
     }
-    .cat-pill.active, .cat-pill:hover { background: var(--surface); color: var(--text); }
+    .cat-pill.active, .cat-pill:hover { background: var(--surface); color: var(--text); border-color: var(--text-dim); }
 
+    /* ── 3D VINYL CRATE CARDS ── */
     .vaults-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px;
     }
     .artist-card {
-      background: var(--surface-dim); border: 1px solid var(--border); border-radius: 16px;
+      background: var(--surface-dim); border: 1px solid var(--border); border-radius: 20px;
       padding: 20px; display: flex; flex-direction: column; gap: 16px; cursor: pointer;
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s, background 0.2s;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s, box-shadow 0.25s;
       position: relative; overflow: hidden;
     }
     .artist-card:hover {
-      transform: translateY(-4px); background: var(--surface); border-color: var(--text-dim);
+      transform: translateY(-6px); border-color: rgba(255,255,255,0.25);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.5);
     }
-    .card-vinyl-preview {
-      width: 100%; height: 110px; border-radius: 12px; background: rgba(0,0,0,0.3);
+    .card-sleeve-wrapper {
+      width: 100%; height: 160px; border-radius: 14px; background: rgba(0,0,0,0.4);
       display: flex; align-items: center; justify-content: center; position: relative;
+      overflow: hidden; border: 1px solid var(--border);
     }
-    .mini-vinyl {
-      width: 84px; height: 84px; border-radius: 50%; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-      position: relative; display: flex; align-items: center; justify-content: center;
-      transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+    .crate-sleeve {
+      width: 126px; height: 126px; border-radius: 10px; background: var(--surface);
+      border: 1px solid var(--border); position: relative; z-index: 2;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+      transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
     }
-    .mini-vinyl-hole {
-      width: 16px; height: 16px; border-radius: 50%; background: var(--app-bg);
-      border: 2px solid var(--text-dim);
+    .crate-sleeve-icon { font-size: 28px; font-weight: 700; opacity: 0.8; }
+    .crate-vinyl {
+      width: 118px; height: 118px; border-radius: 50%;
+      position: absolute; right: 20px; z-index: 1;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex; align-items: center; justify-content: center;
     }
-    .artist-card:hover .mini-vinyl { transform: rotate(180deg) scale(1.05); }
-    .card-meta { display: flex; flex-direction: column; gap: 4px; }
+    .crate-vinyl-hole {
+      width: 22px; height: 22px; border-radius: 50%; background: var(--app-bg);
+      border: 3px solid var(--text-dim);
+    }
+    .artist-card:hover .crate-vinyl {
+      transform: translateX(38px) rotate(180deg);
+    }
+    .artist-card:hover .crate-sleeve {
+      transform: translateX(-10px);
+    }
+    .card-meta { display: flex; flex-direction: column; gap: 4px; z-index: 3; }
     .card-badge {
       font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
-      color: #10b981; letter-spacing: 0.05em; text-transform: uppercase;
+      color: #10b981; letter-spacing: 0.08em; text-transform: uppercase;
     }
     .card-badge.info { color: var(--text-dim); }
-    .card-name { font-size: 16px; font-weight: 700; color: var(--text); }
-    .card-sub { font-size: 12px; color: var(--text-dim); }
+    .card-name { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
+    .card-sub { font-size: 13px; color: var(--text-dim); }
 
     /* ── ABOUT MODAL ── */
     .modal-overlay {
@@ -818,92 +835,142 @@
       <div class="app-content">
         <!-- HOME & DISCOVER VIEW -->
         <div class="home-view" id="homeView">
-      <!-- HERO SPOTLIGHT -->
-      <div class="hero-spotlight">
-        <div class="hero-badge">FEATURED GRAIL VAULT</div>
-        <h2 class="hero-title">Charlie Puth — The Unreleased Archive</h2>
-        <p class="hero-desc">Explore 99 unreleased tracks, acoustic takes, early studio concepts, and scrapped sessions in a full vinyl turntable deck.</p>
-        <div class="hero-actions">
-          <button class="hero-btn primary" id="heroEnterBtn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 3l14 9-14 9V3z"/></svg>
-            Enter Vault
-          </button>
-          <button class="hero-btn secondary" id="heroPlayAllBtn">Shuffle Vault</button>
-        </div>
-      </div>
-
-      <!-- EXPLORE VAULTS -->
-      <div class="section-header">
-        <h3 class="section-title">Artist Vaults</h3>
-        <div class="category-pills" id="categoryPills">
-          <button class="cat-pill active" data-cat="all">All Vaults</button>
-          <button class="cat-pill" data-cat="acoustic">Acoustic</button>
-          <button class="cat-pill" data-cat="demos">Demos</button>
-          <button class="cat-pill" data-cat="albums">Scrapped Albums</button>
-        </div>
-      </div>
-
-      <!-- ARTIST VAULTS GRID -->
-      <div class="vaults-grid" id="vaultsGrid">
-        <div class="artist-card active" id="cardCharliePuth">
-          <div class="card-vinyl-preview">
-            <div class="mini-vinyl" style="background: radial-gradient(circle, #e06c75 0%, #18181b 75%);">
-              <div class="mini-vinyl-hole"></div>
+          <!-- HERO SPOTLIGHT -->
+          <div class="hero-spotlight">
+            <div class="hero-badge">FEATURED GRAIL</div>
+            <h2 class="hero-title">Charlie Puth — 1984 (Unreleased Studio Demo)</h2>
+            <p class="hero-desc">Rare unreleased Voicenotes-era studio arrangement. Stream 99 unreleased Charlie Puth tracks in the live vinyl turntable deck.</p>
+            <div class="hero-actions">
+              <button class="hero-btn primary" id="heroPlayAllBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 3l14 9-14 9V3z"/></svg>
+                Play Grail
+              </button>
+              <button class="hero-btn secondary" id="heroEnterBtn">Explore Charlie Puth Vault (99)</button>
             </div>
           </div>
-          <div class="card-meta">
-            <span class="card-badge">LIVE VAULT</span>
-            <h4 class="card-name">Charlie Puth</h4>
-            <p class="card-sub">99 Unreleased Tracks</p>
-          </div>
-        </div>
 
-        <div class="artist-card" data-artist="frank-ocean">
-          <div class="card-vinyl-preview">
-            <div class="mini-vinyl" style="background: radial-gradient(circle, #3b82f6 0%, #18181b 75%);">
-              <div class="mini-vinyl-hole"></div>
+          <!-- EXPLORE VAULTS -->
+          <div class="section-header">
+            <h3 class="section-title">Artist Vaults Directory</h3>
+            <div class="category-pills" id="categoryPills">
+              <button class="cat-pill active" data-cat="all">All Vaults</button>
+              <button class="cat-pill" data-cat="acoustic">Acoustic</button>
+              <button class="cat-pill" data-cat="demos">Demos</button>
+              <button class="cat-pill" data-cat="albums">Scrapped Albums</button>
             </div>
           </div>
-          <div class="card-meta">
-            <span class="card-badge info">COMING SOON</span>
-            <h4 class="card-name">Frank Ocean</h4>
-            <p class="card-sub">Look at Us We're in Love</p>
-          </div>
-        </div>
 
-        <div class="artist-card" data-artist="kanye-west">
-          <div class="card-vinyl-preview">
-            <div class="mini-vinyl" style="background: radial-gradient(circle, #eab308 0%, #18181b 75%);">
-              <div class="mini-vinyl-hole"></div>
+          <!-- 3D VINYL ARTIST CRATES GRID -->
+          <div class="vaults-grid" id="vaultsGrid">
+            <!-- CHARLIE PUTH -->
+            <div class="artist-card active" id="cardCharliePuth">
+              <div class="card-sleeve-wrapper">
+                <div class="crate-sleeve">
+                  <div class="crate-sleeve-icon">CP</div>
+                </div>
+                <div class="crate-vinyl" style="background: radial-gradient(circle, #e06c75 0%, #18181b 75%);">
+                  <div class="crate-vinyl-hole"></div>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span class="card-badge">LIVE VAULT</span>
+                <h4 class="card-name">Charlie Puth</h4>
+                <p class="card-sub">99 Unreleased Demos & Takes</p>
+              </div>
+            </div>
+
+            <!-- FRANK OCEAN -->
+            <div class="artist-card" data-artist="frank-ocean">
+              <div class="card-sleeve-wrapper">
+                <div class="crate-sleeve">
+                  <div class="crate-sleeve-icon">FO</div>
+                </div>
+                <div class="crate-vinyl" style="background: radial-gradient(circle, #3b82f6 0%, #18181b 75%);">
+                  <div class="crate-vinyl-hole"></div>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span class="card-badge info">COMING SOON</span>
+                <h4 class="card-name">Frank Ocean</h4>
+                <p class="card-sub">Look at Us We're in Love</p>
+              </div>
+            </div>
+
+            <!-- KANYE WEST -->
+            <div class="artist-card" data-artist="kanye-west">
+              <div class="card-sleeve-wrapper">
+                <div class="crate-sleeve">
+                  <div class="crate-sleeve-icon">YE</div>
+                </div>
+                <div class="crate-vinyl" style="background: radial-gradient(circle, #eab308 0%, #18181b 75%);">
+                  <div class="crate-vinyl-hole"></div>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span class="card-badge info">COMING SOON</span>
+                <h4 class="card-name">Kanye West (Ye)</h4>
+                <p class="card-sub">Yandhi & Outtakes</p>
+              </div>
+            </div>
+
+            <!-- TRAVIS SCOTT -->
+            <div class="artist-card" data-artist="travis-scott">
+              <div class="card-sleeve-wrapper">
+                <div class="crate-sleeve">
+                  <div class="crate-sleeve-icon">TS</div>
+                </div>
+                <div class="crate-vinyl" style="background: radial-gradient(circle, #a855f7 0%, #18181b 75%);">
+                  <div class="crate-vinyl-hole"></div>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span class="card-badge info">COMING SOON</span>
+                <h4 class="card-name">Travis Scott</h4>
+                <p class="card-sub">Dystopia Sessions</p>
+              </div>
+            </div>
+
+            <!-- JUICE WRLD -->
+            <div class="artist-card" data-artist="juice-wrld">
+              <div class="card-sleeve-wrapper">
+                <div class="crate-sleeve">
+                  <div class="crate-sleeve-icon">JW</div>
+                </div>
+                <div class="crate-vinyl" style="background: radial-gradient(circle, #ec4899 0%, #18181b 75%);">
+                  <div class="crate-vinyl-hole"></div>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span class="card-badge info">COMING SOON</span>
+                <h4 class="card-name">Juice WRLD</h4>
+                <p class="card-sub">The Abyss & Vault Tapes</p>
+              </div>
+            </div>
+
+            <!-- DRAKE -->
+            <div class="artist-card" data-artist="drake">
+              <div class="card-sleeve-wrapper">
+                <div class="crate-sleeve">
+                  <div class="crate-sleeve-icon">6IX</div>
+                </div>
+                <div class="crate-vinyl" style="background: radial-gradient(circle, #06b6d4 0%, #18181b 75%);">
+                  <div class="crate-vinyl-hole"></div>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span class="card-badge info">COMING SOON</span>
+                <h4 class="card-name">Drake</h4>
+                <p class="card-sub">Care Package 2 & OVO Demos</p>
+              </div>
             </div>
           </div>
-          <div class="card-meta">
-            <span class="card-badge info">COMING SOON</span>
-            <h4 class="card-name">Kanye West (Ye)</h4>
-            <p class="card-sub">Yandhi & Outtakes</p>
-          </div>
-        </div>
 
-        <div class="artist-card" data-artist="travis-scott">
-          <div class="card-vinyl-preview">
-            <div class="mini-vinyl" style="background: radial-gradient(circle, #a855f7 0%, #18181b 75%);">
-              <div class="mini-vinyl-hole"></div>
-            </div>
+          <!-- TRENDING GRAILS LIST -->
+          <div class="section-header" style="margin-top: 32px;">
+            <h3 class="section-title">Master Unreleased Track Index</h3>
           </div>
-          <div class="card-meta">
-            <span class="card-badge info">COMING SOON</span>
-            <h4 class="card-name">Travis Scott</h4>
-            <p class="card-sub">Dystopia Sessions</p>
-          </div>
+          <div class="track-list" id="homeTrendingList"></div>
         </div>
-      </div>
-
-      <!-- TRENDING GRAILS LIST -->
-      <div class="section-header" style="margin-top: 24px;">
-        <h3 class="section-title">Trending Unreleased Grails</h3>
-      </div>
-      <div class="track-list" id="homeTrendingList"></div>
-    </div>
 
     <!-- MAIN CONTENT (ARTIST VAULT PLAYER) -->
     <div class="main-grid hidden" id="artistGrid">
