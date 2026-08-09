@@ -42,7 +42,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   
   <style>
     :root {
@@ -90,38 +90,53 @@
       margin: 0;
       padding: 0;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       transition: background 0.3s;
     }
 
-    h1, h2, h3, .brand, .p-title, .modal-title, .signature span {
-      font-family: 'Space Grotesk', sans-serif;
+    h1, h2, h3, .brand, .p-title, .modal-title, .signature span, .pixel-title {
+      font-family: 'Silkscreen', 'Space Grotesk', sans-serif;
       letter-spacing: -0.02em;
     }
 
     button { background: none; border: none; color: inherit; cursor: pointer; font-family: inherit; }
 
-    /* ── FULL WINDOW DESKTOP STREAMING CANVAS (iTUNES / TIDAL STYLE) ── */
-    #app {
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      max-width: none;
-      background: var(--app-bg);
-      border-radius: 0;
-      box-shadow: none;
-      display: flex;
-      flex-direction: column;
-      padding: 0;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s;
+    /* ── NARROW LEFT VERTICAL ICON RAIL ── */
+    .sidebar-rail {
+      width: 64px; height: 100vh; background: var(--surface-dim);
+      border-right: 1px solid var(--border); display: flex;
+      flex-direction: column; align-items: center; padding: 24px 0;
+      gap: 20px; flex-shrink: 0; z-index: 20;
+    }
+    .rail-btn {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-dim); cursor: pointer; transition: all 0.2s;
+    }
+    .rail-btn:hover, .rail-btn.active {
+      background: var(--surface); color: var(--text);
+      box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+    }
+    .rail-divider {
+      width: 24px; height: 1px; background: var(--border); margin: 4px 0;
     }
 
-    /* ── APP CONTENT (FULL WIDTH 3-PAGE CONTAINER) ── */
-    .app-content {
-      flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-y: auto;
-      padding: 28px 40px 104px 40px; position: relative; z-index: 2;
+    /* ── MAIN CONTAINER CANVAS ── */
+    #app {
+      flex: 1; min-width: 0; height: 100vh; height: 100dvh;
+      background: var(--app-bg); display: flex; flex-direction: column;
+      position: relative; overflow: hidden; transition: background 0.3s;
+    }
+
+    /* ── APP MAIN LAYOUT (2-COLUMN REFERENCE DECK) ── */
+    .app-main-layout {
+      flex: 1; min-width: 0; display: grid;
+      grid-template-columns: 460px 1fr; gap: 32px;
+      padding: 24px 36px 96px 36px; overflow-y: auto;
+      align-items: start;
+    }
+    @media (max-width: 1100px) {
+      .app-main-layout { grid-template-columns: 1fr; gap: 36px; }
     }
 
     /* ── HEADER NAVIGATION LINKS ── */
@@ -806,195 +821,246 @@
 </head>
 <body>
 
+  <!-- NARROW LEFT VERTICAL ICON RAIL (REFERENCE DESIGN) -->
+  <div class="sidebar-rail">
+    <button class="rail-btn active" id="railHomeBtn" title="Discover Home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    </button>
+    <button class="rail-btn" id="railLibraryBtn" title="Liked Grails">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <button class="rail-btn" id="railVaultsBtn" title="Artist Vaults">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+    
+    <div class="rail-divider"></div>
+
+    <button class="rail-btn" id="railThemeBtn" title="Toggle Theme">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+
   <div id="app">
-    <!-- CLEAN MINIMAL TOP HEADER -->
+    <!-- TOP HEADER BAR -->
     <div class="top-bar">
       <div class="top-left">
         <div class="brand">
-          <h1 id="siteBrand" style="display: flex; align-items: center; gap: 6px;">
+          <h1 id="siteBrand" class="pixel-title" style="font-size: 22px; display: flex; align-items: center; gap: 8px;">
             GRAILS
             <span class="brand-tag">UNRELEASED</span>
           </h1>
         </div>
-
-        <div style="display: flex; gap: 8px; margin-left: 16px;">
-          <button class="nav-link active" id="navDiscoverBtn">Discover</button>
-          <button class="nav-link" id="navLibraryBtn">Library</button>
-        </div>
       </div>
 
-      <div class="search-wrapper" style="flex: 0 1 360px;">
+      <div class="search-wrapper" style="flex: 0 1 420px;">
         <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search songs, artists, or unreleased demos..." autocomplete="off">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search for songs, artists..." autocomplete="off">
       </div>
 
       <div class="top-utils">
         <button class="about-btn" id="aboutBtn">About</button>
         <button class="icon-btn" id="themeBtn" aria-label="Toggle Theme">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         </button>
       </div>
     </div>
 
-    <!-- MAIN APP CONTENT CANVAS (NO SIDEBARS) -->
-    <div class="app-content">
-      <!-- PAGE 1: DISCOVER FEED -->
-      <div class="home-view" id="discoverView">
-        <!-- HERO SPOTLIGHT -->
-        <div class="hero-spotlight">
-          <div class="hero-badge">FEATURED GRAIL</div>
-          <h2 class="hero-title">Charlie Puth — 1984 (Unreleased Studio Demo)</h2>
-          <p class="hero-desc">Rare unreleased Voicenotes-era studio arrangement. Stream 99 unreleased Charlie Puth tracks in the live vinyl turntable deck.</p>
-          <div class="hero-actions">
-            <button class="hero-btn primary" id="heroPlayAllBtn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 3l14 9-14 9V3z"/></svg>
-              Play Grail
-            </button>
-            <button class="hero-btn secondary" id="heroEnterBtn">Explore Charlie Puth Vault (99)</button>
+    <!-- APP MAIN LAYOUT (2-COLUMN REFERENCE SCREENSHOT DECK) -->
+    <div class="app-main-layout">
+      <!-- LEFT COLUMN: PINNED METALLIC TURNTABLE DECK -->
+      <div class="player-stage">
+        <div class="turntable-card">
+          <div class="corner-screw screw-tl"></div>
+          <div class="corner-screw screw-tr"></div>
+          <div class="corner-screw screw-bl"></div>
+          <div class="corner-screw screw-br"></div>
+
+          <!-- SIGNATURE TURNTABLE ENGINE -->
+          <div class="turntable-wrapper" style="width: 100%; aspect-ratio: 1;">
+            <div class="turntable" id="turntable" style="width: 100%; height: 100%;">
+              <div class="platter">
+                <div class="vinyl" id="vinylRecord">
+                  <div class="grooves"></div>
+                  <div class="vinyl-label" id="vinylLabel">
+                    <div class="vinyl-hole"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tonearm" id="tonearm">
+                <div class="tonearm-base"></div>
+                <div class="tonearm-rod"></div>
+                <div class="tonearm-head"></div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- EXPLORE VAULTS -->
-        <div class="section-header">
-          <h3 class="section-title">Artist Vaults Directory</h3>
+        <!-- TRACK INFO & PIXEL TITLE -->
+        <div class="deck-meta-box">
+          <h2 class="song-title-pixel" id="pTitle">Select a Grail</h2>
+          <div class="deck-tag-row">
+            <span class="pill-tag" id="pTag">Classic</span>
+            <div class="like-counter" id="pLikeCounter">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+              <span>99 Grails</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANIMATED WAVEFORM SCRUBBER (REFERENCE DESIGN) -->
+        <div class="waveform-scrubber-box">
+          <span class="waveform-time" id="pTimeCur">0:00</span>
+          <div class="waveform-bars" id="wfProgressBar" style="display: flex; align-items: center; gap: 3px; flex: 1; height: 32px; cursor: pointer;">
+            <div class="wf-bar active" style="height: 40%;"></div>
+            <div class="wf-bar active" style="height: 70%;"></div>
+            <div class="wf-bar active" style="height: 90%;"></div>
+            <div class="wf-bar active" style="height: 60%;"></div>
+            <div class="wf-bar active" style="height: 100%;"></div>
+            <div class="wf-bar active" style="height: 75%;"></div>
+            <div class="wf-bar active" style="height: 50%;"></div>
+            <div class="wf-bar active" style="height: 85%;"></div>
+            <div class="wf-bar active" style="height: 95%;"></div>
+            <div class="wf-bar active" style="height: 65%;"></div>
+            <div class="wf-bar active" style="height: 40%;"></div>
+            <div class="wf-bar" style="height: 80%;"></div>
+            <div class="wf-bar" style="height: 60%;"></div>
+            <div class="wf-bar" style="height: 90%;"></div>
+            <div class="wf-bar" style="height: 70%;"></div>
+            <div class="wf-bar" style="height: 50%;"></div>
+            <div class="wf-bar" style="height: 85%;"></div>
+            <div class="wf-bar" style="height: 40%;"></div>
+            <div class="wf-bar" style="height: 65%;"></div>
+            <div class="wf-bar" style="height: 95%;"></div>
+          </div>
+          <span class="waveform-time" id="pTimeTot" style="text-align: right;">--:--</span>
+        </div>
+
+        <!-- PLAYER CONTROLS ROW (REFERENCE DESIGN) -->
+        <div class="player-controls-row" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 8px;">
+          <button class="ctrl-circle-btn" id="btnShuffle" title="Shuffle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+          </button>
+          <button class="ctrl-circle-btn" id="btnPrev" title="Previous">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+          </button>
+          <button class="ctrl-circle-btn main-play" id="btnPlay" title="Play/Pause" style="width: 56px; height: 56px; border-radius: 50%; background: var(--text); color: var(--app-bg); border: none; display: flex; align-items: center; justify-content: center;">
+            <svg id="pIconPlay" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="pIconPause" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <svg id="pIconLoading" class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="display:none; width: 24px; height: 24px;"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity="0.2" fill="none"></circle><path d="M4 12a8 8 0 0 1 8-8" stroke="currentColor" fill="none"></path></svg>
+          </button>
+          <button class="ctrl-circle-btn" id="btnNext" title="Next">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg>
+          </button>
+          <button class="ctrl-circle-btn" id="pLikeBtn" title="Like Grail">
+            <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: DISCOVERY STAGE (REFERENCE DESIGN) -->
+      <div class="discovery-stage">
+        <!-- TOP SECTION: ARTIST VAULTS & CATEGORIES -->
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="pixel-header">Music Categories</h2>
+            <span style="font-size: 13px; font-weight: 600; text-decoration: underline; cursor: pointer; color: var(--text-dim);" id="viewAllCategoriesBtn">View all</span>
+          </div>
+
           <div class="category-pills" id="categoryPills">
-            <button class="cat-pill active" data-cat="all">All Vaults</button>
-            <button class="cat-pill" data-cat="acoustic">Acoustic</button>
+            <button class="cat-pill active" data-cat="all">Classic</button>
+            <button class="cat-pill" data-cat="90s">90s</button>
+            <button class="cat-pill" data-cat="new">New</button>
+            <button class="cat-pill" data-cat="instrumental">Instrumental</button>
             <button class="cat-pill" data-cat="demos">Demos</button>
-            <button class="cat-pill" data-cat="albums">Scrapped Albums</button>
-          </div>
-        </div>
-
-        <!-- MODERN STREAMING ARTIST CARDS GRID -->
-        <div class="vaults-grid" id="vaultsGrid">
-          <!-- CHARLIE PUTH -->
-          <div class="artist-card active" id="cardCharliePuth">
-            <div class="card-avatar-wrapper">
-              <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #e06c75 0%, #3f1a1d 60%, #121215 100%);">
-                <span class="card-avatar-initials">CP</span>
-              </div>
-              <div class="card-play-hover-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
-            </div>
-            <div class="card-meta">
-              <span class="card-badge">LIVE VAULT</span>
-              <h4 class="card-name">Charlie Puth</h4>
-              <p class="card-sub">99 Unreleased Demos & Takes</p>
-            </div>
           </div>
 
-          <!-- FRANK OCEAN -->
-          <div class="artist-card" data-artist="frank-ocean">
-            <div class="card-avatar-wrapper">
-              <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #3b82f6 0%, #1e3a8a 60%, #121215 100%);">
-                <span class="card-avatar-initials">FO</span>
+          <!-- ARTIST CARDS GRID -->
+          <div class="vaults-grid" id="vaultsGrid">
+            <!-- CHARLIE PUTH -->
+            <div class="artist-card active" id="cardCharliePuth">
+              <div class="card-avatar-wrapper">
+                <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #e06c75 0%, #3f1a1d 60%, #121215 100%);">
+                  <span class="card-avatar-initials">CP</span>
+                </div>
+                <div class="card-play-hover-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
               </div>
-              <div class="card-play-hover-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <div class="card-meta">
+                <span class="card-badge">LIVE VAULT</span>
+                <h4 class="card-name">Charlie Puth</h4>
+                <p class="card-sub">99 Unreleased Demos & Takes</p>
               </div>
             </div>
-            <div class="card-meta">
-              <span class="card-badge info">COMING SOON</span>
-              <h4 class="card-name">Frank Ocean</h4>
-              <p class="card-sub">Look at Us We're in Love</p>
-            </div>
-          </div>
 
-          <!-- KANYE WEST -->
-          <div class="artist-card" data-artist="kanye-west">
-            <div class="card-avatar-wrapper">
-              <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #eab308 0%, #713f12 60%, #121215 100%);">
-                <span class="card-avatar-initials">YE</span>
+            <!-- FRANK OCEAN -->
+            <div class="artist-card" data-artist="frank-ocean">
+              <div class="card-avatar-wrapper">
+                <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #3b82f6 0%, #1e3a8a 60%, #121215 100%);">
+                  <span class="card-avatar-initials">FO</span>
+                </div>
+                <div class="card-play-hover-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
               </div>
-              <div class="card-play-hover-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <div class="card-meta">
+                <span class="card-badge info">COMING SOON</span>
+                <h4 class="card-name">Frank Ocean</h4>
+                <p class="card-sub">Look at Us We're in Love</p>
               </div>
             </div>
-            <div class="card-meta">
-              <span class="card-badge info">COMING SOON</span>
-              <h4 class="card-name">Kanye West (Ye)</h4>
-              <p class="card-sub">Yandhi & Outtakes</p>
-            </div>
-          </div>
 
-          <!-- TRAVIS SCOTT -->
-          <div class="artist-card" data-artist="travis-scott">
-            <div class="card-avatar-wrapper">
-              <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #a855f7 0%, #581c87 60%, #121215 100%);">
-                <span class="card-avatar-initials">TS</span>
+            <!-- KANYE WEST -->
+            <div class="artist-card" data-artist="kanye-west">
+              <div class="card-avatar-wrapper">
+                <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #eab308 0%, #713f12 60%, #121215 100%);">
+                  <span class="card-avatar-initials">YE</span>
+                </div>
+                <div class="card-play-hover-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
               </div>
-              <div class="card-play-hover-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <div class="card-meta">
+                <span class="card-badge info">COMING SOON</span>
+                <h4 class="card-name">Kanye West (Ye)</h4>
+                <p class="card-sub">Yandhi & Outtakes</p>
               </div>
             </div>
-            <div class="card-meta">
-              <span class="card-badge info">COMING SOON</span>
-              <h4 class="card-name">Travis Scott</h4>
-              <p class="card-sub">Dystopia Sessions</p>
-            </div>
-          </div>
 
-          <!-- JUICE WRLD -->
-          <div class="artist-card" data-artist="juice-wrld">
-            <div class="card-avatar-wrapper">
-              <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #ec4899 0%, #831843 60%, #121215 100%);">
-                <span class="card-avatar-initials">JW</span>
+            <!-- TRAVIS SCOTT -->
+            <div class="artist-card" data-artist="travis-scott">
+              <div class="card-avatar-wrapper">
+                <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #a855f7 0%, #581c87 60%, #121215 100%);">
+                  <span class="card-avatar-initials">TS</span>
+                </div>
+                <div class="card-play-hover-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
               </div>
-              <div class="card-play-hover-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <div class="card-meta">
+                <span class="card-badge info">COMING SOON</span>
+                <h4 class="card-name">Travis Scott</h4>
+                <p class="card-sub">Dystopia Sessions</p>
               </div>
-            </div>
-            <div class="card-meta">
-              <span class="card-badge info">COMING SOON</span>
-              <h4 class="card-name">Juice WRLD</h4>
-              <p class="card-sub">The Abyss & Vault Tapes</p>
-            </div>
-          </div>
-
-          <!-- DRAKE -->
-          <div class="artist-card" data-artist="drake">
-            <div class="card-avatar-wrapper">
-              <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #06b6d4 0%, #164e63 60%, #121215 100%);">
-                <span class="card-avatar-initials">6IX</span>
-              </div>
-              <div class="card-play-hover-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
-            </div>
-            <div class="card-meta">
-              <span class="card-badge info">COMING SOON</span>
-              <h4 class="card-name">Drake</h4>
-              <p class="card-sub">Care Package 2 & OVO Demos</p>
             </div>
           </div>
         </div>
 
-        <!-- TRENDING GRAILS LIST -->
-        <div class="section-header" style="margin-top: 32px;">
-          <h3 class="section-title">Master Unreleased Track Index</h3>
-        </div>
-        <div class="track-list" id="homeTrendingList"></div>
-      </div>
-
-      <!-- PAGE 2: MY LIBRARY PAGE -->
-      <div class="library-view hidden" id="libraryView">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">My Library</h2>
-            <p style="font-size: 14px; color: var(--text-dim); margin-top: 4px;">Your saved unreleased tracks & liked grails</p>
+        <!-- BOTTOM SECTION: FAVORITE PLAYLISTS / TOP GRAILS -->
+        <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="pixel-header">Favorite Playlists (99)</h2>
+            <div class="filters">
+              <button class="filter-tab active" id="tabAll">All Tracks</button>
+              <button class="filter-tab" id="tabLiked">Liked <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+            </div>
           </div>
-        </div>
-        <div class="track-list" id="libraryList"></div>
-        <div class="empty-library hidden" id="emptyLibrary">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-          <div style="font-size: 18px; font-weight: 700; color: var(--text);">No Liked Grails Yet</div>
-          <p style="font-size: 13px;">Click the heart icon on any unreleased track to save it to your library.</p>
+
+          <div class="track-list" id="trackList"></div>
         </div>
       </div>
-
-      <!-- PAGE 3: ARTIST VAULT PLAYER VIEW -->
-      <div class="main-grid hidden" id="artistGrid">
+    </div>
+  </div>
         <div class="artist-page-header" style="grid-column: 1 / span 2;">
           <div class="artist-title-box">
             <span class="back-link" id="artistBackBtn">← Back to Discover</span>
