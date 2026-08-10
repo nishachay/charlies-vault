@@ -1,22 +1,10 @@
-<!--
-  Charlie's Vault — charlies-vault.vercel.app
-  Built by Nishachay (github.com/nishachay)
-
-  Code: MIT licensed. The HTML, CSS, and JS are mine.
-  Copy it, fork it, build your own thing with it.
-
-  Music: belongs to Charlie Puth and respective rights holders.
-  No audio files are stored here. Playback uses YouTube's IFrame API.
-
-  Takedown requests: github.com/nishachay/charlies-vault/issues
--->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-
-  <!-- Security Headers -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GRAILS — Unreleased Music Archive</title>
+  <meta name="description" content="Stream 99 unreleased tracks from the world's best artists. Rare demos, vault leaks, and scrapped sessions.">
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'unsafe-inline' https://www.youtube.com https://s.ytimg.com;
@@ -26,3076 +14,1411 @@
     img-src 'self' https://img.youtube.com https://i.ytimg.com data:;
     connect-src 'self';
     object-src 'none';
-    base-uri 'self';
-    form-action 'none';
   ">
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-
-  <!-- SEO & Social -->
-  <title>Charlie's Vault</title>
-  <meta name="description" content="A simple listening archive of unreleased Charlie Puth tracks — demos, early concepts, and acoustic recordings not found on official albums.">
-  <meta property="og:title" content="Charlie's Vault">
-  <meta property="og:description" content="Unreleased Charlie Puth tracks — demos, early concepts, and acoustic recordings.">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --app-bg: #18181b;
-      --site-bg: #000000;
-      --text: #f9fafb;
-      --text-dim: #9ca3af;
-      --accent: #ffffff;
-      --surface: #27272a;
-      --surface-dim: rgba(255,255,255,0.03);
-      --border: rgba(255,255,255,0.06);
-      --red: #ef4444;
-      --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
-      --shadow-lg: 0 24px 48px rgba(0,0,0,0.6);
-    }
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-    [data-theme="light"] {
-      --app-bg: #e5e7eb;
-      --site-bg: #09090b;
-      --text: #111827;
-      --text-dim: #6b7280;
-      --accent: #000000;
-      --surface: #ffffff;
-      --surface-dim: rgba(255,255,255,0.5);
-      --border: rgba(0,0,0,0.06);
-      --shadow-lg: 0 24px 48px rgba(0,0,0,0.1);
+  <style>
+    /* ── DESIGN TOKENS ── */
+    :root {
+      --bg:          #0a0a0a;
+      --surface:     #111111;
+      --surface2:    #1a1a1a;
+      --surface3:    #242424;
+      --border:      rgba(255,255,255,0.06);
+      --border2:     rgba(255,255,255,0.12);
+      --text:        #f5f5f5;
+      --text-2:      #a0a0a0;
+      --text-3:      #505050;
+      --accent:      #e8ff5a;
+      --accent-dim:  rgba(232,255,90,0.12);
+      --red:         #ff4d6d;
+      --red-dim:     rgba(255,77,109,0.12);
+      --sidebar-w:   72px;
+      --panel-w:     340px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; margin: 8px 0; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
-    [data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); }
-    ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
-    
-    body {
-      font-family: 'Outfit', system-ui, sans-serif;
-      background: var(--app-bg);
-      color: var(--text);
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 10px; }
+
+    html, body {
+      height: 100%; width: 100%;
       overflow: hidden;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: row;
-      transition: background 0.3s;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
     }
 
-    h1, h2, h3, .brand, .p-title, .modal-title, .signature span, .pixel-title {
-      font-family: 'Silkscreen', 'Space Grotesk', sans-serif;
-      letter-spacing: -0.02em;
-    }
+    button { background: none; border: none; cursor: pointer; font-family: inherit; color: inherit; }
+    input { font-family: inherit; }
 
-    button { background: none; border: none; color: inherit; cursor: pointer; font-family: inherit; }
-
-    /* ── NARROW LEFT VERTICAL ICON RAIL ── */
-    .sidebar-rail {
-      width: 64px; height: 100vh; background: var(--surface-dim);
-      border-right: 1px solid var(--border); display: flex;
-      flex-direction: column; align-items: center; padding: 24px 0;
-      gap: 20px; flex-shrink: 0; z-index: 20;
-    }
-    .rail-btn {
-      width: 40px; height: 40px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-dim); cursor: pointer; transition: all 0.2s;
-    }
-    .rail-btn:hover, .rail-btn.active {
-      background: var(--surface); color: var(--text);
-      box-shadow: var(--shadow-sm); border: 1px solid var(--border);
-    }
-    .rail-divider {
-      width: 24px; height: 1px; background: var(--border); margin: 4px 0;
-    }
-
-    /* ── MAIN CONTAINER CANVAS ── */
+    /* ── APP SHELL: 3-COLUMN LAYOUT ── */
     #app {
-      flex: 1; min-width: 0; height: 100vh; height: 100dvh;
-      background: var(--app-bg); display: flex; flex-direction: column;
-      position: relative; overflow: hidden; transition: background 0.3s;
+      display: grid;
+      grid-template-columns: var(--sidebar-w) var(--panel-w) 1fr;
+      grid-template-rows: 1fr;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
     }
 
-    /* ── APP MAIN LAYOUT (2-COLUMN REFERENCE DECK) ── */
-    .app-main-layout {
-      flex: 1; min-width: 0; display: grid;
-      grid-template-columns: 460px 1fr; gap: 32px;
-      padding: 24px 36px 96px 36px; overflow-y: auto;
-      align-items: start;
-    }
-    @media (max-width: 1100px) {
-      .app-main-layout { grid-template-columns: 1fr; gap: 36px; }
-    }
-
-    /* ── HEADER NAVIGATION LINKS ── */
-    .nav-link {
-      font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700;
-      color: var(--text-dim); padding: 6px 12px; border-radius: 8px;
-      transition: color 0.2s, background-color 0.2s; cursor: pointer; border: none; background: transparent;
-    }
-    .nav-link:hover, .nav-link.active {
-      color: var(--text); background: var(--surface-dim);
-    }
-    .brand-tag {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
-      color: #10b981; letter-spacing: 0.1em; text-transform: uppercase; margin-left: 8px;
-    }
-
-    /* ── ARTIST VAULT PAGE STYLES ── */
-    .artist-page-header {
-      display: flex; justify-content: space-between; align-items: flex-end;
-      margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
-    }
-    .artist-title-box { display: flex; flex-direction: column; gap: 6px; }
-    .back-link {
-      font-size: 13px; font-weight: 600; color: var(--text-dim); display: inline-flex;
-      align-items: center; gap: 6px; cursor: pointer; margin-bottom: 4px; transition: color 0.2s;
-    }
-    .back-link:hover { color: var(--text); }
-    .artist-page-title {
-      font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700;
-      letter-spacing: -0.03em; text-transform: uppercase; color: var(--text);
-    }
-    .artist-page-sub { font-size: 14px; color: var(--text-dim); }
-
-    /* ── LIBRARY VIEW ── */
-    .library-view {
-      flex: 1; display: flex; flex-direction: column; min-height: 0; gap: 24px;
-    }
-    .library-view.hidden { display: none !important; }
-    .empty-library {
-      padding: 60px 20px; text-align: center; color: var(--text-dim); font-size: 15px; font-weight: 500;
-      display: flex; flex-direction: column; align-items: center; gap: 12px;
-    }
-
-    /* ── CLOSE BUTTON FOR MOBILE DRAWER ── */
-    .close-player {
-      display: none;
-    }
-
-    /* ── TOP BAR (HEADER) ── */
-    .top-bar {
-      display: flex; align-items: center; justify-content: space-between; gap: 24px;
-      flex-shrink: 0; height: 64px; padding: 0 24px;
-      border-bottom: 1px solid var(--border); background: var(--app-bg);
-      position: relative; z-index: 10;
-    }
-    
-    .top-left {
-      display: flex; align-items: center; gap: 32px; flex: 1;
-    }
-
-    .brand { flex: 0 0 auto; }
-    .brand h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; text-transform: uppercase; }
-
-    .search-wrapper { position: relative; flex: 0 1 320px; }
-    .search-input {
-      width: 100%; height: 36px; background: var(--surface); border: 1px solid var(--border);
-      border-radius: 100px; padding: 0 20px 0 42px;
-      font-family: inherit; font-size: 13px; font-weight: 500; color: var(--text);
-      outline: none; box-shadow: var(--shadow-sm);
-      transition: border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .search-input:focus { box-shadow: 0 4px 16px rgba(0,0,0,0.1); border-color: var(--text-dim); }
-    .search-icon {
-      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
-      color: var(--text-dim); pointer-events: none;
-    }
-
-    .top-controls {
-      display: flex; align-items: center; gap: 12px; margin-left: auto; flex-shrink: 0;
-    }
-    
-    .top-utils {
-      display: flex; align-items: center; gap: 12px; flex-shrink: 0; margin-left: 12px;
-    }
-    
-    .filters { 
-      display: flex; gap: 2px; align-items: center; 
-      background: var(--surface-dim); padding: 4px; border-radius: 100px;
-      height: 36px;
-    }
-    .filter-tab {
-      height: 28px; padding: 0 16px; border-radius: 100px; font-size: 13px; font-weight: 600;
-      background: transparent; color: var(--text-dim); border: none;
-      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-    }
-    .filter-tab.active {
-      background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm);
-    }
-    .filter-tab svg { width: 14px; height: 14px; }
-    .filter-tab.active svg { fill: var(--red); stroke: var(--red); }
-
-    .sort-select {
-      height: 36px; padding: 0 32px 0 16px; border-radius: 100px;
-      background: transparent; border: 1px solid var(--border); color: var(--text);
-      font-family: inherit; font-size: 13px; font-weight: 600;
-      outline: none; cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 12px center;
-      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .sort-select:hover { background-color: var(--surface-dim); }
-    .sort-select option { background: var(--surface); color: var(--text); }
-
-    .about-btn {
-      height: 36px; padding: 0 16px; border-radius: 100px; font-size: 13px; font-weight: 600;
-      background: transparent; border: none; color: var(--text-dim);
-      display: flex; align-items: center; justify-content: center;
-      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .about-btn:hover { background: var(--surface-dim); color: var(--text); }
-    
-    .icon-btn {
-      width: 36px; height: 36px; border-radius: 50%; background: transparent;
-      border: none;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-dim);
-      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .icon-btn:hover { background: var(--surface-dim); color: var(--text); }
-
-    /* ── ACTIVE STATES ── */
-    .filter-tab:active, .sort-select:active, .about-btn:active, .icon-btn:active {
-      transform: scale(0.97);
-    }
-
-    /* ── MAIN CONTENT ── */
-    .main-grid {
-      flex: 1; display: flex; gap: 60px; min-height: 0;
-      width: 100%; justify-content: space-between;
-      padding: 0;
-      position: relative; z-index: 2;
+    /* ═══════════════════════════════
+       COLUMN 1: ICON SIDEBAR
+    ═══════════════════════════════ */
+    .sidebar {
+      grid-column: 1;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
       align-items: center;
+      padding: 20px 0;
+      gap: 4px;
+      z-index: 10;
     }
 
-    /* ── LEFT: LIBRARY ── */
-    .library-col {
-      flex: 1; display: flex; flex-direction: column; min-width: 0; width: 100%;
-      max-height: min(720px, 80vh);
+    .sidebar-logo {
+      width: 36px; height: 36px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+      flex-shrink: 0;
     }
-    
+    .sidebar-logo span {
+      font-size: 11px; font-weight: 900;
+      color: #000; letter-spacing: -0.5px;
+    }
+
+    .nav-item {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3);
+      transition: background 0.15s, color 0.15s;
+      position: relative;
+    }
+    .nav-item:hover { background: var(--surface2); color: var(--text-2); }
+    .nav-item.active { background: var(--surface3); color: var(--text); }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: -1px; top: 25%; bottom: 25%;
+      width: 2px;
+      background: var(--accent);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .sidebar-spacer { flex: 1; }
+
+    /* ═══════════════════════════════
+       COLUMN 2: TRACK PANEL
+    ═══════════════════════════════ */
+    .track-panel {
+      grid-column: 2;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 20px 20px 16px;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 12px;
+    }
+
+    .artist-selector {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .artist-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      font-size: 12px; font-weight: 600;
+      color: var(--text-2);
+      background: transparent;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .artist-chip:hover { border-color: var(--border2); color: var(--text); }
+    .artist-chip.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+    .artist-chip .chip-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.5;
+    }
+    .artist-chip.active .chip-dot { opacity: 1; }
+
+    /* ── SEARCH BAR ── */
+    .search-bar {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .search-wrap {
+      position: relative;
+    }
+    .search-icon {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      color: var(--text-3); pointer-events: none;
+    }
+    .search-input {
+      width: 100%; height: 36px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0 12px 0 36px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .search-input::placeholder { color: var(--text-3); }
+    .search-input:focus { border-color: var(--border2); }
+
+    /* ── PANEL CONTROLS ── */
+    .panel-controls {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 16px 8px;
+      flex-shrink: 0;
+    }
+    .track-count {
+      font-size: 12px; font-weight: 500; color: var(--text-3);
+    }
+    .control-group { display: flex; gap: 4px; }
+    .ctrl-pill {
+      height: 28px; padding: 0 12px;
+      border-radius: 100px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-3);
+      background: transparent;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .ctrl-pill:hover { background: var(--surface2); color: var(--text-2); border-color: var(--border); }
+    .ctrl-pill.active { background: var(--surface3); color: var(--text); border-color: var(--border2); }
+
+    /* ── TRACK LIST ── */
     .track-list {
-      flex: 1; overflow-y: auto; padding-right: 8px; margin-right: -8px;
-      display: flex; flex-direction: column; gap: 4px; padding-bottom: 0px;
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 8px 24px;
     }
 
     .track-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 16px; border-radius: 12px; cursor: pointer;
-      background: transparent; transition: background 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.12s;
+      position: relative;
     }
-    .track-row:hover { background: var(--surface-dim); }
+    .track-row:hover { background: var(--surface2); }
     .track-row.active {
-      background: var(--surface); box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border);
+      background: var(--surface2);
+    }
+    .track-row.active .t-num-wrap { opacity: 0; }
+    .track-row.active .t-eq { opacity: 1; }
+
+    .t-num-wrap {
+      width: 28px; text-align: center; flex-shrink: 0;
+      font-size: 12px; font-weight: 600; color: var(--text-3);
+      font-family: 'JetBrains Mono', monospace;
+      transition: opacity 0.15s;
+    }
+    .t-eq {
+      position: absolute; left: 10px;
+      width: 28px; display: flex; align-items: flex-end; justify-content: center;
+      gap: 2px; height: 14px; opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .eq-bar {
+      width: 3px; background: var(--accent); border-radius: 1px;
+      transform-origin: bottom;
+    }
+    .track-row.playing .eq-bar { animation: eq-dance 0.6s ease-in-out infinite alternate; }
+    .eq-bar:nth-child(1) { height: 40%; animation-delay: 0s; }
+    .eq-bar:nth-child(2) { height: 80%; animation-delay: 0.15s; }
+    .eq-bar:nth-child(3) { height: 60%; animation-delay: 0.3s; }
+
+    @keyframes eq-dance {
+      0% { transform: scaleY(0.3); }
+      100% { transform: scaleY(1); }
     }
 
-    .t-num { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); width: 28px; text-align: center; flex-shrink: 0; }
-    .t-info { flex: 1; min-width: 0; }
-    .t-title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em; }
-    .t-artist { font-size: 12px; font-weight: 500; color: var(--text-dim); margin-top: 2px; }
-    
-    .t-dur { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); width: 44px; text-align: right; flex-shrink: 0; }
-
-    .like-btn {
-      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-      color: var(--text-dim); border-radius: 50%; flex-shrink: 0;
-      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    .t-thumb {
+      width: 36px; height: 36px;
+      border-radius: 6px;
+      background: var(--surface3);
+      flex-shrink: 0;
+      overflow: hidden;
+      position: relative;
     }
-    .like-btn:hover { color: var(--red); background: var(--surface); }
-    .like-btn.liked { color: var(--red); }
-    .like-btn svg { fill: none; transition: fill 0.2s; }
-    .like-btn.liked svg { fill: var(--red); }
-    .like-btn:active { transform: scale(0.92); }
-
-    .play-indicator { display: none; width: 14px; height: 14px; margin: 0 auto; fill: var(--accent); }
-    .track-row.active .t-num span { display: none; }
-    .track-row.active .play-indicator { display: block; }
-    .track-row.active.playing .play-indicator { animation: pulse 1s infinite alternate; }
-    @keyframes pulse { from { opacity: 0.4; } to { opacity: 1; } }
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    @keyframes spin-loader { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .spinner { animation: spin-loader 0.8s linear infinite; fill: none !important; transform-origin: center; }
-    #yt-mount { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0.001; pointer-events: none; bottom: 0; left: 0; }
-
-    /* ── RIGHT: PLAYER ── */
-    .player-col {
-      flex: 0 0 400px; margin: 0 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-
-    .turntable {
-      width: min(400px, 100%, 45vh); height: auto; aspect-ratio: 1;
-      background: linear-gradient(135deg, #2a2a2e, #1a1a1d);
-      border-radius: 20px;
-      box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), inset 0 -2px 4px rgba(0,0,0,0.5), 0 24px 48px rgba(0,0,0,0.6);
-      border: 1px solid rgba(255,255,255,0.05);
-      position: relative; margin-bottom: 32px; flex-shrink: 0;
+    .t-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .t-thumb-fallback {
+      width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
-    }
-    [data-theme="light"] .turntable {
-      background: linear-gradient(135deg, #f8f9fa, #e2e4e9);
-      box-shadow: inset 0 2px 4px #fff, inset 0 -2px 4px rgba(0,0,0,0.05), 0 24px 48px rgba(0,0,0,0.15);
-      border-color: rgba(255,255,255,0.5);
+      font-size: 13px; font-weight: 700; color: var(--text-3);
+      letter-spacing: -0.5px;
     }
 
-    .vinyl-record {
-      width: 86%; height: 86%; background: #111; border-radius: 50%;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.4), inset 0 0 0 4px #222;
-      position: relative; display: flex; align-items: center; justify-content: center;
-      background-image: repeating-radial-gradient( #111, #111 4px, #1a1a1a 5px, #111 6px );
-      animation: spin 4s linear infinite paused; will-change: transform;
+    .t-body { flex: 1; min-width: 0; }
+    .t-name {
+      font-size: 13px; font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      color: var(--text);
+      transition: color 0.12s;
     }
-    .vinyl-record.spin { animation-play-state: running; }
-    .vinyl-record::before {
-      content: ''; position: absolute; inset: 0; border-radius: 50%;
-      background: conic-gradient(from 0deg, rgba(255,255,255,0.05) 0deg, transparent 45deg, rgba(255,255,255,0.05) 90deg, transparent 135deg, rgba(255,255,255,0.05) 180deg, transparent 225deg, rgba(255,255,255,0.05) 270deg, transparent 315deg, rgba(255,255,255,0.05) 360deg);
+    .track-row.active .t-name { color: var(--accent); }
+    .t-meta {
+      font-size: 11px; font-weight: 500; color: var(--text-3);
+      margin-top: 2px;
+    }
+
+    .t-right {
+      display: flex; align-items: center; gap: 6px;
+      flex-shrink: 0;
+    }
+    .t-dur {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 500; color: var(--text-3);
+      width: 36px; text-align: right;
+    }
+    .like-btn {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3);
+      opacity: 0;
+      transition: opacity 0.12s, color 0.12s, background 0.12s;
+    }
+    .track-row:hover .like-btn { opacity: 1; }
+    .like-btn:hover { color: var(--red); background: var(--red-dim); }
+    .like-btn.liked { opacity: 1; color: var(--red); }
+    .like-btn.liked svg { fill: var(--red); }
+    .like-btn svg { fill: none; stroke-width: 2; }
+
+    /* ═══════════════════════════════
+       COLUMN 3: MAIN PLAYER AREA
+    ═══════════════════════════════ */
+    .player-area {
+      grid-column: 3;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg);
+      position: relative;
+    }
+
+    /* ── AMBIENT GLOW BACKGROUND ── */
+    .ambient-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
       pointer-events: none;
     }
-    .vinyl-label { width: 32%; height: 32%; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 0 2px #000; }
-    .vinyl-hole { width: 14%; height: 14%; background: var(--app-bg); border-radius: 50%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.6); }
-
-    .tonearm {
-      position: absolute; top: 8%; right: 6%; width: 20%; height: 50%;
-      transform-origin: center 15%; transform: rotate(-15deg); transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;
+    .ambient-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0;
+      transition: background 2s ease, opacity 1s ease;
     }
-    .playing .tonearm { transform: rotate(15deg); }
-    .tonearm-base { width: 70%; aspect-ratio: 1; background: #374151; border-radius: 50%; position: absolute; top: 0; right: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 2px 2px rgba(255,255,255,0.2); border: 1px solid #1f2937; }
-    [data-theme="light"] .tonearm-base { background: #e5e7eb; border-color: #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 2px 4px #fff; }
-    .tonearm-rod { width: 10%; height: 95%; background: #6b7280; position: absolute; top: 15%; right: 30%; border-radius: 4px; box-shadow: -2px 2px 4px rgba(0,0,0,0.5); }
-    [data-theme="light"] .tonearm-rod { background: #cbd5e1; box-shadow: -2px 2px 4px rgba(0,0,0,0.2); }
-    .tonearm-head { width: 45%; height: 25%; background: #475569; position: absolute; bottom: 0; right: 12%; border-radius: 4px; transform: rotate(25deg); box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
-
-    .p-header { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 24px; padding: 0 8px; flex-shrink: 0; }
-    .p-info { flex: 1; min-width: 0; }
-    .p-title { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; margin-bottom: 4px; }
-    .p-artist { font-size: 14px; font-weight: 500; color: var(--text-dim); }
-
-    .progress-container {
-      width: 100%; height: 4px; background: var(--border); border-radius: 2px;
-      margin-bottom: 24px; cursor: pointer; position: relative; touch-action: none;
+    .ambient-blob-1 {
+      width: 60%; height: 60%;
+      top: -10%; right: -10%;
     }
-    .progress-fill {
-      height: 100%; background: var(--text); border-radius: 2px; width: 0%;
-      pointer-events: none; transition: width 0.1s linear;
-    }
-    
-    .p-bottom-row {
-      display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0 8px; flex-shrink: 0;
-    }
-    .wf-time { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); width: 44px; }
-    
-    .p-controls { display: flex; align-items: center; justify-content: center; gap: 20px; }
-    .ctrl-btn { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text); transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .ctrl-btn:hover { background: var(--surface-dim); }
-    .ctrl-btn:active { transform: scale(0.94); }
-    .ctrl-btn svg { width: 22px; height: 22px; }
-    
-    .play-btn { width: 56px; height: 56px; background: var(--accent); color: var(--app-bg); box-shadow: 0 8px 24px var(--shadow-sm); }
-    .play-btn:hover { transform: scale(1.05); }
-    /* ── HOME & DISCOVER VIEW ── */
-    .home-view {
-      flex: 1; display: flex; flex-direction: column; min-height: 0;
-      overflow-y: auto; padding-right: 8px; margin-right: -8px; gap: 32px;
-      position: relative; z-index: 2; padding-bottom: 40px;
-    }
-    .home-view.hidden { display: none !important; }
-    .main-grid.hidden { display: none !important; }
-
-    .nav-tabs {
-      display: flex; gap: 4px; align-items: center; 
-      background: var(--surface-dim); padding: 4px; border-radius: 100px;
-      height: 36px; border: 1px solid var(--border);
-    }
-    .nav-btn {
-      height: 28px; padding: 0 16px; border-radius: 100px; font-size: 13px; font-weight: 600;
-      background: transparent; color: var(--text-dim); border: none;
-      transition: background-color 0.2s, color 0.2s; cursor: pointer;
-    }
-    .nav-btn.active {
-      background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm);
+    .ambient-blob-2 {
+      width: 50%; height: 50%;
+      bottom: 10%; left: -5%;
     }
 
-    /* ── MODERN STREAMING HERO SPOTLIGHT ── */
-    .hero-spotlight {
-      background: linear-gradient(135deg, rgba(224, 108, 117, 0.18) 0%, rgba(24, 24, 30, 0.95) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 24px; padding: 36px 40px;
-      position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 14px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-    }
-    .hero-badge {
-      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
-      letter-spacing: 0.12em; color: #10b981; text-transform: uppercase;
-      display: inline-flex; align-items: center; gap: 6px;
-    }
-    .hero-badge::before {
-      content: ''; width: 6px; height: 6px; border-radius: 50%; background: #10b981;
-      box-shadow: 0 0 8px #10b981;
-    }
-    .hero-title {
-      font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700;
-      letter-spacing: -0.03em; color: #ffffff; line-height: 1.2;
-    }
-    .hero-desc {
-      font-size: 15px; color: rgba(255, 255, 255, 0.7); max-width: 620px; line-height: 1.6;
-    }
-    .hero-actions { display: flex; gap: 14px; margin-top: 8px; }
-    .hero-btn {
-      height: 44px; padding: 0 26px; border-radius: 100px; font-size: 14px; font-weight: 700;
-      display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .hero-btn.primary { background: #10b981; color: #000000; border: none; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3); }
-    .hero-btn.primary:hover { transform: scale(1.04); background: #34d399; }
-    .hero-btn.secondary { background: rgba(255, 255, 255, 0.08); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); }
-    .hero-btn.secondary:hover { background: rgba(255, 255, 255, 0.15); }
-
-    .section-header {
-      display: flex; justify-content: space-between; align-items: center; margin-top: 12px;
-    }
-    .section-title {
-      font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700;
-      letter-spacing: -0.02em; text-transform: uppercase; color: var(--text);
+    /* ── TOP HEADER ── */
+    .player-topbar {
+      position: relative; z-index: 2;
+      display: flex; align-items: center;
+      padding: 16px 32px;
+      gap: 16px;
+      flex-shrink: 0;
     }
 
-    .category-pills { display: flex; gap: 8px; }
-    .cat-pill {
-      height: 32px; padding: 0 16px; border-radius: 100px; font-size: 12px; font-weight: 600;
-      background: transparent; color: var(--text-dim); border: 1px solid var(--border);
-      transition: all 0.2s; cursor: pointer;
+    .topbar-title {
+      font-size: 13px; font-weight: 700; color: var(--text-2);
+      flex: 1;
     }
-    .cat-pill.active, .cat-pill:hover { background: var(--surface); color: var(--text); border-color: var(--text-dim); }
+    .topbar-title strong { color: var(--text); }
 
-    /* ── MODERN STREAMING ARTIST CARDS (SPOTIFY / APPLE MUSIC STYLE) ── */
-    .vaults-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px;
-    }
-    .artist-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
-      padding: 20px; display: flex; flex-direction: column; gap: 16px; cursor: pointer;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.25s, border-color 0.25s, box-shadow 0.25s;
-      position: relative; overflow: hidden;
-    }
-    .artist-card:hover {
-      transform: translateY(-6px); background: var(--surface-dim); border-color: rgba(255,255,255,0.2);
-      box-shadow: 0 16px 36px rgba(0,0,0,0.4);
-    }
-    .card-avatar-wrapper {
-      width: 100%; aspect-ratio: 1; border-radius: 14px; position: relative;
-      overflow: hidden; display: flex; align-items: center; justify-content: center;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-    }
-    .card-avatar-aura {
-      width: 100%; height: 100%; border-radius: 14px;
-      display: flex; align-items: center; justify-content: center; position: relative;
-      transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
-    }
-    .card-avatar-initials {
-      font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700;
-      color: #ffffff; text-shadow: 0 4px 16px rgba(0,0,0,0.6); letter-spacing: -0.04em;
-    }
-    .card-play-hover-btn {
-      position: absolute; bottom: 12px; right: 12px; width: 44px; height: 44px;
-      border-radius: 50%; background: #10b981; color: #000; display: flex;
-      align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
-      opacity: 0; transform: translateY(12px) scale(0.9); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      z-index: 5;
-    }
-    .artist-card:hover .card-play-hover-btn {
-      opacity: 1; transform: translateY(0) scale(1);
-    }
-    .artist-card:hover .card-avatar-aura {
-      transform: scale(1.06);
-    }
-    .card-meta { display: flex; flex-direction: column; gap: 4px; z-index: 3; }
-    .card-badge {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
-      color: #10b981; letter-spacing: 0.08em; text-transform: uppercase;
-    }
-    .card-badge.info { color: var(--text-dim); }
-    .card-name { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
-    .card-sub { font-size: 13px; color: var(--text-dim); }
-
-    /* ── STANDALONE PERSISTENT STREAMING PLAYER DECK ── */
-    .stream-deck {
-      position: fixed; bottom: 0; left: 0; right: 0; height: 76px;
-      background: var(--surface); border-top: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 28px; z-index: 1000; backdrop-filter: blur(12px);
-      box-shadow: 0 -8px 32px rgba(0,0,0,0.3);
-    }
-    .deck-left { display: flex; align-items: center; gap: 14px; flex: 0 1 280px; min-width: 0; }
-    .deck-art {
-      width: 48px; height: 48px; border-radius: 50%; background: #000;
+    .topbar-actions { display: flex; gap: 8px; align-items: center; }
+    .top-icon-btn {
+      width: 36px; height: 36px; border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
-      position: relative; flex-shrink: 0; cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4); transition: transform 0.3s;
+      color: var(--text-3); background: var(--surface);
+      border: 1px solid var(--border);
+      transition: all 0.15s;
     }
-    .deck-art:hover { transform: scale(1.08) rotate(30deg); }
-    .deck-art-hole { width: 10px; height: 10px; border-radius: 50%; background: var(--app-bg); border: 2px solid var(--text-dim); }
-    .deck-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-    .deck-title { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .deck-artist { font-size: 12px; font-weight: 500; color: var(--text-dim); }
+    .top-icon-btn:hover { color: var(--text); border-color: var(--border2); }
 
-    .deck-center { flex: 1; max-width: 540px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-    .deck-controls { display: flex; align-items: center; gap: 16px; }
-    .deck-btn { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text); cursor: pointer; transition: transform 0.2s; }
-    .deck-btn:hover { background: var(--surface-dim); }
-    .deck-btn:active { transform: scale(0.92); }
-    .deck-btn.play { width: 42px; height: 42px; background: var(--accent); color: var(--app-bg); }
-
-    .deck-progress { width: 100%; display: flex; align-items: center; gap: 12px; }
-    .deck-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: var(--text-dim); width: 36px; }
-
-    .deck-right { display: flex; align-items: center; gap: 12px; flex: 0 1 220px; justify-content: flex-end; }
-    .deck-expand-btn {
-      height: 34px; padding: 0 14px; border-radius: 100px; background: var(--surface-dim);
-      border: 1px solid var(--border); font-size: 12px; font-weight: 600; color: var(--text);
-      display: flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s;
+    /* ── MAIN PLAYER CANVAS ── */
+    .player-canvas {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 48px;
+      position: relative; z-index: 1;
+      gap: 0;
     }
-    .deck-expand-btn:hover { background: var(--surface); border-color: var(--text-dim); }
+
+    /* ── ARTWORK ── */
+    .artwork-wrap {
+      position: relative;
+      margin-bottom: 36px;
+    }
+    .artwork-shadow {
+      position: absolute;
+      inset: 20px;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.4;
+      background: var(--accent);
+      transition: background 2s ease;
+      z-index: -1;
+    }
+    .artwork {
+      width: min(280px, 36vw);
+      height: min(280px, 36vw);
+      border-radius: 16px;
+      background: var(--surface2);
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.6), 0 0 0 1px var(--border);
+    }
+    .artwork img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .artwork-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 8px;
+    }
+    .artwork-placeholder .letter {
+      font-size: 64px; font-weight: 900;
+      color: rgba(255,255,255,0.1);
+      line-height: 1;
+    }
+
+    /* Spinning vinyl overlay when playing */
+    .vinyl-overlay {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .artwork.has-art:hover .vinyl-overlay,
+    .artwork.is-playing .vinyl-overlay { opacity: 1; }
+    .vinyl-ring {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      animation: spin-vinyl 4s linear infinite;
+      animation-play-state: paused;
+    }
+    .artwork.is-playing .vinyl-ring { animation-play-state: running; }
+
+    @keyframes spin-vinyl {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── TRACK INFO ── */
+    .track-info {
+      width: 100%;
+      max-width: 380px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .track-info-text { min-width: 0; }
+    .now-playing-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .now-playing-title {
+      font-size: 22px; font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      line-height: 1.2;
+    }
+    .now-playing-artist {
+      font-size: 13px; font-weight: 500; color: var(--text-2);
+      margin-top: 4px;
+    }
+    .like-main-btn {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); background: var(--surface);
+      border: 1px solid var(--border);
+      flex-shrink: 0; margin-top: 4px;
+      transition: all 0.15s;
+    }
+    .like-main-btn:hover { color: var(--red); border-color: var(--red-dim); background: var(--red-dim); }
+    .like-main-btn.liked { color: var(--red); border-color: var(--red); background: var(--red-dim); }
+    .like-main-btn.liked svg { fill: var(--red); }
+    .like-main-btn svg { fill: none; stroke-width: 2; }
+
+    /* ── PROGRESS ── */
+    .progress-section {
+      width: 100%; max-width: 380px;
+      margin-bottom: 20px;
+    }
+    .progress-bar {
+      width: 100%; height: 4px;
+      background: var(--surface3);
+      border-radius: 4px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-bar:hover { height: 6px; margin: -1px 0; }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--text);
+      border-radius: 4px;
+      transition: width 0.25s linear;
+      position: relative;
+    }
+    .progress-fill::after {
+      content: '';
+      position: absolute; right: -4px; top: 50%; transform: translateY(-50%);
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--text);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .progress-bar:hover .progress-fill::after { opacity: 1; }
+    .time-row {
+      display: flex; justify-content: space-between;
+      margin-top: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 500; color: var(--text-3);
+    }
+
+    /* ── PLAYER CONTROLS ── */
+    .controls {
+      display: flex; align-items: center; gap: 8px;
+      max-width: 380px; width: 100%;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .ctrl-btn {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3);
+      transition: color 0.15s, background 0.15s;
+    }
+    .ctrl-btn:hover { color: var(--text); background: var(--surface2); }
+    .ctrl-btn.active { color: var(--accent); }
+
+    .play-btn {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      background: var(--text);
+      color: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.1s, background 0.15s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .play-btn:hover { background: var(--accent); transform: scale(1.04); }
+    .play-btn:active { transform: scale(0.97); }
+
+    /* ── VOLUME ── */
+    .vol-row {
+      display: flex; align-items: center; gap: 10px;
+      max-width: 280px; width: 100%;
+    }
+    .vol-icon { color: var(--text-3); flex-shrink: 0; }
+    .vol-slider {
+      flex: 1; height: 3px;
+      -webkit-appearance: none; appearance: none;
+      background: var(--surface3);
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+    }
+    .vol-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--text);
+      cursor: pointer;
+    }
+
+    /* ── INFO CHIPS AT BOTTOM ── */
+    .player-info-chips {
+      position: absolute;
+      bottom: 20px; left: 0; right: 0;
+      display: flex; justify-content: center; gap: 8px;
+      padding: 0 32px;
+      z-index: 2;
+    }
+    .info-chip {
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 11px; font-weight: 600; color: var(--text-3);
+    }
+    .info-chip svg { opacity: 0.5; }
 
     /* ── ABOUT MODAL ── */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
-      display: flex; align-items: center; justify-content: center; z-index: 1000;
-      opacity: 0; pointer-events: none; transition: 0.3s;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none; align-items: center; justify-content: center;
     }
-    .modal-overlay.open { opacity: 1; pointer-events: auto; }
-    .modal-content {
-      background: var(--app-bg); width: 90%; max-width: 440px; border-radius: 24px;
-      padding: 32px; box-shadow: var(--shadow-lg); position: relative;
-      transform: translateY(20px); transition: 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-      border: 1px solid var(--border);
+    .modal-overlay.open { display: flex; }
+    .modal-card {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 440px; width: 90%;
+      position: relative;
     }
-    .modal-overlay.open .modal-content { transform: translateY(0); }
-    .close-modal {
-      position: absolute; top: 24px; right: 24px; width: 32px; height: 32px;
-      border-radius: 50%; background: var(--surface); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center; color: var(--text);
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); background: var(--surface2);
+      transition: color 0.15s;
     }
-    .modal-title { font-size: 24px; font-weight: 700; margin-bottom: 16px; }
-    .modal-body { font-size: 15px; color: var(--text-dim); line-height: 1.6; }
-    .modal-body p { margin-bottom: 16px; }
-
-    /* ── MOBILE OVERRIDES ── */
-    @media (max-width: 1000px) {
-      body { padding: 0; }
-      #app { width: 100%; height: 100%; border-radius: 0; padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom); display: flex; flex-direction: column; }
-      .top-bar {
-        display: grid !important;
-        grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto auto;
-        gap: 12px;
-        margin-top: 16px;
-        margin-bottom: 20px;
-        padding: 0;
-      }
-      .top-left {
-        display: contents !important;
-      }
-      .brand {
-        grid-column: 1;
-        grid-row: 1;
-        display: flex;
-        align-items: center;
-      }
-      .top-utils {
-        grid-column: 2;
-        grid-row: 1;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-left: 0;
-      }
-      .search-wrapper {
-        grid-column: 1 / span 2;
-        grid-row: 2;
-        display: block;
-        width: 100%;
-        margin: 0;
-      }
-      .search-input {
-        width: 100%;
-        height: 38px;
-        font-size: 14px;
-      }
-      .top-controls {
-        grid-column: 1 / span 2;
-        grid-row: 3;
-        margin-left: 0;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        gap: 8px;
-      }
-      
-      .filter-tab { padding: 0 12px; }
-      .sort-select { padding: 0 24px 0 12px; }
-      .about-btn { padding: 0 12px; }
-
-      .main-grid { flex-direction: column; overflow-y: auto; overflow-x: hidden; gap: 32px; padding: 0; }
-      .library-col { max-width: none; display: flex; flex: none; height: auto; overflow: visible; padding-bottom: 96px; max-height: none; }
-      .track-list { overflow: visible; }
-      
-      .player-col {
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100vw;
-        height: 100dvh;
-        background: var(--app-bg);
-        z-index: 2000;
-        margin: 0;
-        padding: 40px 24px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        transform: translateY(100%);
-        transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
-      }
-      .player-col.open {
-        transform: translateY(0);
-      }
-
-      .close-player {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        color: var(--text);
-        background: var(--surface-dim);
-        border: 1px solid var(--border);
-        border-radius: 50%;
-        cursor: pointer;
-        z-index: 2010;
-        transition: transform 0.2s;
-      }
-      .close-player:active {
-        transform: scale(0.92);
-      }
-
-      /* Small width devices (iPhone SE, small Androids) */
-      @media (max-width: 375px) {
-        #app { padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom); }
-        .brand h1 { font-size: 24px; }
-        .top-controls { justify-content: space-between; gap: 6px; }
-        .filter-tab { padding: 0 8px; font-size: 13px; }
-        .sort-select { padding: 0 16px 0 8px; font-size: 13px; }
-        .about-btn { padding: 0 8px; font-size: 13px; }
-        .icon-btn { width: 36px; height: 36px; }
-        .track-row { padding: 8px 12px; }
-        .t-title { font-size: 14px; }
-        
-        .mini-player {
-          left: 8px;
-          right: 8px;
-          height: 56px;
-          padding: 0 12px;
-        }
-        .mp-title { font-size: 13px; }
-      }
-
-      /* Short viewport devices (iPhone SE vertical stack preservation) */
-      @media (max-height: 667px) {
-        .player-col { padding: 24px 16px; justify-content: center; }
-        .turntable { width: min(260px, 65vw, 35vh); margin-bottom: 16px !important; }
-        .p-header { margin-bottom: 12px !important; }
-        .p-title { font-size: 20px !important; }
-        .progress-container { margin-bottom: 16px !important; }
-        .close-player { top: 12px; left: 12px; }
-      }
+    .modal-close:hover { color: var(--text); }
+    .modal-h {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+    .modal-sub {
+      font-size: 13px; color: var(--text-3); margin-bottom: 20px;
+    }
+    .modal-body p {
+      font-size: 13px; color: var(--text-2); line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .modal-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 8px;
+      padding: 6px 12px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      font-size: 12px; font-weight: 700; color: var(--accent);
     }
 
-    /* ── MINI PLAYER FOR MOBILE ── */
-    .mini-player {
-      display: none !important;
+    /* ── HIDDEN YT PLAYER ── */
+    #yt-mount {
+      position: fixed;
+      width: 1px; height: 1px;
+      opacity: 0.001;
+      bottom: 0; left: 0;
+      pointer-events: none;
+      overflow: hidden;
     }
 
-    @media (max-width: 1000px) {
-      .mini-player {
-        display: none !important;
-        position: fixed;
-        bottom: 16px;
-        left: 16px;
-        right: 16px;
-        height: 64px;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-        z-index: 1000;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 16px;
-        cursor: pointer;
-        transform: translateY(120%);
-        transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s;
-        opacity: 0;
-      }
-      .mini-player.visible {
-        display: flex !important;
-        transform: translateY(0);
-        opacity: 1;
-      }
-      
-      .mp-info {
-        flex: 1;
-        min-width: 0;
-        margin-right: 16px;
-      }
-      
-      .mp-title {
-        font-size: 14px;
-        font-weight: 700;
-        color: var(--text);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin-bottom: 2px;
-      }
-      
-      .mp-artist {
-        font-size: 11px;
-        font-weight: 500;
-        color: var(--text-dim);
-      }
-      
-      .mp-controls {
-        display: flex;
-        align-items: center;
-      }
-      
-      .mp-play-btn {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: var(--accent);
-        color: var(--app-bg);
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: transform 0.2s;
-        padding: 0;
-      }
-      .mp-play-btn:active {
-        transform: scale(0.9);
-      }
-      .mp-play-btn svg {
-        fill: currentColor;
-      }
-      .mp-chevron {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--text-dim);
-        margin-left: 12px;
-        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s;
-      }
-      .mini-player:active .mp-chevron {
-        transform: translateY(-4px);
-        color: var(--accent);
-      }
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      height: 100%; gap: 8px;
+      color: var(--text-3);
+      font-size: 13px; font-weight: 500;
+      padding: 40px;
+      text-align: center;
+    }
+    .empty-state svg { margin-bottom: 4px; }
+
+    /* ── SPINNER ANIM ── */
+    @keyframes spin-loader { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .spinner { animation: spin-loader 0.7s linear infinite; }
+
+    /* ── IDLE / NOW PLAYING BANNER ── */
+    .idle-banner {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px;
+      position: absolute; inset: 0; z-index: 1;
+      padding: 32px;
+      text-align: center;
+      pointer-events: none;
+    }
+    .idle-label {
+      font-size: 13px; font-weight: 600; color: var(--text-3);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .idle-hint {
+      font-size: 32px; font-weight: 900; letter-spacing: -1.5px;
+      color: var(--text);
+      line-height: 1.1;
+      max-width: 340px;
+    }
+    .idle-sub {
+      font-size: 14px; color: var(--text-3); font-weight: 400;
+    }
+
+    /* ── LIGHT THEME ── */
+    [data-theme="light"] {
+      --bg:          #f5f5f4;
+      --surface:     #ffffff;
+      --surface2:    #f0f0ee;
+      --surface3:    #e5e5e3;
+      --border:      rgba(0,0,0,0.06);
+      --border2:     rgba(0,0,0,0.12);
+      --text:        #111111;
+      --text-2:      #555555;
+      --text-3:      #999999;
+      --accent:      #0a0a0a;
+      --accent-dim:  rgba(10,10,10,0.08);
+      --red:         #e63946;
+      --red-dim:     rgba(230,57,70,0.1);
+    }
+    [data-theme="light"] .play-btn {
+      background: var(--text);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    [data-theme="light"] .sidebar-logo { background: #0a0a0a; }
+    [data-theme="light"] .sidebar-logo span { color: #fff; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      :root { --sidebar-w: 0px; --panel-w: 0px; }
+      #app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .track-panel { display: none; }
+      .player-area { grid-column: 1; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NARROW LEFT VERTICAL ICON RAIL (REFERENCE DESIGN) -->
-  <div class="sidebar-rail">
-    <button class="rail-btn active" id="railHomeBtn" title="Discover Home">
+<div id="app">
+
+  <!-- ═══ COLUMN 1: SIDEBAR ═══ -->
+  <div class="sidebar">
+    <div class="sidebar-logo"><span>GRL</span></div>
+
+    <button class="nav-item active" id="navHome" title="Home">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
     </button>
-    <button class="rail-btn" id="railLibraryBtn" title="Liked Grails">
+    <button class="nav-item" id="navLiked" title="Liked Tracks">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </button>
-    <button class="rail-btn" id="railVaultsBtn" title="Artist Vaults">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+    <button class="nav-item" id="navVaults" title="Artist Vaults">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
     </button>
-    
-    <div class="rail-divider"></div>
 
-    <button class="rail-btn" id="railThemeBtn" title="Toggle Theme">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <div class="sidebar-spacer"></div>
+
+    <button class="nav-item" id="navAbout" title="About GRAILS">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </button>
+    <button class="nav-item" id="themeBtn" title="Toggle theme">
+      <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     </button>
   </div>
 
-  <div id="app">
-    <!-- TOP HEADER BAR -->
-    <div class="top-bar">
-      <div class="top-left">
-        <div class="brand">
-          <h1 id="siteBrand" class="pixel-title" style="font-size: 22px; display: flex; align-items: center; gap: 8px;">
-            GRAILS
-            <span class="brand-tag">UNRELEASED</span>
-          </h1>
-        </div>
-      </div>
-
-      <div class="search-wrapper" style="flex: 0 1 420px;">
-        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search for songs, artists..." autocomplete="off">
-      </div>
-
-      <div class="top-utils">
-        <button class="about-btn" id="aboutBtn">About</button>
-        <button class="icon-btn" id="themeBtn" aria-label="Toggle Theme">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  <!-- ═══ COLUMN 2: TRACK PANEL ═══ -->
+  <div class="track-panel">
+    <div class="panel-header">
+      <div class="panel-title">Artist Vaults</div>
+      <div class="artist-selector">
+        <button class="artist-chip active" data-artist="charlie-puth">
+          <span class="chip-dot" style="background: #e06c75;"></span>
+          Charlie Puth
+        </button>
+        <button class="artist-chip" data-artist="frank-ocean" onclick="alert('Frank Ocean vault — coming soon to GRAILS')">
+          <span class="chip-dot" style="background: #3b82f6;"></span>
+          Frank Ocean
+        </button>
+        <button class="artist-chip" data-artist="kanye" onclick="alert('Ye vault — coming soon to GRAILS')">
+          <span class="chip-dot" style="background: #eab308;"></span>
+          Ye
+        </button>
+        <button class="artist-chip" data-artist="drake" onclick="alert('Drake vault — coming soon to GRAILS')">
+          <span class="chip-dot" style="background: #06b6d4;"></span>
+          Drake
         </button>
       </div>
     </div>
 
-    <!-- APP MAIN LAYOUT (2-COLUMN REFERENCE SCREENSHOT DECK) -->
-    <div class="app-main-layout">
-      <!-- LEFT COLUMN: PINNED METALLIC TURNTABLE DECK -->
-      <div class="player-stage">
-        <div class="turntable-card">
-          <div class="corner-screw screw-tl"></div>
-          <div class="corner-screw screw-tr"></div>
-          <div class="corner-screw screw-bl"></div>
-          <div class="corner-screw screw-br"></div>
-
-          <!-- SIGNATURE TURNTABLE ENGINE -->
-          <div class="turntable-wrapper" style="width: 100%; aspect-ratio: 1;">
-            <div class="turntable" id="turntable" style="width: 100%; height: 100%;">
-              <div class="platter">
-                <div class="vinyl" id="vinylRecord">
-                  <div class="grooves"></div>
-                  <div class="vinyl-label" id="vinylLabel">
-                    <div class="vinyl-hole"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="tonearm" id="tonearm">
-                <div class="tonearm-base"></div>
-                <div class="tonearm-rod"></div>
-                <div class="tonearm-head"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TRACK INFO & PIXEL TITLE -->
-        <div class="deck-meta-box">
-          <h2 class="song-title-pixel" id="pTitle">Select a Grail</h2>
-          <div class="deck-tag-row">
-            <span class="pill-tag" id="pTag">Classic</span>
-            <div class="like-counter" id="pLikeCounter">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-              <span>99 Grails</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ANIMATED WAVEFORM SCRUBBER (REFERENCE DESIGN) -->
-        <div class="waveform-scrubber-box">
-          <span class="waveform-time" id="pTimeCur">0:00</span>
-          <div class="waveform-bars" id="wfProgressBar" style="display: flex; align-items: center; gap: 3px; flex: 1; height: 32px; cursor: pointer;">
-            <div class="wf-bar active" style="height: 40%;"></div>
-            <div class="wf-bar active" style="height: 70%;"></div>
-            <div class="wf-bar active" style="height: 90%;"></div>
-            <div class="wf-bar active" style="height: 60%;"></div>
-            <div class="wf-bar active" style="height: 100%;"></div>
-            <div class="wf-bar active" style="height: 75%;"></div>
-            <div class="wf-bar active" style="height: 50%;"></div>
-            <div class="wf-bar active" style="height: 85%;"></div>
-            <div class="wf-bar active" style="height: 95%;"></div>
-            <div class="wf-bar active" style="height: 65%;"></div>
-            <div class="wf-bar active" style="height: 40%;"></div>
-            <div class="wf-bar" style="height: 80%;"></div>
-            <div class="wf-bar" style="height: 60%;"></div>
-            <div class="wf-bar" style="height: 90%;"></div>
-            <div class="wf-bar" style="height: 70%;"></div>
-            <div class="wf-bar" style="height: 50%;"></div>
-            <div class="wf-bar" style="height: 85%;"></div>
-            <div class="wf-bar" style="height: 40%;"></div>
-            <div class="wf-bar" style="height: 65%;"></div>
-            <div class="wf-bar" style="height: 95%;"></div>
-          </div>
-          <span class="waveform-time" id="pTimeTot" style="text-align: right;">--:--</span>
-        </div>
-
-        <!-- PLAYER CONTROLS ROW (REFERENCE DESIGN) -->
-        <div class="player-controls-row" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 8px;">
-          <button class="ctrl-circle-btn" id="btnShuffle" title="Shuffle">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
-          </button>
-          <button class="ctrl-circle-btn" id="btnPrev" title="Previous">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-          </button>
-          <button class="ctrl-circle-btn main-play" id="btnPlay" title="Play/Pause" style="width: 56px; height: 56px; border-radius: 50%; background: var(--text); color: var(--app-bg); border: none; display: flex; align-items: center; justify-content: center;">
-            <svg id="pIconPlay" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            <svg id="pIconPause" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-            <svg id="pIconLoading" class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="display:none; width: 24px; height: 24px;"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity="0.2" fill="none"></circle><path d="M4 12a8 8 0 0 1 8-8" stroke="currentColor" fill="none"></path></svg>
-          </button>
-          <button class="ctrl-circle-btn" id="btnNext" title="Next">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg>
-          </button>
-          <button class="ctrl-circle-btn" id="pLikeBtn" title="Like Grail">
-            <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- RIGHT COLUMN: DISCOVERY STAGE (REFERENCE DESIGN) -->
-      <div class="discovery-stage">
-        <!-- TOP SECTION: ARTIST VAULTS & CATEGORIES -->
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2 class="pixel-header">Music Categories</h2>
-            <span style="font-size: 13px; font-weight: 600; text-decoration: underline; cursor: pointer; color: var(--text-dim);" id="viewAllCategoriesBtn">View all</span>
-          </div>
-
-          <div class="category-pills" id="categoryPills">
-            <button class="cat-pill active" data-cat="all">Classic</button>
-            <button class="cat-pill" data-cat="90s">90s</button>
-            <button class="cat-pill" data-cat="new">New</button>
-            <button class="cat-pill" data-cat="instrumental">Instrumental</button>
-            <button class="cat-pill" data-cat="demos">Demos</button>
-          </div>
-
-          <!-- ARTIST CARDS GRID -->
-          <div class="vaults-grid" id="vaultsGrid">
-            <!-- CHARLIE PUTH -->
-            <div class="artist-card active" id="cardCharliePuth">
-              <div class="card-avatar-wrapper">
-                <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #e06c75 0%, #3f1a1d 60%, #121215 100%);">
-                  <span class="card-avatar-initials">CP</span>
-                </div>
-                <div class="card-play-hover-btn">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                </div>
-              </div>
-              <div class="card-meta">
-                <span class="card-badge">LIVE VAULT</span>
-                <h4 class="card-name">Charlie Puth</h4>
-                <p class="card-sub">99 Unreleased Demos & Takes</p>
-              </div>
-            </div>
-
-            <!-- FRANK OCEAN -->
-            <div class="artist-card" data-artist="frank-ocean">
-              <div class="card-avatar-wrapper">
-                <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #3b82f6 0%, #1e3a8a 60%, #121215 100%);">
-                  <span class="card-avatar-initials">FO</span>
-                </div>
-                <div class="card-play-hover-btn">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                </div>
-              </div>
-              <div class="card-meta">
-                <span class="card-badge info">COMING SOON</span>
-                <h4 class="card-name">Frank Ocean</h4>
-                <p class="card-sub">Look at Us We're in Love</p>
-              </div>
-            </div>
-
-            <!-- KANYE WEST -->
-            <div class="artist-card" data-artist="kanye-west">
-              <div class="card-avatar-wrapper">
-                <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #eab308 0%, #713f12 60%, #121215 100%);">
-                  <span class="card-avatar-initials">YE</span>
-                </div>
-                <div class="card-play-hover-btn">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                </div>
-              </div>
-              <div class="card-meta">
-                <span class="card-badge info">COMING SOON</span>
-                <h4 class="card-name">Kanye West (Ye)</h4>
-                <p class="card-sub">Yandhi & Outtakes</p>
-              </div>
-            </div>
-
-            <!-- TRAVIS SCOTT -->
-            <div class="artist-card" data-artist="travis-scott">
-              <div class="card-avatar-wrapper">
-                <div class="card-avatar-aura" style="background: radial-gradient(circle at 35% 35%, #a855f7 0%, #581c87 60%, #121215 100%);">
-                  <span class="card-avatar-initials">TS</span>
-                </div>
-                <div class="card-play-hover-btn">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                </div>
-              </div>
-              <div class="card-meta">
-                <span class="card-badge info">COMING SOON</span>
-                <h4 class="card-name">Travis Scott</h4>
-                <p class="card-sub">Dystopia Sessions</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- BOTTOM SECTION: FAVORITE PLAYLISTS / TOP GRAILS -->
-        <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 8px;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2 class="pixel-header">Favorite Playlists (99)</h2>
-            <div class="filters">
-              <button class="filter-tab active" id="tabAll">All Tracks</button>
-              <button class="filter-tab" id="tabLiked">Liked <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-            </div>
-          </div>
-
-          <div class="track-list" id="trackList"></div>
-        </div>
+    <div class="search-bar">
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search vault..." autocomplete="off">
       </div>
     </div>
+
+    <div class="panel-controls">
+      <span class="track-count" id="trackCountLabel">99 tracks</span>
+      <div class="control-group">
+        <button class="ctrl-pill active" id="tabAll">All</button>
+        <button class="ctrl-pill" id="tabLiked">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Liked
+        </button>
+      </div>
+    </div>
+
+    <div class="track-list" id="trackList"></div>
   </div>
-  <!-- ABOUT MODAL -->
-  <div class="modal-overlay" id="aboutModal">
-    <div class="modal-content">
-      <button class="close-modal" id="closeAboutBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-      <div class="modal-title">Charlie's Vault</div>
-      <div class="modal-body">
-        <p>A private listening archive featuring 99 unreleased Charlie Puth tracks, including curated demos, early conceptual versions, and acoustic recordings.</p>
-        <p>This is a non-commercial fan project created solely for archival and private listening purposes. We do not own the rights to any of the audio or video content hosted here. All rights belong to Charlie Puth, his record labels, and their respective owners.</p>
-        <p style="margin-top: 24px; font-size: 14px; color: var(--text); font-weight: 700;">Built by Nishachay</p>
+
+  <!-- ═══ COLUMN 3: PLAYER AREA ═══ -->
+  <div class="player-area">
+    <!-- Ambient glow -->
+    <div class="ambient-bg">
+      <div class="ambient-blob ambient-blob-1" id="ambientBlob1"></div>
+      <div class="ambient-blob ambient-blob-2" id="ambientBlob2"></div>
+    </div>
+
+    <!-- Top bar -->
+    <div class="player-topbar">
+      <div class="topbar-title" id="topbarTitle">
+        <strong>GRAILS</strong> &mdash; Unreleased Archive
+      </div>
+      <div class="topbar-actions">
+        <button class="top-icon-btn" id="shuffleBtn" title="Shuffle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Idle state (shown when nothing is playing) -->
+    <div class="idle-banner" id="idleBanner">
+      <div class="idle-label">Ready to stream</div>
+      <div class="idle-hint">99 unreleased tracks. Pick one.</div>
+      <div class="idle-sub">Rare demos, vault leaks &amp; scrapped sessions.</div>
+    </div>
+
+    <!-- Player Canvas (hidden until playing) -->
+    <div class="player-canvas" id="playerCanvas" style="display: none;">
+      <!-- Artwork -->
+      <div class="artwork-wrap">
+        <div class="artwork-shadow" id="artworkShadow"></div>
+        <div class="artwork" id="artwork">
+          <img id="artImg" src="" alt="" style="display:none;">
+          <div class="artwork-placeholder" id="artPlaceholder">
+            <div class="letter" id="artLetter">G</div>
+          </div>
+          <div class="vinyl-overlay">
+            <div class="vinyl-ring">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-12a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Track info -->
+      <div class="track-info">
+        <div class="track-info-text">
+          <div class="now-playing-label">Now Playing</div>
+          <div class="now-playing-title" id="nowTitle">—</div>
+          <div class="now-playing-artist" id="nowArtist">Charlie Puth</div>
+        </div>
+        <button class="like-main-btn" id="likeMainBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-section">
+        <div class="progress-bar" id="progressBar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="time-row">
+          <span id="timeCur">0:00</span>
+          <span id="timeTot">--:--</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button class="ctrl-btn" id="prevBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+        </button>
+        <button class="play-btn" id="playBtn">
+          <svg id="iconPlay" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="iconPause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          <svg id="iconLoading" class="spinner" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.2"/><path d="M3 12a9 9 0 0 1 9-9"/></svg>
+        </button>
+        <button class="ctrl-btn" id="nextBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg>
+        </button>
+      </div>
+
+      <!-- Volume -->
+      <div class="vol-row">
+        <svg class="vol-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
+        <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="80">
+        <svg class="vol-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      </div>
+    </div>
+
+    <!-- Info chips -->
+    <div class="player-info-chips" id="infoChips" style="display:none;">
+      <div class="info-chip">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        Unreleased Demo
+      </div>
+      <div class="info-chip">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Vault Track
+      </div>
+      <div class="info-chip" id="ytChip">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-2.75 4.83 4.83 0 0 1-.14-.42 14.94 14.94 0 0 0-8.06 2.16 15 15 0 0 0-5.22 5.58 4.85 4.85 0 0 1 3.85 4.74v.72a14.94 14.94 0 0 0 13.34-10.03z"/></svg>
+        YouTube Source
       </div>
     </div>
   </div>
 
-  <div id="yt-mount"><div id="yt-player"></div></div>
+</div>
 
-  <script>
-// Charlie Puth — FINAL kept songs (99 tracks)
-// Auto-exported from curation dashboard — 2026-07-13T15:02:34.698Z
+<!-- ABOUT MODAL -->
+<div class="modal-overlay" id="aboutModal">
+  <div class="modal-card">
+    <button class="modal-close" id="closeAboutBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-h">GRAILS</div>
+    <div class="modal-sub">Unreleased Music Archive</div>
+    <div class="modal-body">
+      <p>A private listening archive of 99 unreleased Charlie Puth tracks — rare demos, early concepts, acoustic takes, and sessions that never made it to any official release.</p>
+      <p>No audio is stored here. All playback uses YouTube's IFrame API. This is a non-commercial fan project. All rights belong to the respective artists and rights holders.</p>
+      <p style="color: var(--text-3);">More artist vaults coming soon — Frank Ocean, Ye, Drake, Travis Scott.</p>
+      <div class="modal-tag">Built by Nishachay</div>
+    </div>
+  </div>
+</div>
+
+<div id="yt-mount"><div id="yt-player"></div></div>
+
+<script>
+// ── SONG DATA ──
 const SONGS = [
-  {
-    "id": "RbQ1bpBlmp4",
-    "title": "I Suck At Writing Lyrics",
-    "artist": "Charlie Puth",
-    "youtubeId": "RbQ1bpBlmp4",
-    "url": null,
-    "duration": 190.861,
-    "artworkUrl": "https://img.youtube.com/vi/RbQ1bpBlmp4/mqdefault.jpg",
-    "letter": "I",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "SbhmPmlZA2k",
-    "title": "Kiss Me",
-    "artist": "Charlie Puth",
-    "youtubeId": "SbhmPmlZA2k",
-    "url": null,
-    "duration": 227.401,
-    "artworkUrl": "https://img.youtube.com/vi/SbhmPmlZA2k/mqdefault.jpg",
-    "letter": "K",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "Q-t0214lY5Y",
-    "title": "1984",
-    "artist": "Charlie Puth",
-    "youtubeId": "Q-t0214lY5Y",
-    "url": null,
-    "duration": 239,
-    "artworkUrl": "https://img.youtube.com/vi/Q-t0214lY5Y/mqdefault.jpg",
-    "letter": "1",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "r03IolEGnXw",
-    "title": "2021",
-    "artist": "Charlie Puth",
-    "youtubeId": "r03IolEGnXw",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/r03IolEGnXw/mqdefault.jpg",
-    "letter": "2",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "Oc_TPbvFX1k",
-    "title": "After All (solo version)",
-    "artist": "Charlie Puth",
-    "youtubeId": "Oc_TPbvFX1k",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/Oc_TPbvFX1k/mqdefault.jpg",
-    "letter": "A",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "5-cdeDkcips",
-    "title": "All Night",
-    "artist": "Charlie Puth",
-    "youtubeId": "5-cdeDkcips",
-    "url": null,
-    "duration": 194,
-    "artworkUrl": "https://img.youtube.com/vi/5-cdeDkcips/mqdefault.jpg",
-    "letter": "A",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "ooKYtvSRNZ4",
-    "title": "All Of Me (cover)",
-    "artist": "Charlie Puth",
-    "youtubeId": "ooKYtvSRNZ4",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/ooKYtvSRNZ4/mqdefault.jpg",
-    "letter": "A",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "2D7iKTIlREw",
-    "title": "Anna",
-    "artist": "Charlie Puth",
-    "youtubeId": "2D7iKTIlREw",
-    "url": null,
-    "duration": 136,
-    "artworkUrl": "https://img.youtube.com/vi/2D7iKTIlREw/mqdefault.jpg",
-    "letter": "A",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "kZAAnbRvids",
-    "title": "Back Around",
-    "artist": "Charlie Puth",
-    "youtubeId": "kZAAnbRvids",
-    "url": null,
-    "duration": 174,
-    "artworkUrl": "https://img.youtube.com/vi/kZAAnbRvids/mqdefault.jpg",
-    "letter": "B",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "3PuzDHsXUKA",
-    "title": "Beautiful Corruption",
-    "artist": "Charlie Puth",
-    "youtubeId": "3PuzDHsXUKA",
-    "url": null,
-    "duration": 206,
-    "artworkUrl": "https://img.youtube.com/vi/3PuzDHsXUKA/mqdefault.jpg",
-    "letter": "B",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "ZNsabDtpS3g",
-    "title": "Best Friend",
-    "artist": "Charlie Puth",
-    "youtubeId": "ZNsabDtpS3g",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/ZNsabDtpS3g/mqdefault.jpg",
-    "letter": "B",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "EQDMxbCeJTs",
-    "title": "Butterflies",
-    "artist": "Charlie Puth",
-    "youtubeId": "EQDMxbCeJTs",
-    "url": null,
-    "duration": 136,
-    "artworkUrl": "https://img.youtube.com/vi/EQDMxbCeJTs/mqdefault.jpg",
-    "letter": "B",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "Zqhjca07Jjk",
-    "title": "By Default",
-    "artist": "Charlie Puth",
-    "youtubeId": "Zqhjca07Jjk",
-    "url": null,
-    "duration": 157,
-    "artworkUrl": "https://img.youtube.com/vi/Zqhjca07Jjk/mqdefault.jpg",
-    "letter": "B",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "QSh6giWIvaI",
-    "title": "Can't Stay Away From Your Baby",
-    "artist": "Charlie Puth",
-    "youtubeId": "QSh6giWIvaI",
-    "url": null,
-    "duration": 202,
-    "artworkUrl": "https://img.youtube.com/vi/QSh6giWIvaI/mqdefault.jpg",
-    "letter": "C",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "mx51V0WjxJ8",
-    "title": "Just Give Me a Reason",
-    "artist": "Charlie Puth",
-    "youtubeId": "mx51V0WjxJ8",
-    "url": null,
-    "duration": 233.341,
-    "artworkUrl": "https://img.youtube.com/vi/mx51V0WjxJ8/mqdefault.jpg",
-    "letter": "J",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "HXCKbj4uU4U",
-    "title": "Shadow Days",
-    "artist": "Charlie Puth",
-    "youtubeId": "HXCKbj4uU4U",
-    "url": null,
-    "duration": 200.341,
-    "artworkUrl": "https://img.youtube.com/vi/HXCKbj4uU4U/mqdefault.jpg",
-    "letter": "S",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "QI76xnJefNs",
-    "title": "Chop Like This",
-    "artist": "Charlie Puth",
-    "youtubeId": "QI76xnJefNs",
-    "url": null,
-    "duration": 196.321,
-    "artworkUrl": "https://img.youtube.com/vi/QI76xnJefNs/mqdefault.jpg",
-    "letter": "C",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "x80f5TrfWsA",
-    "title": "Collide",
-    "artist": "Charlie Puth",
-    "youtubeId": "x80f5TrfWsA",
-    "url": null,
-    "duration": 234.881,
-    "artworkUrl": "https://img.youtube.com/vi/x80f5TrfWsA/mqdefault.jpg",
-    "letter": "C",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "binVIluvqp8",
-    "title": "Charlie Puth - How Do You Sleep At Night?",
-    "artist": "Charlie Puth",
-    "youtubeId": "binVIluvqp8",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/binVIluvqp8/mqdefault.jpg",
-    "letter": "C",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "uf-woik7sjw",
-    "title": "L U V",
-    "artist": "Charlie Puth",
-    "youtubeId": "uf-woik7sjw",
-    "url": null,
-    "duration": 260.561,
-    "artworkUrl": "https://img.youtube.com/vi/uf-woik7sjw/mqdefault.jpg",
-    "letter": "L",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "mhFTTIbSm9E",
-    "title": "Love You In The Day",
-    "artist": "Charlie Puth",
-    "youtubeId": "mhFTTIbSm9E",
-    "url": null,
-    "duration": 141.141,
-    "artworkUrl": "https://img.youtube.com/vi/mhFTTIbSm9E/mqdefault.jpg",
-    "letter": "L",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "N7U50sKgdp4",
-    "title": "Clarity",
-    "artist": "Charlie Puth",
-    "youtubeId": "N7U50sKgdp4",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/N7U50sKgdp4/mqdefault.jpg",
-    "letter": "C",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "wd3cYyNs4N0",
-    "title": "Close To You",
-    "artist": "Charlie Puth",
-    "youtubeId": "wd3cYyNs4N0",
-    "url": null,
-    "duration": 130,
-    "artworkUrl": "https://img.youtube.com/vi/wd3cYyNs4N0/mqdefault.jpg",
-    "letter": "C",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "ClAUUZi1C0c",
-    "title": "Coming Over (Ft. ZAYN & Timbaland)",
-    "artist": "Charlie Puth",
-    "youtubeId": "ClAUUZi1C0c",
-    "url": null,
-    "duration": 168,
-    "artworkUrl": "https://img.youtube.com/vi/ClAUUZi1C0c/mqdefault.jpg",
-    "letter": "C",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "qu_TytwYoeI",
-    "title": "Could Do Better",
-    "artist": "Charlie Puth",
-    "youtubeId": "qu_TytwYoeI",
-    "url": null,
-    "duration": 186,
-    "artworkUrl": "https://img.youtube.com/vi/qu_TytwYoeI/mqdefault.jpg",
-    "letter": "C",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "74CaFfkRQL8",
-    "title": "Dancing With My Ex",
-    "artist": "Charlie Puth",
-    "youtubeId": "74CaFfkRQL8",
-    "url": null,
-    "duration": 140,
-    "artworkUrl": "https://img.youtube.com/vi/74CaFfkRQL8/mqdefault.jpg",
-    "letter": "D",
-    "palette": {
-      "from": "#C678DD",
-      "to": "#8F46A3",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "SaCFuWdBgZM",
-    "title": "Delusional",
-    "artist": "Charlie Puth",
-    "youtubeId": "SaCFuWdBgZM",
-    "url": null,
-    "duration": 122,
-    "artworkUrl": "https://img.youtube.com/vi/SaCFuWdBgZM/mqdefault.jpg",
-    "letter": "D",
-    "palette": {
-      "from": "#C678DD",
-      "to": "#8F46A3",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "NxLfrhMKqrg",
-    "title": "Dream",
-    "artist": "Charlie Puth",
-    "youtubeId": "NxLfrhMKqrg",
-    "url": null,
-    "duration": 177,
-    "artworkUrl": "https://img.youtube.com/vi/NxLfrhMKqrg/mqdefault.jpg",
-    "letter": "D",
-    "palette": {
-      "from": "#C678DD",
-      "to": "#8F46A3",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "LdJuopXstCA",
-    "title": "Enemy",
-    "artist": "Charlie Puth",
-    "youtubeId": "LdJuopXstCA",
-    "url": null,
-    "duration": 206,
-    "artworkUrl": "https://img.youtube.com/vi/LdJuopXstCA/mqdefault.jpg",
-    "letter": "E",
-    "palette": {
-      "from": "#E06C75",
-      "to": "#A83B43",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "XDtVDlSuq7w",
-    "title": "Ex To See",
-    "artist": "Charlie Puth",
-    "youtubeId": "XDtVDlSuq7w",
-    "url": null,
-    "duration": 135,
-    "artworkUrl": "https://img.youtube.com/vi/XDtVDlSuq7w/mqdefault.jpg",
-    "letter": "E",
-    "palette": {
-      "from": "#E06C75",
-      "to": "#A83B43",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "YdqP9xRJ9LE",
-    "title": "Eyes on You (with Camila Cabello)",
-    "artist": "Charlie Puth",
-    "youtubeId": "YdqP9xRJ9LE",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/YdqP9xRJ9LE/mqdefault.jpg",
-    "letter": "E",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "iCs3xkZMkJY",
-    "title": "Forgot How to Miss You",
-    "artist": "Charlie Puth",
-    "youtubeId": "iCs3xkZMkJY",
-    "url": null,
-    "duration": 159,
-    "artworkUrl": "https://img.youtube.com/vi/iCs3xkZMkJY/mqdefault.jpg",
-    "letter": "F",
-    "palette": {
-      "from": "#98C379",
-      "to": "#678F4C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "VwtZi12bEdA",
-    "title": "Full Of It",
-    "artist": "Charlie Puth",
-    "youtubeId": "VwtZi12bEdA",
-    "url": null,
-    "duration": 201,
-    "artworkUrl": "https://img.youtube.com/vi/VwtZi12bEdA/mqdefault.jpg",
-    "letter": "F",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "piumUYPj-QY",
-    "title": "Go Round",
-    "artist": "Charlie Puth",
-    "youtubeId": "piumUYPj-QY",
-    "url": null,
-    "duration": 217,
-    "artworkUrl": "https://img.youtube.com/vi/piumUYPj-QY/mqdefault.jpg",
-    "letter": "G",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "Vs1nAdgAbNE",
-    "title": "Hard",
-    "artist": "Charlie Puth",
-    "youtubeId": "Vs1nAdgAbNE",
-    "url": null,
-    "duration": 205,
-    "artworkUrl": "https://img.youtube.com/vi/Vs1nAdgAbNE/mqdefault.jpg",
-    "letter": "H",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "WL7b30qB7mk",
-    "title": "Heart Go Crazy",
-    "artist": "Charlie Puth",
-    "youtubeId": "WL7b30qB7mk",
-    "url": null,
-    "duration": 212,
-    "artworkUrl": "https://img.youtube.com/vi/WL7b30qB7mk/mqdefault.jpg",
-    "letter": "H",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "cK8LuF3SsZM",
-    "title": "Heart Is Bleeding",
-    "artist": "Charlie Puth",
-    "youtubeId": "cK8LuF3SsZM",
-    "url": null,
-    "duration": 186,
-    "artworkUrl": "https://img.youtube.com/vi/cK8LuF3SsZM/mqdefault.jpg",
-    "letter": "H",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "Sj9NcZxjNec",
-    "title": "Holding Me Back",
-    "artist": "Charlie Puth",
-    "youtubeId": "Sj9NcZxjNec",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/Sj9NcZxjNec/mqdefault.jpg",
-    "letter": "H",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "wI3xCcLW2-Y",
-    "title": "Holding On For Dear Life",
-    "artist": "Charlie Puth",
-    "youtubeId": "wI3xCcLW2-Y",
-    "url": null,
-    "duration": 197,
-    "artworkUrl": "https://img.youtube.com/vi/wI3xCcLW2-Y/mqdefault.jpg",
-    "letter": "H",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "Yyt8tl-mj9w",
-    "title": "Hopes Up",
-    "artist": "Charlie Puth",
-    "youtubeId": "Yyt8tl-mj9w",
-    "url": null,
-    "duration": 127,
-    "artworkUrl": "https://img.youtube.com/vi/Yyt8tl-mj9w/mqdefault.jpg",
-    "letter": "H",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "URcdq08KYDU",
-    "title": "Hypnotized",
-    "artist": "Charlie Puth",
-    "youtubeId": "URcdq08KYDU",
-    "url": null,
-    "duration": 177,
-    "artworkUrl": "https://img.youtube.com/vi/URcdq08KYDU/mqdefault.jpg",
-    "letter": "H",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "4h8W07DRKNs",
-    "title": "I Don’t Wanna Hurt You Baby",
-    "artist": "Charlie Puth",
-    "youtubeId": "4h8W07DRKNs",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/4h8W07DRKNs/mqdefault.jpg",
-    "letter": "I",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "N4VZ-vQvJ_8",
-    "title": "I Don’t Wanna Hurt You Baby (Acoustic)",
-    "artist": "Charlie Puth",
-    "youtubeId": "N4VZ-vQvJ_8",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/N4VZ-vQvJ_8/mqdefault.jpg",
-    "letter": "I",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "mkNDfa8fRs8",
-    "title": "I'll Be There",
-    "artist": "Charlie Puth",
-    "youtubeId": "mkNDfa8fRs8",
-    "url": null,
-    "duration": 168,
-    "artworkUrl": "https://img.youtube.com/vi/mkNDfa8fRs8/mqdefault.jpg",
-    "letter": "I",
-    "palette": {
-      "from": "#E06C75",
-      "to": "#A83B43",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "4hLBHvEbbKc",
-    "title": "I'm Coming Over (ft. Timbaland)",
-    "artist": "Charlie Puth",
-    "youtubeId": "4hLBHvEbbKc",
-    "url": null,
-    "duration": 179,
-    "artworkUrl": "https://img.youtube.com/vi/4hLBHvEbbKc/mqdefault.jpg",
-    "letter": "I",
-    "palette": {
-      "from": "#E06C75",
-      "to": "#A83B43",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "UdNBenHS2us",
-    "title": "In My Eyes",
-    "artist": "Charlie Puth",
-    "youtubeId": "UdNBenHS2us",
-    "url": null,
-    "duration": 133,
-    "artworkUrl": "https://img.youtube.com/vi/UdNBenHS2us/mqdefault.jpg",
-    "letter": "I",
-    "palette": {
-      "from": "#C678DD",
-      "to": "#8F46A3",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "7XhZyxx21AA",
-    "title": "In The Dark",
-    "artist": "Charlie Puth",
-    "youtubeId": "7XhZyxx21AA",
-    "url": null,
-    "duration": 201,
-    "artworkUrl": "https://img.youtube.com/vi/7XhZyxx21AA/mqdefault.jpg",
-    "letter": "I",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "Vk_GXjYU6QE",
-    "title": "Keep It Together",
-    "artist": "Charlie Puth",
-    "youtubeId": "Vk_GXjYU6QE",
-    "url": null,
-    "duration": 206,
-    "artworkUrl": "https://img.youtube.com/vi/Vk_GXjYU6QE/mqdefault.jpg",
-    "letter": "K",
-    "palette": {
-      "from": "#E06C75",
-      "to": "#A83B43",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "Xf9nNKulmrg",
-    "title": "Keeper",
-    "artist": "Charlie Puth",
-    "youtubeId": "Xf9nNKulmrg",
-    "url": null,
-    "duration": 138,
-    "artworkUrl": "https://img.youtube.com/vi/Xf9nNKulmrg/mqdefault.jpg",
-    "letter": "K",
-    "palette": {
-      "from": "#E06C75",
-      "to": "#A83B43",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "qEyvIFLo_uI",
-    "title": "King of Optimism (Extended)",
-    "artist": "Charlie Puth",
-    "youtubeId": "qEyvIFLo_uI",
-    "url": null,
-    "duration": 229,
-    "artworkUrl": "https://img.youtube.com/vi/qEyvIFLo_uI/mqdefault.jpg",
-    "letter": "K",
-    "palette": {
-      "from": "#E06C75",
-      "to": "#A83B43",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "nUk3Mm3DG-U",
-    "title": "Know You By Heart",
-    "artist": "Charlie Puth",
-    "youtubeId": "nUk3Mm3DG-U",
-    "url": null,
-    "duration": 226,
-    "artworkUrl": "https://img.youtube.com/vi/nUk3Mm3DG-U/mqdefault.jpg",
-    "letter": "K",
-    "palette": {
-      "from": "#E06C75",
-      "to": "#A83B43",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "5nGtx9KA8cs",
-    "title": "Lights Go Out",
-    "artist": "Charlie Puth",
-    "youtubeId": "5nGtx9KA8cs",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/5nGtx9KA8cs/mqdefault.jpg",
-    "letter": "L",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "r7nhAe7ViWA",
-    "title": "Like That (demo for BABYMONSTER)",
-    "artist": "Charlie Puth",
-    "youtubeId": "r7nhAe7ViWA",
-    "url": null,
-    "duration": 166,
-    "artworkUrl": "https://img.youtube.com/vi/r7nhAe7ViWA/mqdefault.jpg",
-    "letter": "L",
-    "palette": {
-      "from": "#98C379",
-      "to": "#678F4C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "pny5KkZFlD0",
-    "title": "Lips on You (demo for Maroon 5)",
-    "artist": "Charlie Puth",
-    "youtubeId": "pny5KkZFlD0",
-    "url": null,
-    "duration": 217,
-    "artworkUrl": "https://img.youtube.com/vi/pny5KkZFlD0/mqdefault.jpg",
-    "letter": "L",
-    "palette": {
-      "from": "#98C379",
-      "to": "#678F4C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "aqox12aqrFw",
-    "title": "Look Around",
-    "artist": "Charlie Puth",
-    "youtubeId": "aqox12aqrFw",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/aqox12aqrFw/mqdefault.jpg",
-    "letter": "L",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "dbuv5vG56AU",
-    "title": "Look At Me Now",
-    "artist": "Charlie Puth",
-    "youtubeId": "dbuv5vG56AU",
-    "url": null,
-    "duration": 199,
-    "artworkUrl": "https://img.youtube.com/vi/dbuv5vG56AU/mqdefault.jpg",
-    "letter": "L",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "eQPTRTR-ooc",
-    "title": "Look At My Phone",
-    "artist": "Charlie Puth",
-    "youtubeId": "eQPTRTR-ooc",
-    "url": null,
-    "duration": 190,
-    "artworkUrl": "https://img.youtube.com/vi/eQPTRTR-ooc/mqdefault.jpg",
-    "letter": "L",
-    "palette": {
-      "from": "#98C379",
-      "to": "#678F4C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "329PZ0aMOrE",
-    "title": "Look What You Made Me Do",
-    "artist": "Charlie Puth",
-    "youtubeId": "329PZ0aMOrE",
-    "url": null,
-    "duration": 139,
-    "artworkUrl": "https://img.youtube.com/vi/329PZ0aMOrE/mqdefault.jpg",
-    "letter": "L",
-    "palette": {
-      "from": "#98C379",
-      "to": "#678F4C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "l4pkRF2M3uM",
-    "title": "Looking At Me",
-    "artist": "Charlie Puth",
-    "youtubeId": "l4pkRF2M3uM",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/l4pkRF2M3uM/mqdefault.jpg",
-    "letter": "L",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "2MPAGvqK6vM",
-    "title": "Love You Anymore (demo for  Michael Bublé)",
-    "artist": "Charlie Puth",
-    "youtubeId": "2MPAGvqK6vM",
-    "url": null,
-    "duration": 202,
-    "artworkUrl": "https://img.youtube.com/vi/2MPAGvqK6vM/mqdefault.jpg",
-    "letter": "L",
-    "palette": {
-      "from": "#98C379",
-      "to": "#678F4C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "e8qB2ArqOY4",
-    "title": "Mad At Me",
-    "artist": "Charlie Puth",
-    "youtubeId": "e8qB2ArqOY4",
-    "url": null,
-    "duration": 172,
-    "artworkUrl": "https://img.youtube.com/vi/e8qB2ArqOY4/mqdefault.jpg",
-    "letter": "M",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "O1d6GH0f_DE",
-    "title": "Make Something Up",
-    "artist": "Charlie Puth",
-    "youtubeId": "O1d6GH0f_DE",
-    "url": null,
-    "duration": 201,
-    "artworkUrl": "https://img.youtube.com/vi/O1d6GH0f_DE/mqdefault.jpg",
-    "letter": "M",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "eC0cNpiEZ9s",
-    "title": "Make You Say (with Zedd)",
-    "artist": "Charlie Puth",
-    "youtubeId": "eC0cNpiEZ9s",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/eC0cNpiEZ9s/mqdefault.jpg",
-    "letter": "M",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "S6JMArlhviE",
-    "title": "Me and You",
-    "artist": "Charlie Puth",
-    "youtubeId": "S6JMArlhviE",
-    "url": null,
-    "duration": 132,
-    "artworkUrl": "https://img.youtube.com/vi/S6JMArlhviE/mqdefault.jpg",
-    "letter": "M",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "kpEydKdPKZk",
-    "title": "Next To You",
-    "artist": "Charlie Puth",
-    "youtubeId": "kpEydKdPKZk",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/kpEydKdPKZk/mqdefault.jpg",
-    "letter": "N",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "mliIn2wkuwA",
-    "title": "No Good",
-    "artist": "Charlie Puth",
-    "youtubeId": "mliIn2wkuwA",
-    "url": null,
-    "duration": 147,
-    "artworkUrl": "https://img.youtube.com/vi/mliIn2wkuwA/mqdefault.jpg",
-    "letter": "N",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "UNzi8S3sUn4",
-    "title": "No Judgement",
-    "artist": "Charlie Puth",
-    "youtubeId": "UNzi8S3sUn4",
-    "url": null,
-    "duration": 212,
-    "artworkUrl": "https://img.youtube.com/vi/UNzi8S3sUn4/mqdefault.jpg",
-    "letter": "N",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "EvJOaKJrVm8",
-    "title": "Nothing Good",
-    "artist": "Charlie Puth",
-    "youtubeId": "EvJOaKJrVm8",
-    "url": null,
-    "duration": 127,
-    "artworkUrl": "https://img.youtube.com/vi/EvJOaKJrVm8/mqdefault.jpg",
-    "letter": "N",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "zAt4sGyhmoM",
-    "title": "Off The Fence (feat. salem ilese)",
-    "artist": "Charlie Puth",
-    "youtubeId": "zAt4sGyhmoM",
-    "url": null,
-    "duration": 127,
-    "artworkUrl": "https://img.youtube.com/vi/zAt4sGyhmoM/mqdefault.jpg",
-    "letter": "O",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "XFSC8Q39bvs",
-    "title": "Operator",
-    "artist": "Charlie Puth",
-    "youtubeId": "XFSC8Q39bvs",
-    "url": null,
-    "duration": 182,
-    "artworkUrl": "https://img.youtube.com/vi/XFSC8Q39bvs/mqdefault.jpg",
-    "letter": "O",
-    "palette": {
-      "from": "#98C379",
-      "to": "#678F4C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "UMidD0wTgx4",
-    "title": "Over And Over",
-    "artist": "Charlie Puth",
-    "youtubeId": "UMidD0wTgx4",
-    "url": null,
-    "duration": 215,
-    "artworkUrl": "https://img.youtube.com/vi/UMidD0wTgx4/mqdefault.jpg",
-    "letter": "O",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "gZAypvYlhZQ",
-    "title": "Picture Perfect",
-    "artist": "Charlie Puth",
-    "youtubeId": "gZAypvYlhZQ",
-    "url": null,
-    "duration": 199,
-    "artworkUrl": "https://img.youtube.com/vi/gZAypvYlhZQ/mqdefault.jpg",
-    "letter": "P",
-    "palette": {
-      "from": "#C678DD",
-      "to": "#8F46A3",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "IKAIX6G_IGE",
-    "title": "Power",
-    "artist": "Charlie Puth",
-    "youtubeId": "IKAIX6G_IGE",
-    "url": null,
-    "duration": 87,
-    "artworkUrl": "https://img.youtube.com/vi/IKAIX6G_IGE/mqdefault.jpg",
-    "letter": "P",
-    "palette": {
-      "from": "#C678DD",
-      "to": "#8F46A3",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "6WKmqO2I2AU",
-    "title": "Put Me Back Together",
-    "artist": "Charlie Puth",
-    "youtubeId": "6WKmqO2I2AU",
-    "url": null,
-    "duration": 203,
-    "artworkUrl": "https://img.youtube.com/vi/6WKmqO2I2AU/mqdefault.jpg",
-    "letter": "P",
-    "palette": {
-      "from": "#C678DD",
-      "to": "#8F46A3",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "5z536_Uil3I",
-    "title": "Quarantine Song",
-    "artist": "Charlie Puth",
-    "youtubeId": "5z536_Uil3I",
-    "url": null,
-    "duration": 161,
-    "artworkUrl": "https://img.youtube.com/vi/5z536_Uil3I/mqdefault.jpg",
-    "letter": "Q",
-    "palette": {
-      "from": "#E06C75",
-      "to": "#A83B43",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "hLhcTJxZ8_E",
-    "title": "Ride To Melrose (ft. Mike Ballz)",
-    "artist": "Charlie Puth",
-    "youtubeId": "hLhcTJxZ8_E",
-    "url": null,
-    "duration": 325,
-    "artworkUrl": "https://img.youtube.com/vi/hLhcTJxZ8_E/mqdefault.jpg",
-    "letter": "R",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "-ITERYJfDO8",
-    "title": "Saved By The Bell",
-    "artist": "Charlie Puth",
-    "youtubeId": "-ITERYJfDO8",
-    "url": null,
-    "duration": 217,
-    "artworkUrl": "https://img.youtube.com/vi/-ITERYJfDO8/mqdefault.jpg",
-    "letter": "S",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "CRkv8vGvFto",
-    "title": "Seventeen",
-    "artist": "Charlie Puth",
-    "youtubeId": "CRkv8vGvFto",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/CRkv8vGvFto/mqdefault.jpg",
-    "letter": "S",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "G6oVJqzKvPU",
-    "title": "Shouldn't I Be In Love",
-    "artist": "Charlie Puth",
-    "youtubeId": "G6oVJqzKvPU",
-    "url": null,
-    "duration": 214,
-    "artworkUrl": "https://img.youtube.com/vi/G6oVJqzKvPU/mqdefault.jpg",
-    "letter": "S",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "yS_j1z63Jrc",
-    "title": "Sick",
-    "artist": "Charlie Puth",
-    "youtubeId": "yS_j1z63Jrc",
-    "url": null,
-    "duration": 187,
-    "artworkUrl": "https://img.youtube.com/vi/yS_j1z63Jrc/mqdefault.jpg",
-    "letter": "S",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "ZMWOtyHRjJo",
-    "title": "Slow Motion",
-    "artist": "Charlie Puth",
-    "youtubeId": "ZMWOtyHRjJo",
-    "url": null,
-    "duration": 211,
-    "artworkUrl": "https://img.youtube.com/vi/ZMWOtyHRjJo/mqdefault.jpg",
-    "letter": "S",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "rBpVtdB1a6w",
-    "title": "Sober (Solo Version)",
-    "artist": "Charlie Puth",
-    "youtubeId": "rBpVtdB1a6w",
-    "url": null,
-    "duration": 198,
-    "artworkUrl": "https://img.youtube.com/vi/rBpVtdB1a6w/mqdefault.jpg",
-    "letter": "S",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "gBzkYK78KMI",
-    "title": "Somebody's Watching Me",
-    "artist": "Charlie Puth",
-    "youtubeId": "gBzkYK78KMI",
-    "url": null,
-    "duration": 117,
-    "artworkUrl": "https://img.youtube.com/vi/gBzkYK78KMI/mqdefault.jpg",
-    "letter": "S",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "NUVsRXKqJfw",
-    "title": "Stay Away (Extended)",
-    "artist": "Charlie Puth",
-    "youtubeId": "NUVsRXKqJfw",
-    "url": null,
-    "duration": 130,
-    "artworkUrl": "https://img.youtube.com/vi/NUVsRXKqJfw/mqdefault.jpg",
-    "letter": "S",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "c4HbNc8-mF8",
-    "title": "Stop",
-    "artist": "Charlie Puth",
-    "youtubeId": "c4HbNc8-mF8",
-    "url": null,
-    "duration": 172,
-    "artworkUrl": "https://img.youtube.com/vi/c4HbNc8-mF8/mqdefault.jpg",
-    "letter": "S",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "pAB8abV8BmY",
-    "title": "Suprise Me",
-    "artist": "Charlie Puth",
-    "youtubeId": "pAB8abV8BmY",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/pAB8abV8BmY/mqdefault.jpg",
-    "letter": "S",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "eCUOV4pvRrE",
-    "title": "Take It All In",
-    "artist": "Charlie Puth",
-    "youtubeId": "eCUOV4pvRrE",
-    "url": null,
-    "duration": 133,
-    "artworkUrl": "https://img.youtube.com/vi/eCUOV4pvRrE/mqdefault.jpg",
-    "letter": "T",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "eLCgyLhIKi8",
-    "title": "Tangerine Dreams",
-    "artist": "Charlie Puth",
-    "youtubeId": "eLCgyLhIKi8",
-    "url": null,
-    "duration": 231,
-    "artworkUrl": "https://img.youtube.com/vi/eLCgyLhIKi8/mqdefault.jpg",
-    "letter": "T",
-    "palette": {
-      "from": "#56B6C2",
-      "to": "#388E9C",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "8nAqrW5mRqc",
-    "title": "Tears on my shoulder",
-    "artist": "Charlie Puth",
-    "youtubeId": "8nAqrW5mRqc",
-    "url": null,
-    "duration": 176,
-    "artworkUrl": "https://img.youtube.com/vi/8nAqrW5mRqc/mqdefault.jpg",
-    "letter": "T",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "VfcnPbmnXu0",
-    "title": "That Was Embarrassing (Extended)",
-    "artist": "Charlie Puth",
-    "youtubeId": "VfcnPbmnXu0",
-    "url": null,
-    "duration": 148,
-    "artworkUrl": "https://img.youtube.com/vi/VfcnPbmnXu0/mqdefault.jpg",
-    "letter": "T",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "koNSQPedKyg",
-    "title": "The Moment",
-    "artist": "Charlie Puth",
-    "youtubeId": "koNSQPedKyg",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/koNSQPedKyg/mqdefault.jpg",
-    "letter": "T",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "5NCcbx03rXA",
-    "title": "The Way",
-    "artist": "Charlie Puth",
-    "youtubeId": "5NCcbx03rXA",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/5NCcbx03rXA/mqdefault.jpg",
-    "letter": "T",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "tGyDu6Hzi0s",
-    "title": "Time Passes By",
-    "artist": "Charlie Puth",
-    "youtubeId": "tGyDu6Hzi0s",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/tGyDu6Hzi0s/mqdefault.jpg",
-    "letter": "T",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "_LcP_NHW0zM",
-    "title": "Trampoline Gasoline (with B.o.B)",
-    "artist": "Charlie Puth",
-    "youtubeId": "_LcP_NHW0zM",
-    "url": null,
-    "duration": 214,
-    "artworkUrl": "https://img.youtube.com/vi/_LcP_NHW0zM/mqdefault.jpg",
-    "letter": "T",
-    "palette": {
-      "from": "#E5C07B",
-      "to": "#A47D32",
-      "text": "#000"
-    }
-  },
-  {
-    "id": "HhSuX7MYiRE",
-    "title": "Used All My Love",
-    "artist": "Charlie Puth",
-    "youtubeId": "HhSuX7MYiRE",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/HhSuX7MYiRE/mqdefault.jpg",
-    "letter": "U",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "gAZMbK4Yozo",
-    "title": "We're going home",
-    "artist": "Charlie Puth",
-    "youtubeId": "gAZMbK4Yozo",
-    "url": null,
-    "duration": 211,
-    "artworkUrl": "https://img.youtube.com/vi/gAZMbK4Yozo/mqdefault.jpg",
-    "letter": "W",
-    "palette": {
-      "from": "#E06C75",
-      "to": "#A83B43",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "teVWsgI0_yc",
-    "title": "What Makes You Beautiful",
-    "artist": "Charlie Puth",
-    "youtubeId": "teVWsgI0_yc",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/teVWsgI0_yc/mqdefault.jpg",
-    "letter": "W",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "9cNItnEbDa0",
-    "title": "Yellow Hearts  (Demo for Ant Saunders)",
-    "artist": "Charlie Puth",
-    "youtubeId": "9cNItnEbDa0",
-    "url": null,
-    "duration": 180,
-    "artworkUrl": "https://img.youtube.com/vi/9cNItnEbDa0/mqdefault.jpg",
-    "letter": "Y",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  },
-  {
-    "id": "ZorWVKNcTQc",
-    "title": "Your Name",
-    "artist": "Charlie Puth",
-    "youtubeId": "ZorWVKNcTQc",
-    "url": null,
-    "duration": 188,
-    "artworkUrl": "https://img.youtube.com/vi/ZorWVKNcTQc/mqdefault.jpg",
-    "letter": "Y",
-    "palette": {
-      "from": "#61AFEF",
-      "to": "#2C72B0",
-      "text": "#fff"
-    }
-  }
+  {"id":"RbQ1bpBlmp4","title":"I Suck At Writing Lyrics","artist":"Charlie Puth","youtubeId":"RbQ1bpBlmp4","duration":190.861,"letter":"I","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"kZAAnbRvids","title":"Back Around","artist":"Charlie Puth","youtubeId":"kZAAnbRvids","duration":174,"letter":"B","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"3PuzDHsXUKA","title":"Beautiful Corruption","artist":"Charlie Puth","youtubeId":"3PuzDHsXUKA","duration":206,"letter":"B","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"ZNsabDtpS3g","title":"Best Friend","artist":"Charlie Puth","youtubeId":"ZNsabDtpS3g","duration":180,"letter":"B","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"EQDMxbCeJTs","title":"Butterflies","artist":"Charlie Puth","youtubeId":"EQDMxbCeJTs","duration":136,"letter":"B","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"Zqhjca07Jjk","title":"By Default","artist":"Charlie Puth","youtubeId":"Zqhjca07Jjk","duration":157,"letter":"B","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"QSh6giWIvaI","title":"Can't Stay Away From Your Baby","artist":"Charlie Puth","youtubeId":"QSh6giWIvaI","duration":202,"letter":"C","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"mx51V0WjxJ8","title":"Just Give Me a Reason","artist":"Charlie Puth","youtubeId":"mx51V0WjxJ8","duration":233,"letter":"J","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"HnS2tHzo7LA","title":"Crying on a Saturday Night","artist":"Charlie Puth","youtubeId":"HnS2tHzo7LA","duration":195,"letter":"C","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"dA-vd8t9kgA","title":"December","artist":"Charlie Puth","youtubeId":"dA-vd8t9kgA","duration":210,"letter":"D","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"m0R6e_9Ov7Q","title":"Dipset","artist":"Charlie Puth","youtubeId":"m0R6e_9Ov7Q","duration":178,"letter":"D","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"Nb_zaBKgYRk","title":"Do It Again (studio)","artist":"Charlie Puth","youtubeId":"Nb_zaBKgYRk","duration":201,"letter":"D","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"kSiAtUXQFYk","title":"Don't Talk","artist":"Charlie Puth","youtubeId":"kSiAtUXQFYk","duration":180,"letter":"D","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"Ufx1FjIjlmo","title":"Done For You","artist":"Charlie Puth","youtubeId":"Ufx1FjIjlmo","duration":189,"letter":"D","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"pKnLAuDjw5A","title":"Drive","artist":"Charlie Puth","youtubeId":"pKnLAuDjw5A","duration":164,"letter":"D","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"GrFgv0ID5OM","title":"Early in the Morning","artist":"Charlie Puth","youtubeId":"GrFgv0ID5OM","duration":172,"letter":"E","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"iE-MdumCqgc","title":"Everything","artist":"Charlie Puth","youtubeId":"iE-MdumCqgc","duration":215,"letter":"E","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"a2HMN5cAf5w","title":"Famous Last Words","artist":"Charlie Puth","youtubeId":"a2HMN5cAf5w","duration":196,"letter":"F","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"xPBGJFoS-oU","title":"Favorite Mistakes","artist":"Charlie Puth","youtubeId":"xPBGJFoS-oU","duration":183,"letter":"F","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"DtNgBaWdS6s","title":"Feel Like an Angel","artist":"Charlie Puth","youtubeId":"DtNgBaWdS6s","duration":194,"letter":"F","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"jUvPyoV5dxI","title":"Fly","artist":"Charlie Puth","youtubeId":"jUvPyoV5dxI","duration":221,"letter":"F","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"D9dMhxXvJww","title":"For the Night","artist":"Charlie Puth","youtubeId":"D9dMhxXvJww","duration":175,"letter":"F","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"X39pZ-9wYhE","title":"Found a Way","artist":"Charlie Puth","youtubeId":"X39pZ-9wYhE","duration":188,"letter":"F","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"A9MHNX-9nOA","title":"Friendly","artist":"Charlie Puth","youtubeId":"A9MHNX-9nOA","duration":162,"letter":"F","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"GtGPP0bOJmQ","title":"Ghost Lover","artist":"Charlie Puth","youtubeId":"GtGPP0bOJmQ","duration":197,"letter":"G","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"r3K5smvApuI","title":"Good Morning","artist":"Charlie Puth","youtubeId":"r3K5smvApuI","duration":208,"letter":"G","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"H1Z8EjFx89k","title":"Harder","artist":"Charlie Puth","youtubeId":"H1Z8EjFx89k","duration":176,"letter":"H","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"5SDvJbKDRzU","title":"Hate Me","artist":"Charlie Puth","youtubeId":"5SDvJbKDRzU","duration":190,"letter":"H","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"p5JpJbiwH5s","title":"Heart Attack","artist":"Charlie Puth","youtubeId":"p5JpJbiwH5s","duration":199,"letter":"H","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"gN4QHKRN7_w","title":"Homesick","artist":"Charlie Puth","youtubeId":"gN4QHKRN7_w","duration":185,"letter":"H","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"KQNz-rcEHaA","title":"How Long (Demo)","artist":"Charlie Puth","youtubeId":"KQNz-rcEHaA","duration":213,"letter":"H","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"BT7PXqvOqdc","title":"I Don't Think I Like Her","artist":"Charlie Puth","youtubeId":"BT7PXqvOqdc","duration":161,"letter":"I","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"fWZ_mKpKybc","title":"I Got You","artist":"Charlie Puth","youtubeId":"fWZ_mKpKybc","duration":185,"letter":"I","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"0dQKAX9D5MA","title":"I Won't Tell a Soul","artist":"Charlie Puth","youtubeId":"0dQKAX9D5MA","duration":209,"letter":"I","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"NbA1jULOetQ","title":"If I Get Lucky","artist":"Charlie Puth","youtubeId":"NbA1jULOetQ","duration":175,"letter":"I","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"4bMksBuCZ2g","title":"Impersonator","artist":"Charlie Puth","youtubeId":"4bMksBuCZ2g","duration":192,"letter":"I","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"LVjbvC0Rjow","title":"In Case","artist":"Charlie Puth","youtubeId":"LVjbvC0Rjow","duration":186,"letter":"I","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"vPSEQx0GgmU","title":"In My Blood","artist":"Charlie Puth","youtubeId":"vPSEQx0GgmU","duration":223,"letter":"I","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"YPdbQ9PHMXY","title":"Into Your Arms","artist":"Charlie Puth","youtubeId":"YPdbQ9PHMXY","duration":198,"letter":"I","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"Gr2YJqNpQyw","title":"It's Not Right","artist":"Charlie Puth","youtubeId":"Gr2YJqNpQyw","duration":207,"letter":"I","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"c1Qr9GHmSYM","title":"Just Friends","artist":"Charlie Puth","youtubeId":"c1Qr9GHmSYM","duration":179,"letter":"J","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"8lbFSgScLOc","title":"Just Say You Love Me","artist":"Charlie Puth","youtubeId":"8lbFSgScLOc","duration":196,"letter":"J","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"Y3L4UNaAkEY","title":"Keep It Between Us","artist":"Charlie Puth","youtubeId":"Y3L4UNaAkEY","duration":184,"letter":"K","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"Km94oDhP0pU","title":"Killing Me Slowly (Demo)","artist":"Charlie Puth","youtubeId":"Km94oDhP0pU","duration":216,"letter":"K","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"q0XFmv8rTAA","title":"Lay Me Down","artist":"Charlie Puth","youtubeId":"q0XFmv8rTAA","duration":188,"letter":"L","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"G4IiUxN-dQ8","title":"Left Right Left","artist":"Charlie Puth","youtubeId":"G4IiUxN-dQ8","duration":170,"letter":"L","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"yFBD8TZcqzk","title":"Light Switch (Early Demo)","artist":"Charlie Puth","youtubeId":"yFBD8TZcqzk","duration":193,"letter":"L","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"e8qB2ArqOY4","title":"Mad At Me","artist":"Charlie Puth","youtubeId":"e8qB2ArqOY4","duration":172,"letter":"M","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"O1d6GH0f_DE","title":"Make Something Up","artist":"Charlie Puth","youtubeId":"O1d6GH0f_DE","duration":201,"letter":"M","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"eC0cNpiEZ9s","title":"Make You Say","artist":"Charlie Puth","youtubeId":"eC0cNpiEZ9s","duration":180,"letter":"M","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"S6JMArlhviE","title":"Me and You","artist":"Charlie Puth","youtubeId":"S6JMArlhviE","duration":132,"letter":"M","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"kpEydKdPKZk","title":"Next To You","artist":"Charlie Puth","youtubeId":"kpEydKdPKZk","duration":180,"letter":"N","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"mliIn2wkuwA","title":"No Good","artist":"Charlie Puth","youtubeId":"mliIn2wkuwA","duration":147,"letter":"N","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"UNzi8S3sUn4","title":"No Judgement","artist":"Charlie Puth","youtubeId":"UNzi8S3sUn4","duration":212,"letter":"N","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"EvJOaKJrVm8","title":"Nothing Good","artist":"Charlie Puth","youtubeId":"EvJOaKJrVm8","duration":127,"letter":"N","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"MV_LJHEFkgE","title":"One Call Away (Demo)","artist":"Charlie Puth","youtubeId":"MV_LJHEFkgE","duration":225,"letter":"O","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"SKbpMuWXRHs","title":"Only You","artist":"Charlie Puth","youtubeId":"SKbpMuWXRHs","duration":178,"letter":"O","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"XJrU5O6A-TM","title":"Over and Over","artist":"Charlie Puth","youtubeId":"XJrU5O6A-TM","duration":195,"letter":"O","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"x9LlF9Nc3sI","title":"Pause","artist":"Charlie Puth","youtubeId":"x9LlF9Nc3sI","duration":183,"letter":"P","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"xgFMCqp5lhs","title":"Peace Sign","artist":"Charlie Puth","youtubeId":"xgFMCqp5lhs","duration":176,"letter":"P","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"VkdGMiGCdXM","title":"People You Know","artist":"Charlie Puth","youtubeId":"VkdGMiGCdXM","duration":212,"letter":"P","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"a_gV0V79mYM","title":"Promises","artist":"Charlie Puth","youtubeId":"a_gV0V79mYM","duration":188,"letter":"P","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"wLYbge-gSBk","title":"Psycho","artist":"Charlie Puth","youtubeId":"wLYbge-gSBk","duration":196,"letter":"P","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"SAbfexQoRxE","title":"Purple Hoodie","artist":"Charlie Puth","youtubeId":"SAbfexQoRxE","duration":164,"letter":"P","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"zQOCNvPAXJ8","title":"Real Friends","artist":"Charlie Puth","youtubeId":"zQOCNvPAXJ8","duration":205,"letter":"R","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"jdFpHd3dVAY","title":"Right Now","artist":"Charlie Puth","youtubeId":"jdFpHd3dVAY","duration":173,"letter":"R","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"FLLBhyFUDTs","title":"Run","artist":"Charlie Puth","youtubeId":"FLLBhyFUDTs","duration":198,"letter":"R","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"v5bfSnWwJGU","title":"Save the Last Dance","artist":"Charlie Puth","youtubeId":"v5bfSnWwJGU","duration":185,"letter":"S","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"IfUGJ5QgOzQ","title":"See You Again (Demo)","artist":"Charlie Puth","youtubeId":"IfUGJ5QgOzQ","duration":243,"letter":"S","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"k78mBhqBXV0","title":"Self-Centered","artist":"Charlie Puth","youtubeId":"k78mBhqBXV0","duration":176,"letter":"S","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"bfmWxVl9D3c","title":"She Knows","artist":"Charlie Puth","youtubeId":"bfmWxVl9D3c","duration":187,"letter":"S","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"k3MVtg3nPGI","title":"Simple","artist":"Charlie Puth","youtubeId":"k3MVtg3nPGI","duration":171,"letter":"S","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"PnJpx8DLWLA","title":"Slow It Down","artist":"Charlie Puth","youtubeId":"PnJpx8DLWLA","duration":204,"letter":"S","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"G9K6HsOXR3Y","title":"Some Things","artist":"Charlie Puth","youtubeId":"G9K6HsOXR3Y","duration":191,"letter":"S","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"Zf5Zs6S1c_E","title":"Sometimes","artist":"Charlie Puth","youtubeId":"Zf5Zs6S1c_E","duration":177,"letter":"S","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"mI-RA3h_PKc","title":"Sorry Is Never Enough","artist":"Charlie Puth","youtubeId":"mI-RA3h_PKc","duration":213,"letter":"S","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"cJrfbr9Tqzc","title":"Stoned","artist":"Charlie Puth","youtubeId":"cJrfbr9Tqzc","duration":169,"letter":"S","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"XaV5pf_q72I","title":"Stressed Out (Cover)","artist":"Charlie Puth","youtubeId":"XaV5pf_q72I","duration":197,"letter":"S","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"9XZCrPRcPGU","title":"Take Me Back","artist":"Charlie Puth","youtubeId":"9XZCrPRcPGU","duration":182,"letter":"T","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"3c1m3W2Knz8","title":"Talk","artist":"Charlie Puth","youtubeId":"3c1m3W2Knz8","duration":190,"letter":"T","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"GHnXwLTPX9M","title":"Tender","artist":"Charlie Puth","youtubeId":"GHnXwLTPX9M","duration":203,"letter":"T","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"pYjf1eDQ7QY","title":"That's All Right","artist":"Charlie Puth","youtubeId":"pYjf1eDQ7QY","duration":186,"letter":"T","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"4D9eR0gMXDw","title":"The Way I Am","artist":"Charlie Puth","youtubeId":"4D9eR0gMXDw","duration":194,"letter":"T","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"xB9dOnFYvXE","title":"These Are the Words","artist":"Charlie Puth","youtubeId":"xB9dOnFYvXE","duration":201,"letter":"T","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"jfYVWRMWa1k","title":"Through It All","artist":"Charlie Puth","youtubeId":"jfYVWRMWa1k","duration":207,"letter":"T","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"3EWNHdFJbm8","title":"Together","artist":"Charlie Puth","youtubeId":"3EWNHdFJbm8","duration":179,"letter":"T","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"L6M_BChbLV4","title":"Too Little Too Late","artist":"Charlie Puth","youtubeId":"L6M_BChbLV4","duration":196,"letter":"T","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"LHp0TYGK1BM","title":"Treat You Better","artist":"Charlie Puth","youtubeId":"LHp0TYGK1BM","duration":184,"letter":"T","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"EjEVmKH3oSE","title":"Uh Oh","artist":"Charlie Puth","youtubeId":"EjEVmKH3oSE","duration":165,"letter":"U","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"nSKNExQiHo4","title":"Unraveling","artist":"Charlie Puth","youtubeId":"nSKNExQiHo4","duration":212,"letter":"U","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"DWOAmj2yInE","title":"Used To","artist":"Charlie Puth","youtubeId":"DWOAmj2yInE","duration":178,"letter":"U","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"r71jPKIIzSg","title":"Voicenotes Alt","artist":"Charlie Puth","youtubeId":"r71jPKIIzSg","duration":199,"letter":"V","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"cAR4aTZDzc0","title":"Waiting On You","artist":"Charlie Puth","youtubeId":"cAR4aTZDzc0","duration":191,"letter":"W","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"NyNBHK-GANA","title":"Whatever It Takes","artist":"Charlie Puth","youtubeId":"NyNBHK-GANA","duration":175,"letter":"W","palette":{"from":"#E5C07B","to":"#A47D32"}},
+  {"id":"Xpqdf2jRQnA","title":"When I'm Gone (Demo)","artist":"Charlie Puth","youtubeId":"Xpqdf2jRQnA","duration":218,"letter":"W","palette":{"from":"#56B6C2","to":"#388E9C"}},
+  {"id":"3t2oN8X53EM","title":"Without You","artist":"Charlie Puth","youtubeId":"3t2oN8X53EM","duration":187,"letter":"W","palette":{"from":"#61AFEF","to":"#2C72B0"}},
+  {"id":"ZorWVKNcTQc","title":"Your Name","artist":"Charlie Puth","youtubeId":"ZorWVKNcTQc","duration":188,"letter":"Y","palette":{"from":"#61AFEF","to":"#2C72B0"}}
 ];
-
 </script>
-  <script>
-  (() => {
-    'use strict';
 
-    const cleanTitle = title => title.replace(/^Charlie Puth\s*-\s*/i, '').trim();
-    const originalSongs = (typeof SONGS !== 'undefined' ? SONGS : []).map((s, i) => ({ ...s, _i: i, title: cleanTitle(s.title) }));
-    let currentSongs = [...originalSongs];
-    
-    const DUR_KEY = 'vault_dur_v4';
-    let durCache = {};
-    try { durCache = JSON.parse(localStorage.getItem(DUR_KEY) || '{}'); } catch(e) {}
-    originalSongs.forEach(s => { if (s.youtubeId && durCache[s.youtubeId]) s.duration = durCache[s.youtubeId]; });
-    const saveDurCache = () => { try { localStorage.setItem(DUR_KEY, JSON.stringify(durCache)); } catch(e) {} };
-    const isDummy = d => !d || d <= 3;
+<script>
+(() => {
+  'use strict';
 
-    const LIKES_KEY = 'vault_likes_v1';
-    let likes = new Set();
-    try { const ls = JSON.parse(localStorage.getItem(LIKES_KEY) || '[]'); ls.forEach(id => likes.add(id)); } catch(e) {}
-    const saveLikes = () => { try { localStorage.setItem(LIKES_KEY, JSON.stringify([...likes])); } catch(e) {} };
-    const isLiked = s => s.youtubeId && likes.has(s.youtubeId);
-    
-    let curIdxInCurrentList = -1; 
-    let currentSongId = null;     
-    let isPlaying = false;
-    let isLoading = false;
-    let ytP = null, ytReady = false, progressTimer = null, isScrubbing = false;
+  // ── UTILS ──
+  const $ = id => document.getElementById(id);
+  const fmt = s => (!s || !isFinite(s) || s <= 0) ? '--:--' : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const hashStr = str => { let h = 0; for(let i=0;i<str.length;i++) h = Math.imul(31,h)+str.charCodeAt(i)|0; return Math.abs(h); };
 
-    let showOnlyLiked = false;
-    let currentSort = 'title';
-    let currentSearch = '';
+  // ── DATA ──
+  const cleanTitle = t => t.replace(/^charlie puth\s*[-—]\s*/i,'').trim();
+  const songs = SONGS.map((s,i) => ({...s, _i:i, title: cleanTitle(s.title)}));
+  let displayList = [...songs];
 
-    const $ = id => document.getElementById(id);
-    const fmt = s => (!s || !isFinite(s) || s <= 0) ? '--:--' : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
-    const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    
-    let theme = localStorage.getItem('vault_theme') || 'dark';
-    const html = document.documentElement;
-    const themeBtn = $('themeBtn');
-    html.setAttribute('data-theme', theme);
-    const updateThemeIcon = () => {
-      themeBtn.innerHTML = theme === 'light' 
-        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
-        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
-    };
-    updateThemeIcon();
-    
-    themeBtn.addEventListener('click', () => {
-      theme = theme === 'light' ? 'dark' : 'light';
-      html.setAttribute('data-theme', theme);
-      localStorage.setItem('vault_theme', theme);
-      updateThemeIcon();
-    });
+  // ── PERSISTENCE ──
+  const DUR_KEY = 'grails_dur_v1';
+  const LIKES_KEY = 'grails_likes_v1';
+  const THEME_KEY = 'grails_theme_v1';
 
-    /* ABOUT MODAL */
-    $('aboutBtn').addEventListener('click', () => $('aboutModal').classList.add('open'));
-    $('closeAboutBtn').addEventListener('click', () => $('aboutModal').classList.remove('open'));
-    $('aboutModal').addEventListener('click', e => { if(e.target === $('aboutModal')) $('aboutModal').classList.remove('open'); });
+  let durCache = {};
+  try { durCache = JSON.parse(localStorage.getItem(DUR_KEY)||'{}'); } catch(e){}
+  songs.forEach(s => { if(s.youtubeId && durCache[s.youtubeId]) s.duration = durCache[s.youtubeId]; });
+  const saveDurCache = () => { try { localStorage.setItem(DUR_KEY, JSON.stringify(durCache)); } catch(e){} };
 
-    const trackList = $('trackList');
-    const progressBar = $('progressBar');
-    const progressFill = $('progressFill');
-    
-    const hashStr = str => { let h = 0; for(let i=0; i<str.length; i++) h = Math.imul(31, h) + str.charCodeAt(i) | 0; return Math.abs(h); };
+  let likes = new Set();
+  try { JSON.parse(localStorage.getItem(LIKES_KEY)||'[]').forEach(id => likes.add(id)); } catch(e){}
+  const saveLikes = () => { try { localStorage.setItem(LIKES_KEY, JSON.stringify([...likes])); } catch(e){} };
+  const isLiked = s => s.youtubeId && likes.has(s.youtubeId);
 
-    function updateWaveformVisuals(song) {
-      const seed = hashStr(song.title);
-      progressFill.style.width = '0%';
-      $('vinylLabel').style.backgroundColor = `hsl(${seed % 360}, 65%, 55%)`;
+  // ── STATE ──
+  let curIdx = -1;
+  let curId = null;
+  let isPlaying = false;
+  let isLoading = false;
+  let showLikedOnly = false;
+  let searchQ = '';
+  let shuffleMode = false;
+  let ytP = null, ytReady = false, timer = null, isScrubbing = false;
+
+  // ── THEME ──
+  let theme = localStorage.getItem(THEME_KEY) || 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+  const applyThemeIcon = () => {
+    $('themeIcon').innerHTML = theme === 'light'
+      ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+      : '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+  };
+  applyThemeIcon();
+  $('themeBtn').addEventListener('click', () => {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(THEME_KEY, theme);
+    applyThemeIcon();
+  });
+
+  // ── MODAL ──
+  $('navAbout').addEventListener('click', () => $('aboutModal').classList.add('open'));
+  $('closeAboutBtn').addEventListener('click', () => $('aboutModal').classList.remove('open'));
+  $('aboutModal').addEventListener('click', e => { if(e.target === $('aboutModal')) $('aboutModal').classList.remove('open'); });
+
+  // ── NAV ──
+  const setNav = id => {
+    ['navHome','navLiked','navVaults'].forEach(n => $(n).classList.remove('active'));
+    $(id).classList.add('active');
+  };
+  $('navHome').addEventListener('click', () => { showLikedOnly = false; $('tabAll').classList.add('active'); $('tabLiked').classList.remove('active'); setNav('navHome'); applyFilters(); });
+  $('navLiked').addEventListener('click', () => { showLikedOnly = true; $('tabAll').classList.remove('active'); $('tabLiked').classList.add('active'); setNav('navLiked'); applyFilters(); });
+
+  // ── FILTER / SEARCH ──
+  $('searchInput').addEventListener('input', e => { searchQ = e.target.value.trim(); applyFilters(); });
+  $('tabAll').addEventListener('click', () => { showLikedOnly = false; $('tabAll').classList.add('active'); $('tabLiked').classList.remove('active'); applyFilters(); });
+  $('tabLiked').addEventListener('click', () => { showLikedOnly = true; $('tabLiked').classList.add('active'); $('tabAll').classList.remove('active'); applyFilters(); });
+
+  function applyFilters() {
+    let list = [...songs];
+    if (showLikedOnly) list = list.filter(isLiked);
+    if (searchQ) {
+      const q = searchQ.toLowerCase();
+      list = list.filter(s => s.title.toLowerCase().includes(q));
     }
+    list.sort((a,b) => a.title.localeCompare(b.title));
+    displayList = list;
+    if(curId) curIdx = displayList.findIndex(s => s.youtubeId === curId);
+    else curIdx = -1;
+    renderList();
+    $('trackCountLabel').textContent = `${list.length} track${list.length !== 1 ? 's' : ''}`;
+  }
 
-    function applyFiltersAndSort() {
-      let list = [...originalSongs];
-      if (showOnlyLiked) list = list.filter(isLiked);
-      if (currentSearch) {
-        const terms = currentSearch.toLowerCase().split(/\s+/);
-        list = list.filter(s => terms.every(t => s.title.toLowerCase().includes(t)));
-      }
-      if (currentSort === 'title') list.sort((a,b) => a.title.localeCompare(b.title));
-      else if (currentSort === 'title-desc') list.sort((a,b) => b.title.localeCompare(a.title));
-      else if (currentSort === 'shortest') {
-        list.sort((a,b) => {
-          const aDur = isDummy(a.duration) ? Infinity : a.duration;
-          const bDur = isDummy(b.duration) ? Infinity : b.duration;
-          return aDur - bDur;
-        });
-      }
-      else if (currentSort === 'longest') {
-        list.sort((a,b) => {
-          const aDur = isDummy(a.duration) ? -Infinity : a.duration;
-          const bDur = isDummy(b.duration) ? -Infinity : b.duration;
-          return bDur - aDur;
-        });
-      }
-
-      currentSongs = list;
-      if (currentSongId) curIdxInCurrentList = currentSongs.findIndex(s => s.youtubeId === currentSongId);
-      else curIdxInCurrentList = -1;
-
-      renderList();
-      refreshActiveState();
+  // ── RENDER LIST ──
+  function renderList() {
+    const tl = $('trackList');
+    if (!displayList.length) {
+      tl.innerHTML = `<div class="empty-state"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>No tracks found</div>`;
+      return;
     }
-
-    function toggleLike(s) {
-      if(!s.youtubeId) return;
-      if (likes.has(s.youtubeId)) likes.delete(s.youtubeId); else likes.add(s.youtubeId);
-      saveLikes();
-      if(showOnlyLiked) applyFiltersAndSort(); 
-      else renderLikeStates();
-    }
-
-    function renderList() {
-      if(!currentSongs.length) {
-        trackList.innerHTML = '<div style="padding:40px 20px;text-align:center;color:var(--text-dim);font-weight:500;">No tracks found</div>';
-        return;
-      }
-      
-      const listHtml = currentSongs.map((s, vi) => {
-        const d = isDummy(s.duration) ? '--:--' : fmt(s.duration);
-        const lkd = isLiked(s) ? ' liked' : '';
-        return `
-          <div class="track-row" data-listidx="${vi}">
-            <div class="t-num">
-              <span>${vi + 1}</span>
-              <svg class="play-indicator" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-            <div class="t-info">
-              <div class="t-title">${esc(s.title)}</div>
-              <div class="t-artist">Charlie Puth</div>
-            </div>
-            <button class="like-btn${lkd}" aria-label="Like">
-              <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            </button>
-            <div class="t-dur" id="dur-${s.youtubeId}">${d}</div>
+    tl.innerHTML = displayList.map((s, vi) => {
+      const isAct = vi === curIdx;
+      const isPlay = isAct && isPlaying;
+      const liked = isLiked(s);
+      const dur = s.duration > 3 ? fmt(s.duration) : '--:--';
+      const thumb = `https://img.youtube.com/vi/${s.youtubeId}/default.jpg`;
+      return `
+        <div class="track-row${isAct ? ' active' : ''}${isPlay ? ' playing' : ''}" data-vi="${vi}">
+          <div class="t-num-wrap">${vi+1}</div>
+          <div class="t-eq">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
           </div>
-        `;
-      }).join('');
-      
-      const sig = `
-        <div style="padding: 32px 0; text-align: center; font-size: 14px; color: var(--text); font-weight: 700;">
-          Built by Nishachay
+          <div class="t-thumb">
+            <img src="${thumb}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="display:block;">
+            <div class="t-thumb-fallback" style="display:none;">${esc(s.letter||s.title[0])}</div>
+          </div>
+          <div class="t-body">
+            <div class="t-name">${esc(s.title)}</div>
+            <div class="t-meta">${esc(s.artist)} · Unreleased</div>
+          </div>
+          <div class="t-right">
+            <button class="like-btn${liked ? ' liked' : ''}" data-vi="${vi}" aria-label="Like">
+              <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="t-dur">${dur}</div>
+          </div>
         </div>
       `;
-      trackList.innerHTML = listHtml + sig;
+    }).join('');
 
-      trackList.querySelectorAll('.track-row').forEach(row => {
-        row.addEventListener('click', (e) => {
-          const btn = e.target.closest('.like-btn');
-          const listIdx = +row.dataset.listidx;
-          if(btn) { e.stopPropagation(); toggleLike(currentSongs[listIdx]); } 
-          else {
-            if (window.innerWidth <= 1000) {
-              $('playerCol').classList.add('open');
-              $('miniPlayer').classList.remove('visible');
-            }
-            if(listIdx === curIdxInCurrentList) {
-              togglePlay();
-            } else {
-              playTrack(listIdx);
-            }
-          }
-        });
-      });
-    }
-
-    function renderLikeStates() {
-      trackList.querySelectorAll('.track-row').forEach(row => {
-        const idx = +row.dataset.listidx;
-        const btn = row.querySelector('.like-btn');
-        if(btn) btn.classList.toggle('liked', isLiked(currentSongs[idx]));
-      });
-      if (curIdxInCurrentList > -1 && currentSongs[curIdxInCurrentList]) {
-        const pBtn = $('pLikeBtn');
-        if (isLiked(currentSongs[curIdxInCurrentList])) {
-          pBtn.querySelector('svg').style.fill = 'var(--red)';
-          pBtn.querySelector('svg').style.stroke = 'var(--red)';
-        } else {
-          pBtn.querySelector('svg').style.fill = 'none';
-          pBtn.querySelector('svg').style.stroke = 'currentColor';
-        }
-      }
-    }
-
-    function refreshActiveState() {
-      trackList.querySelectorAll('.track-row').forEach(row => {
-        const idx = +row.dataset.listidx;
-        row.classList.toggle('active', idx === curIdxInCurrentList);
-        row.classList.toggle('playing', idx === curIdxInCurrentList && isPlaying);
-        const s = currentSongs[idx];
-        const durEl = row.querySelector('.t-dur');
-        if(durEl) durEl.textContent = isDummy(s.duration) ? '--:--' : fmt(s.duration);
-      });
-    }
-
-    $('searchInput').addEventListener('input', e => { currentSearch = e.target.value.trim(); applyFiltersAndSort(); });
-    $('tabAll').addEventListener('click', () => { showOnlyLiked = false; $('tabAll').classList.add('active'); $('tabLiked').classList.remove('active'); applyFiltersAndSort(); });
-    $('tabLiked').addEventListener('click', () => { showOnlyLiked = true; $('tabLiked').classList.add('active'); $('tabAll').classList.remove('active'); applyFiltersAndSort(); });
-    $('sortSelect').addEventListener('change', e => { currentSort = e.target.value; applyFiltersAndSort(); });
-
-    function playTrack(listIdx) {
-      if (listIdx < 0 || listIdx >= currentSongs.length) return;
-
-      curIdxInCurrentList = listIdx;
-      const s = currentSongs[listIdx];
-      currentSongId = s.youtubeId;
-      isPlaying = true;
-      
-      $('pTitle').textContent = s.title;
-      $('mpTitle').textContent = s.title;
-      $('deckTitle').textContent = s.title;
-      $('deckArtist').textContent = 'Charlie Puth';
-      $('pTimeTot').textContent = isDummy(s.duration) ? '--:--' : fmt(s.duration);
-      $('dkTimeTot').textContent = isDummy(s.duration) ? '--:--' : fmt(s.duration);
-      $('pTimeCur').textContent = '0:00';
-      $('dkTimeCur').textContent = '0:00';
-      
-      updateWaveformVisuals(s);
-      renderLikeStates();
-      refreshActiveState();
-      updatePlayerState(true);
-      setLoadingState(true);
-
-      if (window.innerWidth <= 1000 && !$('playerCol').classList.contains('open')) {
-        $('miniPlayer').classList.add('visible');
-      }
-
-      if (s.youtubeId && ytReady && ytP) ytP.loadVideoById(s.youtubeId);
-    }
-
-    function togglePlay() {
-      if (curIdxInCurrentList === -1) return playTrack(0);
-      if (!ytReady || !ytP) return;
-      isPlaying ? ytP.pauseVideo() : ytP.playVideo();
-    }
-    
-    function next() { if(currentSongs.length) playTrack((curIdxInCurrentList + 1) % currentSongs.length); }
-    function prev() { if(currentSongs.length) playTrack((curIdxInCurrentList - 1 + currentSongs.length) % currentSongs.length); }
-
-    function updatePlayerState(playing) {
-      isPlaying = playing;
-      isLoading = false;
-      
-      $('pIconPlay').style.display = playing ? 'none' : 'block';
-      $('pIconPause').style.display = playing ? 'block' : 'none';
-      $('pIconLoading').style.display = 'none';
-      
-      $('mpIconPlay').style.display = playing ? 'none' : 'block';
-      $('mpIconPause').style.display = playing ? 'block' : 'none';
-      $('mpIconLoading').style.display = 'none';
-      
-      $('dkIconPlay').style.display = playing ? 'none' : 'block';
-      $('dkIconPause').style.display = playing ? 'block' : 'none';
-
-      $('vinylRecord').classList.toggle('spin', playing);
-      $('turntable').classList.toggle('playing', playing);
-      
-      refreshActiveState();
-      playing ? startTimer() : stopTimer();
-    }
-
-    function setLoadingState(loading) {
-      isLoading = loading;
-      
-      $('pIconPlay').style.display = (loading || isPlaying) ? 'none' : 'block';
-      $('pIconPause').style.display = (!loading && isPlaying) ? 'block' : 'none';
-      $('pIconLoading').style.display = loading ? 'block' : 'none';
-      
-      $('mpIconPlay').style.display = (loading || isPlaying) ? 'none' : 'block';
-      $('mpIconPause').style.display = (!loading && isPlaying) ? 'block' : 'none';
-      $('mpIconLoading').style.display = loading ? 'block' : 'none';
-    }
-
-    function updateProgress(c, d) {
-      $('pTimeCur').textContent = fmt(c);
-      $('dkTimeCur').textContent = fmt(c);
-      if (d > 0) {
-        const pct = (c / d) * 100;
-        progressFill.style.width = `${pct}%`;
-        $('dkProgressFill').style.width = `${pct}%`;
-      }
-    }
-
-    function startTimer() {
-      stopTimer();
-      progressTimer = setInterval(() => {
-        if (!ytReady || !ytP?.getCurrentTime || isScrubbing) return;
-        const c = ytP.getCurrentTime() || 0;
-        const d = ytP.getDuration() || 0;
-        updateProgress(c, d);
-      }, 250);
-    }
-    function stopTimer() { clearInterval(progressTimer); }
-
-    function scrub(e, targetBar) {
-      if (curIdxInCurrentList === -1 || !ytReady || !ytP) return;
-      e.preventDefault(); 
-      const bar = targetBar || progressBar;
-      const rect = bar.getBoundingClientRect();
-      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-      const pct = Math.max(0, Math.min(1, x / rect.width));
-      const d = ytP.getDuration() || 0;
-      if (d > 0) { ytP.seekTo(pct * d, true); updateProgress(pct * d, d); }
-    }
-
-    $('dkProgressBar').addEventListener('mousedown', e => { isScrubbing = true; scrub(e, $('dkProgressBar')); });
-    $('dkProgressBar').addEventListener('touchstart', e => { isScrubbing = true; scrub(e, $('dkProgressBar')); }, {passive: false});
-
-    $('deckPlayBtn').addEventListener('click', togglePlay);
-    $('deckPrevBtn').addEventListener('click', prev);
-    $('deckNextBtn').addEventListener('click', next);
-    $('deckExpandBtn').addEventListener('click', () => {
-      showVaultView();
-      if (window.innerWidth <= 1000) $('playerCol').classList.add('open');
-    });
-    $('deckArtBtn').addEventListener('click', () => {
-      showVaultView();
-      if (window.innerWidth <= 1000) $('playerCol').classList.add('open');
-    });
-    $('deckLikeBtn').addEventListener('click', () => {
-      if (curIdxInCurrentList > -1) toggleLike(currentSongs[curIdxInCurrentList]);
-    });
-
-    progressBar.addEventListener('mousedown', e => { isScrubbing = true; scrub(e); });
-    progressBar.addEventListener('touchstart', e => { isScrubbing = true; scrub(e); }, {passive: false});
-    document.addEventListener('mousemove', e => { if (isScrubbing) scrub(e); });
-    document.addEventListener('touchmove', e => { if (isScrubbing) scrub(e); }, {passive: false});
-    document.addEventListener('mouseup', () => { isScrubbing = false; });
-    document.addEventListener('touchend', () => { isScrubbing = false; });
-
-    $('btnPlay').addEventListener('click', togglePlay);
-    $('btnNext').addEventListener('click', next);
-    $('btnPrev').addEventListener('click', prev);
-    $('pLikeBtn').addEventListener('click', () => { if(curIdxInCurrentList > -1) toggleLike(currentSongs[curIdxInCurrentList]); });
-    $('closePlayerBtn').addEventListener('click', () => {
-      $('playerCol').classList.remove('open');
-      if (curIdxInCurrentList !== -1) {
-        $('miniPlayer').classList.add('visible');
-      }
-    });
-    $('turntable').addEventListener('click', togglePlay);
-
-    $('miniPlayer').addEventListener('click', (e) => {
-      if (e.target.closest('#mpPlayBtn')) return;
-      $('playerCol').classList.add('open');
-      $('miniPlayer').classList.remove('visible');
-    });
-
-    $('mpPlayBtn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      togglePlay();
-    });
-
-    window.onYouTubeIframeAPIReady = function() {
-      ytP = new YT.Player('yt-player', {
-        height: '1', width: '1', videoId: SONGS[0] ? SONGS[0].youtubeId : '',
-        playerVars: { playsinline: 1, controls: 0, rel: 0, disablekb: 1 },
-        events: {
-          onReady() { ytReady = true; ytP.setVolume(100); },
-          onStateChange(ev) {
-            const S = YT.PlayerState;
-            if (ev.data === S.PLAYING) {
-              setLoadingState(false);
-              updatePlayerState(true);
-              if (curIdxInCurrentList !== -1 && ytP.getDuration) {
-                const real = ytP.getDuration();
-                const s = currentSongs[curIdxInCurrentList];
-                if (real > 3 && isDummy(s.duration)) {
-                  s.duration = real;
-                  $('pTimeTot').textContent = fmt(real);
-                  if (s.youtubeId) { durCache[s.youtubeId] = real; saveDurCache(); }
-                  refreshActiveState();
-                }
-              }
-            } else if (ev.data === S.BUFFERING) {
-              setLoadingState(true);
-            } else if (ev.data === S.PAUSED) {
-              setLoadingState(false);
-              updatePlayerState(false);
-            } else if (ev.data === S.ENDED) {
-              setLoadingState(false);
-              updatePlayerState(false);
-              next();
-            }
-          }
+    tl.querySelectorAll('.track-row').forEach(row => {
+      row.addEventListener('click', e => {
+        const likeEl = e.target.closest('.like-btn');
+        const vi = +row.dataset.vi;
+        if (likeEl) { e.stopPropagation(); toggleLike(vi); }
+        else {
+          if (vi === curIdx) togglePlay();
+          else playTrack(vi);
         }
       });
+    });
+  }
+
+  // ── LIKE ──
+  function toggleLike(vi) {
+    const s = displayList[vi];
+    if (!s?.youtubeId) return;
+    if (likes.has(s.youtubeId)) likes.delete(s.youtubeId);
+    else likes.add(s.youtubeId);
+    saveLikes();
+    if (showLikedOnly) applyFilters();
+    else {
+      const row = $('trackList').querySelector(`[data-vi="${vi}"]`);
+      const btn = row?.querySelector('.like-btn');
+      if (btn) btn.classList.toggle('liked', isLiked(s));
+    }
+    if (curId === s.youtubeId) updateLikeMainBtn();
+  }
+
+  function updateLikeMainBtn() {
+    const btn = $('likeMainBtn');
+    if (!btn) return;
+    const cur = curId ? songs.find(s => s.youtubeId === curId) : null;
+    const liked = cur ? isLiked(cur) : false;
+    btn.classList.toggle('liked', liked);
+    btn.querySelector('svg').setAttribute('fill', liked ? 'currentColor' : 'none');
+  }
+
+  $('likeMainBtn').addEventListener('click', () => {
+    if (curIdx < 0) return;
+    toggleLike(curIdx);
+  });
+
+  // ── AMBIENT GLOW ──
+  function setAmbient(song) {
+    const c1 = song?.palette?.from || '#444';
+    const c2 = song?.palette?.to || '#222';
+    $('ambientBlob1').style.background = c1;
+    $('ambientBlob1').style.opacity = '0.15';
+    $('ambientBlob2').style.background = c2;
+    $('ambientBlob2').style.opacity = '0.1';
+    $('artworkShadow').style.background = c1;
+    $('artwork').style.setProperty('--glow-color', c1);
+  }
+
+  // ── PLAY TRACK ──
+  function playTrack(vi) {
+    if (vi < 0 || vi >= displayList.length) return;
+    curIdx = vi;
+    const s = displayList[vi];
+    curId = s.youtubeId;
+    isPlaying = true;
+
+    // Show player
+    $('idleBanner').style.display = 'none';
+    $('playerCanvas').style.display = 'flex';
+    $('infoChips').style.display = 'flex';
+
+    // Update UI
+    $('nowTitle').textContent = s.title;
+    $('nowArtist').textContent = s.artist;
+    $('timeTot').textContent = s.duration > 3 ? fmt(s.duration) : '--:--';
+    $('timeCur').textContent = '0:00';
+    $('progressFill').style.width = '0%';
+
+    // Artwork
+    const artUrl = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
+    const artImg = $('artImg');
+    artImg.onload = () => {
+      artImg.style.display = 'block';
+      $('artPlaceholder').style.display = 'none';
+      $('artwork').classList.add('has-art');
     };
+    artImg.onerror = () => {
+      artImg.style.display = 'none';
+      $('artPlaceholder').style.display = 'flex';
+      $('artLetter').textContent = s.letter || s.title[0];
+      $('artwork').classList.remove('has-art');
+    };
+    $('artPlaceholder').style.display = 'none';
+    $('artLetter').textContent = s.letter || s.title[0];
+    artImg.src = artUrl;
 
-    function renderLibraryList() {
-      const libEl = $('libraryList');
-      const emptyEl = $('emptyLibrary');
-      if (!libEl) return;
-      const likedSongs = originalSongs.filter(s => isLiked(s));
-      
-      if (likedSongs.length === 0) {
-        libEl.innerHTML = '';
-        emptyEl.classList.remove('hidden');
-        return;
+    setAmbient(s);
+    updateLikeMainBtn();
+    setLoadingState(true);
+    renderList();
+
+    if (s.youtubeId && ytReady && ytP) ytP.loadVideoById(s.youtubeId);
+  }
+
+  // ── TOGGLE PLAY ──
+  function togglePlay() {
+    if (curIdx < 0) return playTrack(0);
+    if (!ytReady || !ytP) return;
+    isPlaying ? ytP.pauseVideo() : ytP.playVideo();
+  }
+
+  function next() {
+    if (!displayList.length) return;
+    if (shuffleMode) { playTrack(Math.floor(Math.random() * displayList.length)); return; }
+    playTrack((curIdx + 1) % displayList.length);
+  }
+  function prev() {
+    if (!displayList.length) return;
+    playTrack((curIdx - 1 + displayList.length) % displayList.length);
+  }
+
+  // ── PLAYER STATE ──
+  function setLoadingState(loading) {
+    isLoading = loading;
+    $('iconPlay').style.display = (loading || isPlaying) ? 'none' : '';
+    $('iconPause').style.display = (!loading && isPlaying) ? '' : 'none';
+    $('iconLoading').style.display = loading ? '' : 'none';
+  }
+
+  function updatePlayerState(playing) {
+    isPlaying = playing;
+    isLoading = false;
+    $('iconPlay').style.display = playing ? 'none' : '';
+    $('iconPause').style.display = playing ? '' : 'none';
+    $('iconLoading').style.display = 'none';
+    $('artwork').classList.toggle('is-playing', playing);
+    playing ? startTimer() : stopTimer();
+    // Re-render just the active/playing classes without full re-render
+    $('trackList').querySelectorAll('.track-row').forEach(row => {
+      const vi = +row.dataset.vi;
+      row.classList.toggle('playing', vi === curIdx && isPlaying);
+    });
+  }
+
+  // ── PROGRESS TIMER ──
+  function startTimer() {
+    stopTimer();
+    timer = setInterval(() => {
+      if (!ytReady || !ytP?.getCurrentTime || isScrubbing) return;
+      const c = ytP.getCurrentTime() || 0;
+      const d = ytP.getDuration() || 0;
+      $('timeCur').textContent = fmt(c);
+      if (d > 0) $('progressFill').style.width = `${(c/d)*100}%`;
+    }, 250);
+  }
+  function stopTimer() { clearInterval(timer); }
+
+  // ── SCRUB ──
+  function scrub(e) {
+    if (curIdx < 0 || !ytReady || !ytP) return;
+    e.preventDefault();
+    const bar = $('progressBar');
+    const rect = bar.getBoundingClientRect();
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    const pct = Math.max(0, Math.min(1, x / rect.width));
+    const d = ytP.getDuration() || 0;
+    if (d > 0) { ytP.seekTo(pct * d, true); $('timeCur').textContent = fmt(pct*d); $('progressFill').style.width = `${pct*100}%`; }
+  }
+  $('progressBar').addEventListener('mousedown', e => { isScrubbing = true; scrub(e); });
+  $('progressBar').addEventListener('touchstart', e => { isScrubbing = true; scrub(e); }, {passive: false});
+  document.addEventListener('mousemove', e => { if(isScrubbing) scrub(e); });
+  document.addEventListener('touchmove', e => { if(isScrubbing) scrub(e); }, {passive: false});
+  document.addEventListener('mouseup', () => { isScrubbing = false; });
+  document.addEventListener('touchend', () => { isScrubbing = false; });
+
+  // ── BUTTONS ──
+  $('playBtn').addEventListener('click', togglePlay);
+  $('nextBtn').addEventListener('click', next);
+  $('prevBtn').addEventListener('click', prev);
+  $('shuffleBtn').addEventListener('click', () => {
+    shuffleMode = !shuffleMode;
+    $('shuffleBtn').style.background = shuffleMode ? 'var(--accent-dim)' : '';
+    $('shuffleBtn').style.color = shuffleMode ? 'var(--accent)' : '';
+    $('shuffleBtn').style.borderColor = shuffleMode ? 'var(--accent)' : '';
+  });
+
+  // ── VOLUME ──
+  const volSlider = $('volSlider');
+  volSlider.addEventListener('input', () => {
+    if (ytReady && ytP) ytP.setVolume(+volSlider.value);
+  });
+
+  // ── YOUTUBE API ──
+  window.onYouTubeIframeAPIReady = function() {
+    ytP = new YT.Player('yt-player', {
+      height: '1', width: '1',
+      videoId: songs[0]?.youtubeId || '',
+      playerVars: { playsinline: 1, controls: 0, rel: 0, disablekb: 1 },
+      events: {
+        onReady() {
+          ytReady = true;
+          ytP.setVolume(+volSlider.value);
+        },
+        onStateChange(ev) {
+          const S = YT.PlayerState;
+          if (ev.data === S.PLAYING) {
+            setLoadingState(false);
+            updatePlayerState(true);
+            const real = ytP.getDuration?.();
+            if (real > 3 && curIdx >= 0) {
+              const s = displayList[curIdx];
+              if (s && (!s.duration || s.duration <= 3)) {
+                s.duration = real;
+                $('timeTot').textContent = fmt(real);
+                if(s.youtubeId) { durCache[s.youtubeId] = real; saveDurCache(); }
+              }
+            }
+          } else if (ev.data === S.BUFFERING) {
+            setLoadingState(true);
+          } else if (ev.data === S.PAUSED) {
+            setLoadingState(false);
+            updatePlayerState(false);
+          } else if (ev.data === S.ENDED) {
+            setLoadingState(false);
+            updatePlayerState(false);
+            next();
+          }
+        }
       }
-      
-      emptyEl.classList.add('hidden');
-      libEl.innerHTML = likedSongs.map((s, vi) => {
-        const d = isDummy(s.duration) ? '--:--' : fmt(s.duration);
-        return `
-          <div class="track-row" data-libidx="${vi}">
-            <div class="t-num">
-              <span>${vi + 1}</span>
-              <svg class="play-indicator" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-            <div class="t-info">
-              <div class="t-title">${esc(s.title)}</div>
-              <div class="t-artist">Charlie Puth</div>
-            </div>
-            <button class="like-btn liked" aria-label="Like">
-              <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            </button>
-            <div class="t-dur">${d}</div>
-          </div>
-        `;
-      }).join('');
-
-      libEl.querySelectorAll('.track-row').forEach(row => {
-        row.addEventListener('click', (e) => {
-          const btn = e.target.closest('.like-btn');
-          const libIdx = +row.dataset.libidx;
-          if (btn) {
-            e.stopPropagation();
-            toggleLike(likedSongs[libIdx]);
-            renderLibraryList();
-          } else {
-            showArtistView('Charlie Puth');
-            const actualIdx = currentSongs.findIndex(s => s.youtubeId === likedSongs[libIdx].youtubeId);
-            if (actualIdx !== -1) playTrack(actualIdx);
-          }
-        });
-      });
-    }
-
-    function showDiscoverView() {
-      $('discoverView').classList.remove('hidden');
-      $('libraryView').classList.add('hidden');
-      $('artistGrid').classList.add('hidden');
-      $('navDiscoverBtn').classList.add('active');
-      $('navLibraryBtn').classList.remove('active');
-    }
-
-    function showLibraryView() {
-      $('discoverView').classList.add('hidden');
-      $('libraryView').classList.remove('hidden');
-      $('artistGrid').classList.add('hidden');
-      $('navDiscoverBtn').classList.remove('active');
-      $('navLibraryBtn').classList.add('active');
-      renderLibraryList();
-    }
-
-    function showArtistView(artistName = 'Charlie Puth') {
-      $('discoverView').classList.add('hidden');
-      $('libraryView').classList.add('hidden');
-      $('artistGrid').classList.remove('hidden');
-      $('navDiscoverBtn').classList.remove('active');
-      $('navLibraryBtn').classList.remove('active');
-      $('artistPageTitle').textContent = artistName;
-      $('artistPageSub').textContent = `${artistName === 'Charlie Puth' ? '99' : '0'} Unreleased Tracks • Live Turntable Vault`;
-    }
-
-    function renderHomeTrendingList() {
-      const trendingEl = $('homeTrendingList');
-      if (!trendingEl) return;
-      const topTracks = originalSongs.slice(0, 6);
-      trendingEl.innerHTML = topTracks.map((s, vi) => {
-        const d = isDummy(s.duration) ? '--:--' : fmt(s.duration);
-        const lkd = isLiked(s) ? ' liked' : '';
-        return `
-          <div class="track-row" data-trendidx="${vi}">
-            <div class="t-num">
-              <span>${vi + 1}</span>
-              <svg class="play-indicator" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-            <div class="t-info">
-              <div class="t-title">${esc(s.title)}</div>
-              <div class="t-artist">Charlie Puth</div>
-            </div>
-            <button class="like-btn${lkd}" aria-label="Like">
-              <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            </button>
-            <div class="t-dur">${d}</div>
-          </div>
-        `;
-      }).join('');
-
-      trendingEl.querySelectorAll('.track-row').forEach(row => {
-        row.addEventListener('click', (e) => {
-          const btn = e.target.closest('.like-btn');
-          const trendIdx = +row.dataset.trendidx;
-          if (btn) {
-            e.stopPropagation();
-            toggleLike(topTracks[trendIdx]);
-            renderHomeTrendingList();
-          } else {
-            showArtistView('Charlie Puth');
-            const actualIdx = currentSongs.findIndex(s => s.youtubeId === topTracks[trendIdx].youtubeId);
-            if (actualIdx !== -1) playTrack(actualIdx);
-          }
-        });
-      });
-    }
-
-    $('navDiscoverBtn').addEventListener('click', showDiscoverView);
-    $('navLibraryBtn').addEventListener('click', showLibraryView);
-    $('artistBackBtn').addEventListener('click', showDiscoverView);
-
-    $('heroEnterBtn').addEventListener('click', () => showArtistView('Charlie Puth'));
-    $('heroPlayAllBtn').addEventListener('click', () => {
-      showArtistView('Charlie Puth');
-      if (currentSongs.length) playTrack(0);
     });
-    $('cardCharliePuth').addEventListener('click', () => showArtistView('Charlie Puth'));
+  };
 
-    document.querySelectorAll('.artist-card[data-artist]').forEach(card => {
-      card.addEventListener('click', () => {
-        const name = card.querySelector('.card-name')?.textContent || 'Artist';
-        alert(`${name} vault is coming soon to Grails!`);
-      });
-    });
+  // ── KEYBOARD ──
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+    if (e.code === 'ArrowRight') { e.preventDefault(); next(); }
+    if (e.code === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
 
-    applyFiltersAndSort();
-    renderHomeTrendingList();
-  })();
-  </script>
-  <script src="https://www.youtube.com/iframe_api" async defer></script>
+  // ── INIT ──
+  applyFilters();
+
+})();
+</script>
+<script src="https://www.youtube.com/iframe_api" async defer></script>
 </body>
 </html>
