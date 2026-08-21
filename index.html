@@ -581,7 +581,7 @@
 
 <div id="app">
 
-  <!-- TOP HEADER BAR (RESPONSIVE & GREAT) -->
+  <!-- TOP HEADER BAR (NO BORDER, CLEAN & RESPONSIVE) -->
   <header class="topbar">
     <div class="brand-group">
       <div class="brand-logo brand-font">GRAILS</div>
@@ -589,16 +589,22 @@
     </div>
 
     <div class="search-box">
-      <svg class="search-icn" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <i data-lucide="search" class="search-icn"></i>
       <input type="text" id="searchInput" class="search-input" placeholder="Search unreleased grails, demos..." autocomplete="off">
     </div>
 
     <div class="topbar-icons">
+      <button class="top-icn-btn" title="Mail / Feedback">
+        <i data-lucide="mail"></i>
+      </button>
+      <button class="top-icn-btn" title="Notifications">
+        <i data-lucide="bell"></i>
+      </button>
       <button class="top-icn-btn" id="aboutBtn" title="About GRAILS">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <i data-lucide="info"></i>
       </button>
       <button class="top-icn-btn" id="themeBtn" title="Toggle Theme">
-        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <i data-lucide="sun" id="themeIcon"></i>
       </button>
       <div class="user-avatar-badge brand-font">CP</div>
     </div>
@@ -610,22 +616,22 @@
     <!-- FAR LEFT ICON RAIL -->
     <nav class="icon-rail">
       <button class="rail-btn active" id="railHome" title="Home">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <i data-lucide="home"></i>
       </button>
       <button class="rail-btn" id="railLiked" title="Favorites">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <i data-lucide="heart"></i>
       </button>
       <button class="rail-btn" title="Music Note">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        <i data-lucide="music"></i>
       </button>
       <button class="rail-btn" title="Vinyl Record">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+        <i data-lucide="disc"></i>
       </button>
       <button class="rail-btn" title="Sliders/EQ">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+        <i data-lucide="sliders"></i>
       </button>
       <button class="rail-btn" title="Tag">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+        <i data-lucide="tag"></i>
       </button>
     </nav>
 
@@ -667,7 +673,7 @@
             <div class="deck-tag-pill pixel-text" id="deckTag">Classic</div>
           </div>
           <button class="deck-like-counter" id="likeCounterBtn">
-            <svg width="14" height="14" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            <i data-lucide="plus"></i>
             <span id="likeCountNum">392</span>
           </button>
         </div>
@@ -684,20 +690,20 @@
         <!-- Player Controls Row -->
         <div class="player-controls-row">
           <button class="ctrl-icn-btn" id="btnExpand" title="Expand">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+            <i data-lucide="maximize-2"></i>
           </button>
           <button class="ctrl-icn-btn" id="btnPrev" title="Previous">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+            <i data-lucide="skip-back"></i>
           </button>
           <button class="ctrl-main-play-btn" id="btnPlay" title="Play/Pause">
-            <svg id="iconPlay" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            <svg id="iconPause" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <i data-lucide="play" id="iconPlay" style="fill: currentColor;"></i>
+            <i data-lucide="pause" id="iconPause" style="display:none; fill: currentColor;"></i>
           </button>
           <button class="ctrl-icn-btn" id="btnNext" title="Next">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg>
+            <i data-lucide="skip-forward"></i>
           </button>
           <button class="ctrl-icn-btn" id="btnShuffle" title="Shuffle">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+            <i data-lucide="shuffle"></i>
           </button>
         </div>
 
@@ -963,8 +969,8 @@ const SONGS = [
           </div>
           <button class="row-play-circle" data-vi="${vi}">
             ${isAct && isPlaying
-              ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'
-              : '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'
+              ? '<i data-lucide="pause" style="width:14px;height:14px;fill:currentColor;"></i>'
+              : '<i data-lucide="play" style="width:14px;height:14px;fill:currentColor;"></i>'
             }
           </button>
         </div>
@@ -977,6 +983,8 @@ const SONGS = [
         if (vi === curIdx) togglePlay(); else playTrack(vi);
       });
     });
+
+    if (window.lucide) { try { lucide.createIcons(); } catch(e){} }
   }
 
   // PLAY TRACK
