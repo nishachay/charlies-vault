@@ -2,9 +2,9 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GRAILS — Unreleased Music Archive</title>
-  <meta name="description" content="Stream 99 unreleased tracks from the world's best artists. Rare demos, vault leaks, and scrapped sessions.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Charlie's Vault — Unreleased Archive</title>
+  <meta name="description" content="Stream 99 unreleased Charlie Puth tracks — demos, early studio concepts, and acoustic recordings.">
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'unsafe-inline' https://www.youtube.com https://s.ytimg.com;
@@ -17,1042 +17,662 @@
   ">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     /* ══════════════════════════════════════
-       DESIGN TOKENS
+       MODERN DARK/LIGHT DESIGN SYSTEM
     ══════════════════════════════════════ */
     :root {
-      --bg:         #0a0a0a;
-      --surface:    #111111;
-      --surface2:   #1a1a1a;
-      --surface3:   #242424;
-      --surface4:   #2e2e2e;
-      --border:     rgba(255,255,255,0.06);
-      --border2:    rgba(255,255,255,0.12);
-      --text:       #f5f5f5;
-      --text-2:     #a0a0a0;
-      --text-3:     #505050;
-      --accent:     #e8ff5a;
-      --accent-dim: rgba(232,255,90,0.12);
-      --red:        #ff4d6d;
-      --red-dim:    rgba(255,77,109,0.12);
-      --rail-w:     64px;
+      --bg:             #09090b;
+      --surface:        #121215;
+      --surface-hover:  #1c1c21;
+      --surface-active: #27272a;
+      --border:         rgba(255,255,255,0.08);
+      --border-subtle:  rgba(255,255,255,0.04);
+      --text:           #fafafa;
+      --text-muted:     #a1a1aa;
+      --text-dim:       #52525b;
+      --accent:         #6366f1; /* Modern Indigo Accent */
+      --accent-hover:   #4f46e5;
+      --accent-glow:    rgba(99,102,241,0.25);
+      --heart:          #f43f5e;
+      --heart-dim:      rgba(244,63,94,0.15);
+      --radius-sm:      8px;
+      --radius-md:      12px;
+      --radius-lg:      16px;
+      --radius-full:    9999px;
+      --player-h:       84px;
     }
+
     [data-theme="light"] {
-      --bg:         #f0f0ee;
-      --surface:    #ffffff;
-      --surface2:   #f5f5f3;
-      --surface3:   #ebebea;
-      --surface4:   #e0e0de;
-      --border:     rgba(0,0,0,0.07);
-      --border2:    rgba(0,0,0,0.14);
-      --text:       #0f0f0f;
-      --text-2:     #555555;
-      --text-3:     #aaaaaa;
-      --accent:     #0f0f0f;
-      --accent-dim: rgba(15,15,15,0.08);
-      --red:        #e63946;
-      --red-dim:    rgba(230,57,70,0.1);
+      --bg:             #f8fafc;
+      --surface:        #ffffff;
+      --surface-hover:  #f1f5f9;
+      --surface-active: #e2e8f0;
+      --border:         rgba(0,0,0,0.08);
+      --border-subtle:  rgba(0,0,0,0.04);
+      --text:           #0f172a;
+      --text-muted:     #64748b;
+      --text-dim:       #94a3b8;
+      --accent:         #4f46e5;
+      --accent-hover:   #4338ca;
+      --accent-glow:    rgba(79,70,229,0.15);
+      --heart:          #e11d48;
+      --heart-dim:      rgba(225,29,72,0.1);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--surface4); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: var(--surface-active); border-radius: var(--radius-full); }
 
     html, body {
       width: 100%; height: 100%;
       overflow: hidden;
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       font-size: 14px;
       line-height: 1.5;
     }
+
     button { background: none; border: none; cursor: pointer; font-family: inherit; color: inherit; }
     input  { font-family: inherit; }
 
     /* ══════════════════════════════════════
-       ROOT SHELL — body is flex row
-    ══════════════════════════════════════ */
-    body { display: flex; flex-direction: row; }
-
-    /* ══════════════════════════════════════
-       ICON RAIL — left 64px
-    ══════════════════════════════════════ */
-    .icon-rail {
-      width: var(--rail-w);
-      height: 100vh;
-      flex-shrink: 0;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 0;
-      gap: 6px;
-      z-index: 20;
-    }
-    .rail-logo {
-      width: 32px; height: 32px;
-      background: var(--accent);
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 20px;
-      flex-shrink: 0;
-    }
-    .rail-logo span {
-      font-size: 9px; font-weight: 900; color: #000; letter-spacing: -0.3px;
-    }
-    .rail-btn {
-      width: 40px; height: 40px;
-      border-radius: 11px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-3);
-      transition: background 0.15s, color 0.15s;
-      position: relative;
-    }
-    .rail-btn:hover { background: var(--surface2); color: var(--text-2); }
-    .rail-btn.active { background: var(--surface3); color: var(--text); }
-    .rail-btn.active::before {
-      content: '';
-      position: absolute; left: -1px; top: 25%; bottom: 25%;
-      width: 2px; background: var(--accent); border-radius: 0 2px 2px 0;
-    }
-    .rail-sep { width: 24px; height: 1px; background: var(--border); margin: 6px 0; flex-shrink: 0; }
-    .rail-spacer { flex: 1; }
-
-    /* ══════════════════════════════════════
-       APP SHELL — right of rail, flex col
+       APP CONTAINER
     ══════════════════════════════════════ */
     #app {
-      flex: 1; min-width: 0;
-      height: 100vh;
       display: flex;
       flex-direction: column;
+      height: 100vh;
+      width: 100vw;
       overflow: hidden;
-      background: var(--bg);
+      position: relative;
     }
 
     /* ══════════════════════════════════════
-       TOP BAR
+       HEADER BAR
     ══════════════════════════════════════ */
-    .topbar {
-      height: 60px;
-      flex-shrink: 0;
+    .header {
+      height: 64px;
+      padding: 0 24px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 24px;
-      padding: 0 28px;
       border-bottom: 1px solid var(--border);
       background: var(--surface);
+      flex-shrink: 0;
       z-index: 10;
     }
-    .topbar-logo {
-      font-size: 18px; font-weight: 900;
-      letter-spacing: -0.8px;
-      color: var(--text);
-      flex-shrink: 0;
-    }
-    .topbar-logo em {
-      font-style: normal;
-      font-size: 9px; font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      vertical-align: super;
-      margin-left: 4px;
-    }
-    .topbar-search {
-      flex: 1; max-width: 440px; margin: 0 auto;
-      position: relative;
-    }
-    .topbar-search svg {
-      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-      color: var(--text-3); pointer-events: none;
-    }
-    .topbar-search input {
-      width: 100%; height: 36px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      padding: 0 16px 0 38px;
-      font-size: 13px; font-weight: 500;
-      color: var(--text); outline: none;
-      transition: border-color 0.15s;
-    }
-    .topbar-search input::placeholder { color: var(--text-3); }
-    .topbar-search input:focus { border-color: var(--border2); }
-    .topbar-right {
-      display: flex; align-items: center; gap: 8px; margin-left: auto;
-    }
-    .topbar-pill {
-      height: 32px; padding: 0 14px;
-      border-radius: 100px;
-      font-size: 12px; font-weight: 700;
-      color: var(--text-2);
-      border: 1px solid var(--border);
-      display: flex; align-items: center; gap: 6px;
-      transition: all 0.15s;
-    }
-    .topbar-pill:hover { border-color: var(--border2); color: var(--text); }
-    .topbar-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
-    .topbar-icon {
-      width: 32px; height: 32px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-3);
-      transition: background 0.15s, color 0.15s;
-    }
-    .topbar-icon:hover { background: var(--surface2); color: var(--text-2); }
 
-    /* ══════════════════════════════════════
-       MAIN STAGE — 2 columns under topbar
-    ══════════════════════════════════════ */
-    .main-stage {
-      flex: 1; min-height: 0;
-      display: flex;
-      flex-direction: row;
-      overflow: hidden;
-    }
-
-    /* ══════════════════════════════════════
-       LEFT STAGE — turntable + controls
-    ══════════════════════════════════════ */
-    .left-stage {
-      width: 460px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 28px 32px 24px;
-      border-right: 1px solid var(--border);
-      overflow: hidden;
-      gap: 0;
-    }
-
-    /* ─── TURNTABLE CHASSIS ─── */
-    .turntable-chassis {
-      width: 100%;
-      aspect-ratio: 1;
-      max-height: 340px;
-      background:
-        linear-gradient(145deg, #2a2a2a 0%, #1c1c1c 40%, #141414 100%);
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.06),
-        inset 0 -1px 0 rgba(0,0,0,0.5),
-        0 20px 60px rgba(0,0,0,0.7),
-        0 4px 16px rgba(0,0,0,0.4);
-      position: relative;
-      flex-shrink: 0;
-      cursor: pointer;
-      overflow: hidden;
-    }
-    .turntable-chassis:hover { box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.06),
-        inset 0 -1px 0 rgba(0,0,0,0.5),
-        0 24px 72px rgba(0,0,0,0.8),
-        0 4px 20px rgba(0,0,0,0.5);
-    }
-
-    /* corner screws */
-    .tc-screw {
-      position: absolute;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #444, #222);
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 1px 2px rgba(0,0,0,0.6);
-    }
-    .tc-screw::after {
-      content: '';
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%,-50%) rotate(45deg);
-      width: 60%; height: 1px;
-      background: rgba(255,255,255,0.15);
-    }
-    .tc-screw.tl { top: 10px; left: 10px; }
-    .tc-screw.tr { top: 10px; right: 10px; }
-    .tc-screw.bl { bottom: 10px; left: 10px; }
-    .tc-screw.br { bottom: 10px; right: 10px; }
-
-    /* platter area */
-    .tc-platter-wrap {
-      position: absolute;
-      top: 50%; left: 44%;
-      transform: translate(-50%, -50%);
-      width: 72%; aspect-ratio: 1;
-    }
-    .tc-platter {
-      width: 100%; height: 100%;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #1e1e1e 0%, #111 50%, #0a0a0a 100%);
-      box-shadow:
-        inset 0 2px 8px rgba(0,0,0,0.8),
-        inset 0 -2px 4px rgba(255,255,255,0.03),
-        0 4px 16px rgba(0,0,0,0.6);
-      border: 2px solid rgba(255,255,255,0.04);
-      position: relative;
-      overflow: hidden;
-    }
-    /* vinyl grooves */
-    .tc-vinyl {
-      position: absolute; inset: 4%;
-      border-radius: 50%;
-      background-image: repeating-radial-gradient(
-        circle at center,
-        #111 0px,
-        #111 3px,
-        #1a1a1a 4px,
-        #111 5px
-      );
-      animation: vinyl-spin 3s linear infinite;
-      animation-play-state: paused;
-    }
-    .turntable-chassis.playing .tc-vinyl { animation-play-state: running; }
-    @keyframes vinyl-spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    /* label */
-    .tc-label {
-      position: absolute; inset: 30%;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #e06c75 0%, #be5046 100%);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-      transition: background 1.5s ease;
-      animation: vinyl-spin 3s linear infinite;
-      animation-play-state: paused;
-    }
-    .turntable-chassis.playing .tc-label { animation-play-state: running; }
-    .tc-label::after {
-      content: '';
-      width: 18%; height: 18%;
-      border-radius: 50%;
-      background: #0a0a0a;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
-    }
-    /* 33 RPM text */
-    .tc-rpm {
-      position: absolute;
-      bottom: 12%; left: 50%; transform: translateX(-50%);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 7px; font-weight: 600;
-      color: rgba(255,255,255,0.25);
-      letter-spacing: 0.05em;
-      white-space: nowrap;
-    }
-
-    /* tonearm */
-    .tc-tonearm {
-      position: absolute;
-      top: 8%; right: 6%;
-      width: 28%; height: 70%;
-      transform-origin: 50% 8%;
-      transform: rotate(-28deg);
-      transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-    }
-    .turntable-chassis.playing .tc-tonearm { transform: rotate(-12deg); }
-    .tc-arm-base {
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #555 0%, #333 100%);
-      border: 1px solid rgba(255,255,255,0.15);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    }
-    .tc-arm-rod {
-      position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
-      width: 4px; height: calc(100% - 14px);
-      background: linear-gradient(to bottom, #666 0%, #444 50%, #333 100%);
-      border-radius: 2px;
-      box-shadow: 1px 0 3px rgba(0,0,0,0.4);
-    }
-    .tc-arm-head {
-      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotate(30deg);
-      width: 12px; height: 20px;
-      background: linear-gradient(135deg, #555 0%, #222 100%);
-      border-radius: 2px 2px 4px 4px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .tc-arm-head::after {
-      content: '';
-      position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
-      width: 2px; height: 6px;
-      background: var(--accent);
-      border-radius: 1px;
-    }
-
-    /* hardware details — power button, pitch slider */
-    .tc-power-btn {
-      position: absolute; bottom: 12px; right: 16px;
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #333, #1a1a1a);
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 0 6px rgba(232,255,90,0.0);
-      transition: box-shadow 0.3s;
-    }
-    .turntable-chassis.playing .tc-power-btn {
-      box-shadow: 0 0 8px rgba(232,255,90,0.6), 0 0 2px var(--accent);
-      background: linear-gradient(135deg, #444, #222);
-    }
-    .tc-pitch {
-      position: absolute; bottom: 10px; right: 38px;
-      width: 3px; height: 40px;
-      background: linear-gradient(to bottom, #333, #1a1a1a);
-      border-radius: 2px;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-    .tc-pitch::after {
-      content: '';
-      position: absolute; top: 30%; left: 50%; transform: translateX(-50%);
-      width: 10px; height: 5px;
-      background: linear-gradient(135deg, #555, #333);
-      border-radius: 2px;
-      border: 1px solid rgba(255,255,255,0.15);
-    }
-
-    /* ─── DECK META (title, tag, like count) ─── */
-    .deck-meta {
-      width: 100%; margin-top: 20px;
-    }
-    .deck-title {
-      font-size: 26px; font-weight: 800;
-      letter-spacing: -0.8px;
-      color: var(--text);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      line-height: 1.1;
-    }
-    .deck-tagrow {
-      display: flex; align-items: center; gap: 10px; margin-top: 10px;
-    }
-    .deck-tag {
-      height: 22px; padding: 0 10px;
-      border-radius: 100px;
-      border: 1px solid var(--border2);
-      font-size: 11px; font-weight: 700;
-      color: var(--text-2);
-      display: flex; align-items: center;
-    }
-    .deck-likes {
-      display: flex; align-items: center; gap: 5px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px; font-weight: 600;
-      color: var(--text-2);
-    }
-    .deck-likes svg { color: var(--accent); }
-
-    /* ─── WAVEFORM SCRUBBER ─── */
-    .waveform-row {
-      width: 100%; margin-top: 16px;
+    .brand {
       display: flex; align-items: center; gap: 10px;
     }
-    .wf-time {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; font-weight: 600; color: var(--text-3);
-      flex-shrink: 0; width: 32px;
+    .brand-icon {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--accent), #a855f7);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; box-shadow: 0 4px 12px var(--accent-glow);
     }
-    .wf-time.right { text-align: right; }
-    .waveform-bars {
-      flex: 1; height: 36px;
-      display: flex; align-items: center; gap: 2.5px;
-      cursor: pointer;
+    .brand-title {
+      font-size: 16px; font-weight: 800; letter-spacing: -0.02em; color: var(--text);
+    }
+    .brand-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 2px 8px; border-radius: var(--radius-full);
+      background: var(--surface-hover); color: var(--accent); border: 1px solid var(--border);
+    }
+
+    .search-bar {
+      flex: 0 1 420px;
       position: relative;
     }
-    .wf-bar {
-      flex: 1; border-radius: 2px;
-      background: var(--surface4);
-      transition: background 0.15s;
-      min-width: 2px;
+    .search-bar svg {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); pointer-events: none;
     }
-    .wf-bar.played { background: var(--text); }
-    .wf-bar.current { background: var(--accent); }
-    .waveform-bars:hover .wf-bar { opacity: 0.8; }
-
-    /* ─── PLAYER CONTROLS ─── */
-    .ctrl-row {
-      width: 100%; margin-top: 14px;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 0;
-    }
-    .ctrl-btn {
-      width: 40px; height: 40px;
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-3);
-      transition: background 0.15s, color 0.15s;
-    }
-    .ctrl-btn:hover { background: var(--surface2); color: var(--text); }
-    .ctrl-btn.active { color: var(--accent); }
-    .ctrl-play-btn {
-      width: 52px; height: 52px;
-      border-radius: 50%;
-      background: var(--text);
-      color: var(--bg);
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.1s, background 0.15s;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
-    .ctrl-play-btn:hover { background: var(--accent); transform: scale(1.06); }
-    .ctrl-play-btn:active { transform: scale(0.95); }
-    [data-theme="light"] .ctrl-play-btn { color: #fff; }
-
-    @keyframes spin-loader { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .spinner { animation: spin-loader 0.7s linear infinite; }
-
-    /* ══════════════════════════════════════
-       RIGHT STAGE — categories + tracks
-    ══════════════════════════════════════ */
-    .right-stage {
-      flex: 1; min-width: 0;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      padding: 28px 32px 40px;
-      gap: 28px;
-    }
-
-    /* ─── SECTION HEADER ─── */
-    .section-head {
-      display: flex; align-items: baseline; justify-content: space-between;
-      margin-bottom: 14px;
-    }
-    .section-title {
-      font-size: 18px; font-weight: 800; letter-spacing: -0.4px;
-    }
-    .section-viewall {
-      font-size: 12px; font-weight: 600; color: var(--text-3);
-      text-decoration: underline; text-underline-offset: 3px;
-      transition: color 0.15s; cursor: pointer;
-    }
-    .section-viewall:hover { color: var(--text-2); }
-
-    /* ─── CATEGORY PILLS ─── */
-    .cat-pills {
-      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;
-    }
-    .cat-pill {
-      height: 28px; padding: 0 14px;
-      border-radius: 100px;
-      border: 1px solid var(--border2);
-      font-size: 12px; font-weight: 700;
-      color: var(--text-2);
-      background: transparent;
-      transition: all 0.15s;
-      cursor: pointer;
-    }
-    .cat-pill:hover { border-color: var(--text-3); color: var(--text); }
-    .cat-pill.active {
-      background: var(--text); color: var(--bg);
-      border-color: var(--text);
-    }
-    [data-theme="light"] .cat-pill.active { color: #fff; }
-
-    /* ─── ARTIST VAULT CARDS ─── */
-    .vault-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
-    }
-    .vault-card {
-      background: var(--surface2);
+    .search-input {
+      width: 100%; height: 38px;
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color 0.15s, transform 0.15s;
-      position: relative;
+      border-radius: var(--radius-full);
+      padding: 0 16px 0 42px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text); outline: none;
+      transition: all 0.2s ease;
     }
-    .vault-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-    .vault-card.live { border-color: rgba(232,255,90,0.3); }
-    .vault-card-art {
-      aspect-ratio: 1;
-      position: relative;
-      overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .vault-aura {
-      width: 55%; height: 55%;
-      border-radius: 50%;
-      position: absolute; right: -10%; top: 50%; transform: translateY(-50%);
-      filter: blur(16px);
-      opacity: 0.7;
-    }
-    .vault-initials {
-      font-size: 28px; font-weight: 900;
-      letter-spacing: -1px;
-      color: var(--text-2);
-      position: relative; z-index: 1;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    }
-    .vault-card-body { padding: 10px 12px 12px; }
-    .vault-badge {
-      font-size: 9px; font-weight: 800;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-    .vault-badge.live { color: var(--accent); }
-    .vault-badge.soon { color: var(--text-3); }
-    .vault-name {
-      font-size: 13px; font-weight: 700;
-      color: var(--text); letter-spacing: -0.2px;
-    }
-    .vault-sub {
-      font-size: 11px; color: var(--text-3); margin-top: 2px;
-    }
-    .vault-play-overlay {
-      position: absolute; top: 8px; right: 8px;
-      width: 28px; height: 28px; border-radius: 50%;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-      border: 1px solid rgba(255,255,255,0.15);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; opacity: 0;
-      transition: opacity 0.15s;
-    }
-    .vault-card:hover .vault-play-overlay { opacity: 1; }
+    .search-input::placeholder { color: var(--text-muted); }
+    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 
-    /* ─── PLAYLIST / TRACK ROWS ─── */
-    .playlist-section { display: flex; flex-direction: column; gap: 0; }
-    .playlist-row {
+    .header-actions {
       display: flex; align-items: center; gap: 12px;
-      padding: 9px 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.12s;
-      position: relative;
     }
-    .playlist-row:hover { background: var(--surface2); }
-    .playlist-row.active { background: var(--surface2); }
-
-    /* track number / EQ indicator */
-    .pl-num {
-      width: 24px; text-align: center; flex-shrink: 0;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; font-weight: 600; color: var(--text-3);
-      transition: opacity 0.15s;
-    }
-    .playlist-row.active .pl-num { opacity: 0; }
-    .pl-eq {
-      position: absolute; left: 10px;
-      width: 24px; display: flex; align-items: flex-end; justify-content: center;
-      gap: 2px; height: 14px; opacity: 0;
-      transition: opacity 0.15s;
-    }
-    .playlist-row.active .pl-eq { opacity: 1; }
-    .pl-eq-bar {
-      width: 3px; background: var(--accent); border-radius: 1px;
-      transform-origin: bottom;
-    }
-    .playlist-row.playing .pl-eq-bar { animation: eq 0.6s ease-in-out infinite alternate; }
-    .pl-eq-bar:nth-child(1) { height: 40%; animation-delay: 0s; }
-    .pl-eq-bar:nth-child(2) { height: 80%; animation-delay: 0.15s; }
-    .pl-eq-bar:nth-child(3) { height: 55%; animation-delay: 0.3s; }
-    @keyframes eq { 0% { transform: scaleY(0.2); } 100% { transform: scaleY(1); } }
-
-    .pl-thumb {
-      width: 38px; height: 38px; border-radius: 8px;
-      background: var(--surface3);
-      flex-shrink: 0; overflow: hidden;
+    .btn-icon {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-full);
       display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); background: transparent;
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
     }
-    .pl-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .pl-thumb-letter {
-      font-size: 14px; font-weight: 800; color: var(--text-3); letter-spacing: -0.5px;
-    }
-
-    .pl-body { flex: 1; min-width: 0; }
-    .pl-name {
-      font-size: 13px; font-weight: 600; color: var(--text);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      transition: color 0.12s;
-    }
-    .playlist-row.active .pl-name { color: var(--accent); }
-    .pl-meta { font-size: 11px; color: var(--text-3); margin-top: 1px; }
-
-    .pl-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-    .pl-dur {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; color: var(--text-3); width: 36px; text-align: right;
-    }
-    .pl-like-btn {
-      width: 28px; height: 28px; border-radius: 7px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-3); opacity: 0;
-      transition: opacity 0.12s, color 0.12s, background 0.12s;
-    }
-    .playlist-row:hover .pl-like-btn { opacity: 1; }
-    .pl-like-btn.liked { opacity: 1; color: var(--red); }
-    .pl-like-btn.liked svg { fill: var(--red); }
-    .pl-like-btn svg { fill: none; stroke-width: 2; }
-    .pl-like-btn:hover { color: var(--red); background: var(--red-dim); }
-
-    /* circular play btn (reference design right-side) */
-    .pl-play-btn {
-      width: 34px; height: 34px; border-radius: 50%;
-      background: var(--surface3);
-      border: 1px solid var(--border2);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-2); flex-shrink: 0;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
-    .pl-play-btn:hover, .playlist-row.active .pl-play-btn {
-      background: var(--text); color: var(--bg); border-color: var(--text);
-    }
-    [data-theme="light"] .pl-play-btn:hover,
-    [data-theme="light"] .playlist-row.active .pl-play-btn { color: #fff; }
-
-    /* ─── FILTER CONTROLS IN SECTION HEAD ─── */
-    .filter-group { display: flex; gap: 4px; }
-    .filter-pill {
-      height: 28px; padding: 0 12px;
-      border-radius: 100px;
-      font-size: 11px; font-weight: 700;
-      color: var(--text-3);
-      border: 1px solid transparent;
-      display: flex; align-items: center; gap: 5px;
-      transition: all 0.15s;
-    }
-    .filter-pill:hover { background: var(--surface2); color: var(--text-2); border-color: var(--border); }
-    .filter-pill.active { background: var(--surface3); color: var(--text); border-color: var(--border2); }
+    .btn-icon:hover { color: var(--text); background: var(--surface-hover); border-color: var(--border); }
 
     /* ══════════════════════════════════════
-       ABOUT MODAL
+       MAIN CONTENT VIEW (SCROLLABLE)
     ══════════════════════════════════════ */
+    .main-content {
+      flex: 1; min-height: 0;
+      overflow-y: auto;
+      padding: 24px 32px calc(var(--player-h) + 24px);
+      display: flex; flex-direction: column; gap: 32px;
+    }
+
+    /* HERO FEATURED BANNER */
+    .hero-banner {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(168,85,247,0.1) 50%, var(--surface) 100%);
+      border: 1px solid var(--border);
+      padding: 32px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      position: relative; overflow: hidden;
+    }
+    .hero-banner::before {
+      content: ''; position: absolute; -100px: top; right: -100px; width: 300px; height: 300px;
+      border-radius: 50%; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-info { max-width: 560px; z-index: 1; }
+    .hero-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2;
+      color: var(--text); margin-bottom: 10px;
+    }
+    .hero-subtitle {
+      font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 12px; }
+    .btn-primary {
+      height: 42px; padding: 0 20px;
+      border-radius: var(--radius-full);
+      background: var(--accent); color: #fff;
+      font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-secondary {
+      height: 42px; padding: 0 20px;
+      border-radius: var(--radius-full);
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--border);
+      font-size: 13px; font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-secondary:hover { background: var(--surface-hover); }
+
+    /* CONTROLS & FILTER ROW */
+    .controls-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      flex-wrap: wrap;
+    }
+    .filter-tabs {
+      display: flex; items-center; gap: 6px; background: var(--surface);
+      padding: 4px; border-radius: var(--radius-full); border: 1px solid var(--border);
+    }
+    .tab-btn {
+      height: 32px; padding: 0 16px; border-radius: var(--radius-full);
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      transition: all 0.2s ease; display: flex; align-items: center; gap: 6px;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { background: var(--surface-active); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .tab-btn.active svg { color: var(--heart); fill: var(--heart); }
+
+    .sort-select {
+      height: 36px; padding: 0 32px 0 14px;
+      border-radius: var(--radius-full);
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); font-size: 12px; font-weight: 600;
+      outline: none; cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+    }
+
+    /* STREAMING TRACK TABLE */
+    .table-container {
+      width: 100%; display: flex; flex-direction: column; gap: 4px;
+    }
+    .table-header {
+      display: grid; grid-template-columns: 48px 1fr 120px 80px 48px;
+      padding: 8px 16px; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .track-row {
+      display: grid; grid-template-columns: 48px 1fr 120px 80px 48px;
+      align-items: center; padding: 10px 16px;
+      border-radius: var(--radius-md);
+      background: transparent; cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .track-row:hover { background: var(--surface); }
+    .track-row.active { background: var(--surface-hover); border: 1px solid var(--border); }
+
+    .t-index {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text-dim);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .track-row.active .t-index { color: var(--accent); }
+    .play-icon-hover { display: none; }
+    .track-row:hover .t-num-span { display: none; }
+    .track-row:hover .play-icon-hover { display: block; color: var(--text); }
+
+    .t-main { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .t-thumb {
+      width: 42px; height: 42px; border-radius: var(--radius-sm);
+      background: var(--surface-active); flex-shrink: 0; overflow: hidden;
+      position: relative;
+    }
+    .t-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .t-details { min-width: 0; }
+    .t-title {
+      font-size: 14px; font-weight: 600; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .track-row.active .t-title { color: var(--accent); }
+    .t-artist { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .t-tag {
+      font-size: 11px; font-weight: 600; color: var(--text-muted);
+      padding: 4px 10px; border-radius: var(--radius-full);
+      background: var(--surface-hover); border: 1px solid var(--border-subtle);
+      width: fit-content;
+    }
+    .t-dur {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; color: var(--text-muted);
+    }
+    .like-btn {
+      width: 32px; height: 32px; border-radius: var(--radius-full);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-dim); transition: all 0.15s ease;
+    }
+    .like-btn:hover { color: var(--heart); background: var(--heart-dim); }
+    .like-btn.liked { color: var(--heart); }
+    .like-btn.liked svg { fill: var(--heart); }
+
+    /* ══════════════════════════════════════
+       PERSISTENT BOTTOM PLAYER DOCK
+    ══════════════════════════════════════ */
+    .player-dock {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: var(--player-h);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 0 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .dock-track-info {
+      display: flex; align-items: center; gap: 14px; width: 280px; flex-shrink: 0;
+    }
+    .dock-thumb {
+      width: 48px; height: 48px; border-radius: var(--radius-sm);
+      background: var(--surface-active); overflow: hidden; flex-shrink: 0;
+    }
+    .dock-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .dock-meta { min-width: 0; }
+    .dock-title {
+      font-size: 14px; font-weight: 700; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .dock-artist { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .dock-controls-center {
+      flex: 0 1 540px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .dock-buttons {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .dock-btn {
+      width: 34px; height: 34px; border-radius: var(--radius-full);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); transition: all 0.15s ease;
+    }
+    .dock-btn:hover { color: var(--text); }
+    .dock-btn.active { color: var(--accent); }
+
+    .dock-play-main {
+      width: 42px; height: 42px; border-radius: var(--radius-full);
+      background: var(--text); color: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+      transition: all 0.15s ease;
+    }
+    .dock-play-main:hover { transform: scale(1.05); background: var(--accent); }
+    [data-theme="light"] .dock-play-main:hover { color: #fff; }
+
+    .progress-bar-row {
+      width: 100%; display: flex; align-items: center; gap: 12px;
+    }
+    .time-stamp {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: var(--text-dim);
+      width: 36px; flex-shrink: 0;
+    }
+    .progress-track {
+      flex: 1; height: 4px; background: var(--surface-active);
+      border-radius: var(--radius-full); cursor: pointer; position: relative;
+    }
+    .progress-fill {
+      height: 100%; width: 0%; background: var(--text); border-radius: var(--radius-full);
+      position: relative; transition: width 0.1s linear;
+    }
+    .progress-track:hover .progress-fill { background: var(--accent); }
+
+    .dock-right {
+      display: flex; align-items: center; gap: 12px; width: 200px; justify-content: flex-end; flex-shrink: 0;
+    }
+    .vol-icon { color: var(--text-muted); }
+    .vol-range {
+      width: 100px; height: 4px;
+      -webkit-appearance: none; appearance: none;
+      background: var(--surface-active); border-radius: var(--radius-full); outline: none; cursor: pointer;
+    }
+    .vol-range::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 12px; height: 12px;
+      border-radius: 50%; background: var(--text); cursor: pointer;
+    }
+
+    /* ABOUT MODAL */
     .modal-overlay {
       position: fixed; inset: 0; z-index: 1000;
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(10px);
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(12px);
       display: none; align-items: center; justify-content: center;
     }
     .modal-overlay.open { display: flex; }
     .modal-card {
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 20px;
-      padding: 32px; max-width: 440px; width: 90%;
-      position: relative;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 32px; max-width: 460px; width: 90%;
+      position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
     .modal-close {
-      position: absolute; top: 16px; right: 16px;
-      width: 30px; height: 30px; border-radius: 8px;
+      position: absolute; top: 20px; right: 20px;
+      width: 32px; height: 32px; border-radius: var(--radius-full);
       display: flex; align-items: center; justify-content: center;
-      color: var(--text-3); background: var(--surface2);
-      transition: color 0.15s;
-    }
-    .modal-close:hover { color: var(--text); }
-    .modal-h { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 4px; }
-    .modal-sub { font-size: 12px; color: var(--text-3); margin-bottom: 20px; }
-    .modal-p { font-size: 13px; color: var(--text-2); line-height: 1.7; margin-bottom: 12px; }
-    .modal-tag {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin-top: 8px; padding: 5px 12px;
-      background: var(--accent-dim); border: 1px solid var(--accent);
-      border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--accent);
+      color: var(--text-muted); background: var(--surface-hover);
     }
 
-    /* ══════════════════════════════════════
-       HIDDEN YT
-    ══════════════════════════════════════ */
-    #yt-mount {
-      position: fixed; width: 1px; height: 1px;
-      opacity: 0.001; bottom: 0; left: 0;
-      pointer-events: none; overflow: hidden;
-    }
-
-    /* ══════════════════════════════════════
-       SEARCH RESULTS DROPDOWN (optional)
-    ══════════════════════════════════════ */
-    .search-results-count {
-      font-size: 11px; font-weight: 600; color: var(--text-3);
-    }
+    #yt-mount { position: fixed; width: 1px; height: 1px; opacity: 0.001; bottom: 0; left: 0; pointer-events: none; }
   </style>
 </head>
 <body>
 
-<!-- ═══ ICON RAIL ═══ -->
-<div class="icon-rail">
-  <div class="rail-logo"><span>GRL</span></div>
-
-  <button class="rail-btn active" id="railHome" title="Home">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-  </button>
-  <button class="rail-btn" id="railLiked" title="Liked Tracks">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-  </button>
-  <button class="rail-btn" id="railVaults" title="Artist Vaults">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-  </button>
-
-  <div class="rail-sep"></div>
-
-  <button class="rail-btn" id="railAboutBtn" title="About">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-  </button>
-
-  <div class="rail-spacer"></div>
-
-  <button class="rail-btn" id="railThemeBtn" title="Toggle theme">
-    <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-  </button>
-</div>
-
-<!-- ═══ APP SHELL ═══ -->
 <div id="app">
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="topbar-logo">GRAILS<em>UNRELEASED</em></div>
-
-    <div class="topbar-search">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="searchInput" placeholder="Search songs or artists..." autocomplete="off">
+  <!-- HEADER BAR -->
+  <header class="header">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <span class="brand-title">Charlie's Vault</span>
+      <span class="brand-badge">99 Grails</span>
     </div>
 
-    <div class="topbar-right">
-      <button class="topbar-pill active" id="tabAll">All Tracks</button>
-      <button class="topbar-pill" id="tabLiked">
-        Liked
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <div class="search-bar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search unreleased tracks or demos..." autocomplete="off">
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-icon" id="aboutBtn" title="About Charlie's Vault">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       </button>
-      <button class="topbar-icon" id="aboutBtn" title="About GRAILS">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      </button>
-      <button class="topbar-icon" id="themeBtn" title="Toggle theme">
-        <svg id="themeBtnIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <button class="btn-icon" id="themeBtn" title="Toggle Theme">
+        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
       </button>
     </div>
-  </div>
+  </header>
 
-  <!-- MAIN STAGE -->
-  <div class="main-stage">
+  <!-- MAIN SCROLLABLE CONTENT -->
+  <main class="main-content">
 
-    <!-- LEFT STAGE: Turntable player -->
-    <div class="left-stage">
-
-      <!-- CSS Turntable Chassis -->
-      <div class="turntable-chassis" id="turntableChassis">
-        <div class="tc-screw tl"></div>
-        <div class="tc-screw tr"></div>
-        <div class="tc-screw bl"></div>
-        <div class="tc-screw br"></div>
-
-        <div class="tc-platter-wrap">
-          <div class="tc-platter">
-            <div class="tc-vinyl"></div>
-            <div class="tc-label" id="vinylLabel"></div>
-            <div class="tc-rpm">33⅓ RPM</div>
-          </div>
+    <!-- HERO FEATURED SPOTLIGHT -->
+    <div class="hero-banner">
+      <div class="hero-info">
+        <div class="hero-pill">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Unreleased Studio Archive
         </div>
-
-        <div class="tc-tonearm" id="tonearm">
-          <div class="tc-arm-base"></div>
-          <div class="tc-arm-rod"></div>
-          <div class="tc-arm-head"></div>
+        <h1 class="hero-title">Charlie Puth — 99 Unreleased Grails &amp; Demos</h1>
+        <p class="hero-subtitle">Rare Voicenotes studio concepts, early acoustic arrangements, and unreleased takes in a clean high-fidelity audio engine.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" id="heroPlayBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Play Vault
+          </button>
+          <button class="btn-secondary" id="heroShuffleBtn">Shuffle Tracks</button>
         </div>
-
-        <div class="tc-power-btn"></div>
-        <div class="tc-pitch"></div>
-      </div>
-
-      <!-- Track Info -->
-      <div class="deck-meta">
-        <div class="deck-title" id="deckTitle">Select a Grail</div>
-        <div class="deck-tagrow">
-          <div class="deck-tag" id="deckTag">Unreleased</div>
-          <div class="deck-likes">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <span id="deckLikeCount">99 Grails</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Waveform Scrubber -->
-      <div class="waveform-row">
-        <span class="wf-time" id="wfCur">0:00</span>
-        <div class="waveform-bars" id="waveformBars">
-          <!-- bars injected by JS -->
-        </div>
-        <span class="wf-time right" id="wfTot">--:--</span>
-      </div>
-
-      <!-- Controls -->
-      <div class="ctrl-row">
-        <button class="ctrl-btn" id="btnExpand" title="View track list">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-        </button>
-        <button class="ctrl-btn" id="btnPrev" title="Previous">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-        </button>
-        <button class="ctrl-play-btn" id="btnPlay" title="Play / Pause">
-          <svg id="iconPlay" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          <svg id="iconPause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-          <svg id="iconLoading" class="spinner" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.2"/><path d="M3 12a9 9 0 0 1 9-9"/></svg>
-        </button>
-        <button class="ctrl-btn" id="btnNext" title="Next">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg>
-        </button>
-        <button class="ctrl-btn" id="btnShuffle" title="Shuffle">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
-        </button>
       </div>
     </div>
 
-    <!-- RIGHT STAGE: Track List & Vault Content -->
-    <div class="right-stage" id="rightStage">
-
-      <!-- TRACK LIST SECTION -->
-      <div class="playlist-section">
-        <div class="section-head">
-          <div>
-            <div class="section-title">Charlie's Vault <span id="trackCountBadge" style="font-size:14px;font-weight:500;color:var(--text-3)">(99)</span></div>
-          </div>
-          <div class="filter-group">
-            <button class="filter-pill active" id="filterAll">All</button>
-            <button class="filter-pill" id="filterLiked">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-              Liked
-            </button>
-          </div>
-        </div>
-
-        <div id="trackList"></div>
+    <!-- CONTROLS & FILTERS -->
+    <div class="controls-row">
+      <div class="filter-tabs">
+        <button class="tab-btn active" id="tabAll">All Grails (99)</button>
+        <button class="tab-btn" id="tabLiked">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Liked Grails
+        </button>
       </div>
 
-    </div><!-- /right-stage -->
-  </div><!-- /main-stage -->
-</div><!-- /#app -->
+      <select class="sort-select" id="sortSelect">
+        <option value="title">Alphabetical (A-Z)</option>
+        <option value="title-desc">Alphabetical (Z-A)</option>
+        <option value="duration">Duration (Shortest)</option>
+      </select>
+    </div>
+
+    <!-- STREAMING TRACK TABLE -->
+    <div class="table-container">
+      <div class="table-header">
+        <div style="text-align: center;">#</div>
+        <div>Title</div>
+        <div>Category</div>
+        <div style="text-align: right;">Time</div>
+        <div></div>
+      </div>
+      <div id="trackTable"></div>
+    </div>
+
+  </main>
+
+  <!-- PERSISTENT BOTTOM PLAYER DOCK -->
+  <footer class="player-dock">
+    <div class="dock-track-info">
+      <div class="dock-thumb">
+        <img id="dockArt" src="https://img.youtube.com/vi/RbQ1bpBlmp4/mqdefault.jpg" alt="">
+      </div>
+      <div class="dock-meta">
+        <div class="dock-title" id="dockTitle">Select a Track</div>
+        <div class="dock-artist" id="dockArtist">Charlie Puth</div>
+      </div>
+      <button class="like-btn" id="dockLikeBtn" style="margin-left: 6px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+    </div>
+
+    <div class="dock-controls-center">
+      <div class="dock-buttons">
+        <button class="dock-btn" id="btnShuffle" title="Shuffle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+        </button>
+        <button class="dock-btn" id="btnPrev" title="Previous">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+        </button>
+        <button class="dock-play-main" id="btnPlay" title="Play / Pause">
+          <svg id="iconPlay" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="iconPause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <button class="dock-btn" id="btnNext" title="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg>
+        </button>
+      </div>
+
+      <div class="progress-bar-row">
+        <span class="time-stamp" id="timeCur">0:00</span>
+        <div class="progress-track" id="progressTrack">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span class="time-stamp" id="timeTot" style="text-align: right;">--:--</span>
+      </div>
+    </div>
+
+    <div class="dock-right">
+      <svg class="vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <input type="range" class="vol-range" id="volRange" min="0" max="100" value="85">
+    </div>
+  </footer>
+
+</div>
 
 <!-- ABOUT MODAL -->
 <div class="modal-overlay" id="aboutModal">
   <div class="modal-card">
     <button class="modal-close" id="closeAboutBtn">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
-    <div class="modal-h">GRAILS</div>
-    <div class="modal-sub">Unreleased Music Archive — 2026</div>
-    <div class="modal-p">A private listening archive of 99 unreleased Charlie Puth tracks — rare demos, early concepts, acoustic takes, and sessions that never made an official release.</div>
-    <div class="modal-p">No audio is stored here. Playback uses YouTube's IFrame API. Non-commercial fan archive. All rights belong to the respective artists and rights holders.</div>
-    <div class="modal-p" style="color:var(--text-3)">More artist vaults incoming — Frank Ocean, Ye, Drake, Travis Scott, Juice WRLD.</div>
-    <div class="modal-tag">Built by Nishachay</div>
+    <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">Charlie's Vault</h2>
+    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Unreleased Charlie Puth Audio Archive</p>
+    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">A private listening archive featuring 99 unreleased Charlie Puth tracks — curated studio demos, Voicenotes-era concepts, and acoustic recordings.</p>
+    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">No audio files are hosted locally. Playback uses YouTube's IFrame API. Built purely for archival and private listening.</p>
   </div>
 </div>
 
 <div id="yt-mount"><div id="yt-player"></div></div>
 
 <!-- ══════════════════════════════════════
-     SONG DATA
+     SONG DATABASE
 ══════════════════════════════════════ -->
 <script>
 const SONGS = [
-  {"id":"RbQ1bpBlmp4","title":"I Suck At Writing Lyrics","artist":"Charlie Puth","youtubeId":"RbQ1bpBlmp4","duration":190,"letter":"I","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"kZAAnbRvids","title":"Back Around","artist":"Charlie Puth","youtubeId":"kZAAnbRvids","duration":174,"letter":"B","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"3PuzDHsXUKA","title":"Beautiful Corruption","artist":"Charlie Puth","youtubeId":"3PuzDHsXUKA","duration":206,"letter":"B","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"ZNsabDtpS3g","title":"Best Friend","artist":"Charlie Puth","youtubeId":"ZNsabDtpS3g","duration":180,"letter":"B","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"EQDMxbCeJTs","title":"Butterflies","artist":"Charlie Puth","youtubeId":"EQDMxbCeJTs","duration":136,"letter":"B","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"Zqhjca07Jjk","title":"By Default","artist":"Charlie Puth","youtubeId":"Zqhjca07Jjk","duration":157,"letter":"B","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"QSh6giWIvaI","title":"Can't Stay Away From Your Baby","artist":"Charlie Puth","youtubeId":"QSh6giWIvaI","duration":202,"letter":"C","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"mx51V0WjxJ8","title":"Just Give Me a Reason","artist":"Charlie Puth","youtubeId":"mx51V0WjxJ8","duration":233,"letter":"J","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"HnS2tHzo7LA","title":"Crying on a Saturday Night","artist":"Charlie Puth","youtubeId":"HnS2tHzo7LA","duration":195,"letter":"C","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"dA-vd8t9kgA","title":"December","artist":"Charlie Puth","youtubeId":"dA-vd8t9kgA","duration":210,"letter":"D","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"m0R6e_9Ov7Q","title":"Dipset","artist":"Charlie Puth","youtubeId":"m0R6e_9Ov7Q","duration":178,"letter":"D","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"Nb_zaBKgYRk","title":"Do It Again","artist":"Charlie Puth","youtubeId":"Nb_zaBKgYRk","duration":201,"letter":"D","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"kSiAtUXQFYk","title":"Don't Talk","artist":"Charlie Puth","youtubeId":"kSiAtUXQFYk","duration":180,"letter":"D","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"Ufx1FjIjlmo","title":"Done For You","artist":"Charlie Puth","youtubeId":"Ufx1FjIjlmo","duration":189,"letter":"D","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"pKnLAuDjw5A","title":"Drive","artist":"Charlie Puth","youtubeId":"pKnLAuDjw5A","duration":164,"letter":"D","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"GrFgv0ID5OM","title":"Early in the Morning","artist":"Charlie Puth","youtubeId":"GrFgv0ID5OM","duration":172,"letter":"E","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"iE-MdumCqgc","title":"Everything","artist":"Charlie Puth","youtubeId":"iE-MdumCqgc","duration":215,"letter":"E","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"a2HMN5cAf5w","title":"Famous Last Words","artist":"Charlie Puth","youtubeId":"a2HMN5cAf5w","duration":196,"letter":"F","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"xPBGJFoS-oU","title":"Favorite Mistakes","artist":"Charlie Puth","youtubeId":"xPBGJFoS-oU","duration":183,"letter":"F","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"DtNgBaWdS6s","title":"Feel Like an Angel","artist":"Charlie Puth","youtubeId":"DtNgBaWdS6s","duration":194,"letter":"F","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"jUvPyoV5dxI","title":"Fly","artist":"Charlie Puth","youtubeId":"jUvPyoV5dxI","duration":221,"letter":"F","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"D9dMhxXvJww","title":"For the Night","artist":"Charlie Puth","youtubeId":"D9dMhxXvJww","duration":175,"letter":"F","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"X39pZ-9wYhE","title":"Found a Way","artist":"Charlie Puth","youtubeId":"X39pZ-9wYhE","duration":188,"letter":"F","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"A9MHNX-9nOA","title":"Friendly","artist":"Charlie Puth","youtubeId":"A9MHNX-9nOA","duration":162,"letter":"F","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"GtGPP0bOJmQ","title":"Ghost Lover","artist":"Charlie Puth","youtubeId":"GtGPP0bOJmQ","duration":197,"letter":"G","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"r3K5smvApuI","title":"Good Morning","artist":"Charlie Puth","youtubeId":"r3K5smvApuI","duration":208,"letter":"G","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"H1Z8EjFx89k","title":"Harder","artist":"Charlie Puth","youtubeId":"H1Z8EjFx89k","duration":176,"letter":"H","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"5SDvJbKDRzU","title":"Hate Me","artist":"Charlie Puth","youtubeId":"5SDvJbKDRzU","duration":190,"letter":"H","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"p5JpJbiwH5s","title":"Heart Attack","artist":"Charlie Puth","youtubeId":"p5JpJbiwH5s","duration":199,"letter":"H","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"gN4QHKRN7_w","title":"Homesick","artist":"Charlie Puth","youtubeId":"gN4QHKRN7_w","duration":185,"letter":"H","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"KQNz-rcEHaA","title":"How Long (Demo)","artist":"Charlie Puth","youtubeId":"KQNz-rcEHaA","duration":213,"letter":"H","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"BT7PXqvOqdc","title":"I Don't Think I Like Her","artist":"Charlie Puth","youtubeId":"BT7PXqvOqdc","duration":161,"letter":"I","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"fWZ_mKpKybc","title":"I Got You","artist":"Charlie Puth","youtubeId":"fWZ_mKpKybc","duration":185,"letter":"I","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"0dQKAX9D5MA","title":"I Won't Tell a Soul","artist":"Charlie Puth","youtubeId":"0dQKAX9D5MA","duration":209,"letter":"I","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"NbA1jULOetQ","title":"If I Get Lucky","artist":"Charlie Puth","youtubeId":"NbA1jULOetQ","duration":175,"letter":"I","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"4bMksBuCZ2g","title":"Impersonator","artist":"Charlie Puth","youtubeId":"4bMksBuCZ2g","duration":192,"letter":"I","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"LVjbvC0Rjow","title":"In Case","artist":"Charlie Puth","youtubeId":"LVjbvC0Rjow","duration":186,"letter":"I","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"vPSEQx0GgmU","title":"In My Blood","artist":"Charlie Puth","youtubeId":"vPSEQx0GgmU","duration":223,"letter":"I","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"YPdbQ9PHMXY","title":"Into Your Arms","artist":"Charlie Puth","youtubeId":"YPdbQ9PHMXY","duration":198,"letter":"I","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"Gr2YJqNpQyw","title":"It's Not Right","artist":"Charlie Puth","youtubeId":"Gr2YJqNpQyw","duration":207,"letter":"I","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"c1Qr9GHmSYM","title":"Just Friends","artist":"Charlie Puth","youtubeId":"c1Qr9GHmSYM","duration":179,"letter":"J","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"8lbFSgScLOc","title":"Just Say You Love Me","artist":"Charlie Puth","youtubeId":"8lbFSgScLOc","duration":196,"letter":"J","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"Y3L4UNaAkEY","title":"Keep It Between Us","artist":"Charlie Puth","youtubeId":"Y3L4UNaAkEY","duration":184,"letter":"K","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"Km94oDhP0pU","title":"Killing Me Slowly (Demo)","artist":"Charlie Puth","youtubeId":"Km94oDhP0pU","duration":216,"letter":"K","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"q0XFmv8rTAA","title":"Lay Me Down","artist":"Charlie Puth","youtubeId":"q0XFmv8rTAA","duration":188,"letter":"L","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"G4IiUxN-dQ8","title":"Left Right Left","artist":"Charlie Puth","youtubeId":"G4IiUxN-dQ8","duration":170,"letter":"L","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"yFBD8TZcqzk","title":"Light Switch (Early Demo)","artist":"Charlie Puth","youtubeId":"yFBD8TZcqzk","duration":193,"letter":"L","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"e8qB2ArqOY4","title":"Mad At Me","artist":"Charlie Puth","youtubeId":"e8qB2ArqOY4","duration":172,"letter":"M","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"O1d6GH0f_DE","title":"Make Something Up","artist":"Charlie Puth","youtubeId":"O1d6GH0f_DE","duration":201,"letter":"M","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"eC0cNpiEZ9s","title":"Make You Say","artist":"Charlie Puth","youtubeId":"eC0cNpiEZ9s","duration":180,"letter":"M","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"S6JMArlhviE","title":"Me and You","artist":"Charlie Puth","youtubeId":"S6JMArlhviE","duration":132,"letter":"M","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"kpEydKdPKZk","title":"Next To You","artist":"Charlie Puth","youtubeId":"kpEydKdPKZk","duration":180,"letter":"N","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"mliIn2wkuwA","title":"No Good","artist":"Charlie Puth","youtubeId":"mliIn2wkuwA","duration":147,"letter":"N","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"UNzi8S3sUn4","title":"No Judgement","artist":"Charlie Puth","youtubeId":"UNzi8S3sUn4","duration":212,"letter":"N","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"EvJOaKJrVm8","title":"Nothing Good","artist":"Charlie Puth","youtubeId":"EvJOaKJrVm8","duration":127,"letter":"N","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"MV_LJHEFkgE","title":"One Call Away (Demo)","artist":"Charlie Puth","youtubeId":"MV_LJHEFkgE","duration":225,"letter":"O","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"SKbpMuWXRHs","title":"Only You","artist":"Charlie Puth","youtubeId":"SKbpMuWXRHs","duration":178,"letter":"O","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"XJrU5O6A-TM","title":"Over and Over","artist":"Charlie Puth","youtubeId":"XJrU5O6A-TM","duration":195,"letter":"O","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"x9LlF9Nc3sI","title":"Pause","artist":"Charlie Puth","youtubeId":"x9LlF9Nc3sI","duration":183,"letter":"P","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"xgFMCqp5lhs","title":"Peace Sign","artist":"Charlie Puth","youtubeId":"xgFMCqp5lhs","duration":176,"letter":"P","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"VkdGMiGCdXM","title":"People You Know","artist":"Charlie Puth","youtubeId":"VkdGMiGCdXM","duration":212,"letter":"P","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"a_gV0V79mYM","title":"Promises","artist":"Charlie Puth","youtubeId":"a_gV0V79mYM","duration":188,"letter":"P","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"wLYbge-gSBk","title":"Psycho","artist":"Charlie Puth","youtubeId":"wLYbge-gSBk","duration":196,"letter":"P","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"SAbfexQoRxE","title":"Purple Hoodie","artist":"Charlie Puth","youtubeId":"SAbfexQoRxE","duration":164,"letter":"P","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"zQOCNvPAXJ8","title":"Real Friends","artist":"Charlie Puth","youtubeId":"zQOCNvPAXJ8","duration":205,"letter":"R","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"jdFpHd3dVAY","title":"Right Now","artist":"Charlie Puth","youtubeId":"jdFpHd3dVAY","duration":173,"letter":"R","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"FLLBhyFUDTs","title":"Run","artist":"Charlie Puth","youtubeId":"FLLBhyFUDTs","duration":198,"letter":"R","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"v5bfSnWwJGU","title":"Save the Last Dance","artist":"Charlie Puth","youtubeId":"v5bfSnWwJGU","duration":185,"letter":"S","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"IfUGJ5QgOzQ","title":"See You Again (Demo)","artist":"Charlie Puth","youtubeId":"IfUGJ5QgOzQ","duration":243,"letter":"S","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"k78mBhqBXV0","title":"Self-Centered","artist":"Charlie Puth","youtubeId":"k78mBhqBXV0","duration":176,"letter":"S","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"bfmWxVl9D3c","title":"She Knows","artist":"Charlie Puth","youtubeId":"bfmWxVl9D3c","duration":187,"letter":"S","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"k3MVtg3nPGI","title":"Simple","artist":"Charlie Puth","youtubeId":"k3MVtg3nPGI","duration":171,"letter":"S","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"PnJpx8DLWLA","title":"Slow It Down","artist":"Charlie Puth","youtubeId":"PnJpx8DLWLA","duration":204,"letter":"S","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"G9K6HsOXR3Y","title":"Some Things","artist":"Charlie Puth","youtubeId":"G9K6HsOXR3Y","duration":191,"letter":"S","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"Zf5Zs6S1c_E","title":"Sometimes","artist":"Charlie Puth","youtubeId":"Zf5Zs6S1c_E","duration":177,"letter":"S","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"mI-RA3h_PKc","title":"Sorry Is Never Enough","artist":"Charlie Puth","youtubeId":"mI-RA3h_PKc","duration":213,"letter":"S","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"cJrfbr9Tqzc","title":"Stoned","artist":"Charlie Puth","youtubeId":"cJrfbr9Tqzc","duration":169,"letter":"S","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"XaV5pf_q72I","title":"Stressed Out (Cover)","artist":"Charlie Puth","youtubeId":"XaV5pf_q72I","duration":197,"letter":"S","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"9XZCrPRcPGU","title":"Take Me Back","artist":"Charlie Puth","youtubeId":"9XZCrPRcPGU","duration":182,"letter":"T","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"3c1m3W2Knz8","title":"Talk","artist":"Charlie Puth","youtubeId":"3c1m3W2Knz8","duration":190,"letter":"T","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"GHnXwLTPX9M","title":"Tender","artist":"Charlie Puth","youtubeId":"GHnXwLTPX9M","duration":203,"letter":"T","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"pYjf1eDQ7QY","title":"That's All Right","artist":"Charlie Puth","youtubeId":"pYjf1eDQ7QY","duration":186,"letter":"T","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"4D9eR0gMXDw","title":"The Way I Am","artist":"Charlie Puth","youtubeId":"4D9eR0gMXDw","duration":194,"letter":"T","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"xB9dOnFYvXE","title":"These Are the Words","artist":"Charlie Puth","youtubeId":"xB9dOnFYvXE","duration":201,"letter":"T","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"jfYVWRMWa1k","title":"Through It All","artist":"Charlie Puth","youtubeId":"jfYVWRMWa1k","duration":207,"letter":"T","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"3EWNHdFJbm8","title":"Together","artist":"Charlie Puth","youtubeId":"3EWNHdFJbm8","duration":179,"letter":"T","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"L6M_BChbLV4","title":"Too Little Too Late","artist":"Charlie Puth","youtubeId":"L6M_BChbLV4","duration":196,"letter":"T","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"LHp0TYGK1BM","title":"Treat You Better","artist":"Charlie Puth","youtubeId":"LHp0TYGK1BM","duration":184,"letter":"T","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"EjEVmKH3oSE","title":"Uh Oh","artist":"Charlie Puth","youtubeId":"EjEVmKH3oSE","duration":165,"letter":"U","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"nSKNExQiHo4","title":"Unraveling","artist":"Charlie Puth","youtubeId":"nSKNExQiHo4","duration":212,"letter":"U","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"DWOAmj2yInE","title":"Used To","artist":"Charlie Puth","youtubeId":"DWOAmj2yInE","duration":178,"letter":"U","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"r71jPKIIzSg","title":"Voicenotes Alt","artist":"Charlie Puth","youtubeId":"r71jPKIIzSg","duration":199,"letter":"V","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"cAR4aTZDzc0","title":"Waiting On You","artist":"Charlie Puth","youtubeId":"cAR4aTZDzc0","duration":191,"letter":"W","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"NyNBHK-GANA","title":"Whatever It Takes","artist":"Charlie Puth","youtubeId":"NyNBHK-GANA","duration":175,"letter":"W","palette":{"from":"#E5C07B","to":"#A47D32"}},
-  {"id":"Xpqdf2jRQnA","title":"When I'm Gone (Demo)","artist":"Charlie Puth","youtubeId":"Xpqdf2jRQnA","duration":218,"letter":"W","palette":{"from":"#56B6C2","to":"#388E9C"}},
-  {"id":"3t2oN8X53EM","title":"Without You","artist":"Charlie Puth","youtubeId":"3t2oN8X53EM","duration":187,"letter":"W","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"ZorWVKNcTQc","title":"Your Name","artist":"Charlie Puth","youtubeId":"ZorWVKNcTQc","duration":188,"letter":"Y","palette":{"from":"#61AFEF","to":"#2C72B0"}},
-  {"id":"9i6k9PYZbCk","title":"1984","artist":"Charlie Puth","youtubeId":"9i6k9PYZbCk","duration":198,"letter":"1","palette":{"from":"#e06c75","to":"#be5046"}},
-  {"id":"VZBDnOXKUho","title":"Slow It Down (Alt Take)","artist":"Charlie Puth","youtubeId":"VZBDnOXKUho","duration":211,"letter":"S","palette":{"from":"#56B6C2","to":"#388E9C"}}
+  {"id":"RbQ1bpBlmp4","title":"I Suck At Writing Lyrics","artist":"Charlie Puth","youtubeId":"RbQ1bpBlmp4","duration":190},
+  {"id":"kZAAnbRvids","title":"Back Around","artist":"Charlie Puth","youtubeId":"kZAAnbRvids","duration":174},
+  {"id":"3PuzDHsXUKA","title":"Beautiful Corruption","artist":"Charlie Puth","youtubeId":"3PuzDHsXUKA","duration":206},
+  {"id":"ZNsabDtpS3g","title":"Best Friend","artist":"Charlie Puth","youtubeId":"ZNsabDtpS3g","duration":180},
+  {"id":"EQDMxbCeJTs","title":"Butterflies","artist":"Charlie Puth","youtubeId":"EQDMxbCeJTs","duration":136},
+  {"id":"Zqhjca07Jjk","title":"By Default","artist":"Charlie Puth","youtubeId":"Zqhjca07Jjk","duration":157},
+  {"id":"QSh6giWIvaI","title":"Can't Stay Away From Your Baby","artist":"Charlie Puth","youtubeId":"QSh6giWIvaI","duration":202},
+  {"id":"mx51V0WjxJ8","title":"Just Give Me a Reason","artist":"Charlie Puth","youtubeId":"mx51V0WjxJ8","duration":233},
+  {"id":"HnS2tHzo7LA","title":"Crying on a Saturday Night","artist":"Charlie Puth","youtubeId":"HnS2tHzo7LA","duration":195},
+  {"id":"dA-vd8t9kgA","title":"December","artist":"Charlie Puth","youtubeId":"dA-vd8t9kgA","duration":210},
+  {"id":"m0R6e_9Ov7Q","title":"Dipset","artist":"Charlie Puth","youtubeId":"m0R6e_9Ov7Q","duration":178},
+  {"id":"Nb_zaBKgYRk","title":"Do It Again","artist":"Charlie Puth","youtubeId":"Nb_zaBKgYRk","duration":201},
+  {"id":"kSiAtUXQFYk","title":"Don't Talk","artist":"Charlie Puth","youtubeId":"kSiAtUXQFYk","duration":180},
+  {"id":"Ufx1FjIjlmo","title":"Done For You","artist":"Charlie Puth","youtubeId":"Ufx1FjIjlmo","duration":189},
+  {"id":"pKnLAuDjw5A","title":"Drive","artist":"Charlie Puth","youtubeId":"pKnLAuDjw5A","duration":164},
+  {"id":"GrFgv0ID5OM","title":"Early in the Morning","artist":"Charlie Puth","youtubeId":"GrFgv0ID5OM","duration":172},
+  {"id":"iE-MdumCqgc","title":"Everything","artist":"Charlie Puth","youtubeId":"iE-MdumCqgc","duration":215},
+  {"id":"a2HMN5cAf5w","title":"Famous Last Words","artist":"Charlie Puth","youtubeId":"a2HMN5cAf5w","duration":196},
+  {"id":"xPBGJFoS-oU","title":"Favorite Mistakes","artist":"Charlie Puth","youtubeId":"xPBGJFoS-oU","duration":183},
+  {"id":"DtNgBaWdS6s","title":"Feel Like an Angel","artist":"Charlie Puth","youtubeId":"DtNgBaWdS6s","duration":194},
+  {"id":"jUvPyoV5dxI","title":"Fly","artist":"Charlie Puth","youtubeId":"jUvPyoV5dxI","duration":221},
+  {"id":"D9dMhxXvJww","title":"For the Night","artist":"Charlie Puth","youtubeId":"D9dMhxXvJww","duration":175},
+  {"id":"X39pZ-9wYhE","title":"Found a Way","artist":"Charlie Puth","youtubeId":"X39pZ-9wYhE","duration":188},
+  {"id":"A9MHNX-9nOA","title":"Friendly","artist":"Charlie Puth","youtubeId":"A9MHNX-9nOA","duration":162},
+  {"id":"GtGPP0bOJmQ","title":"Ghost Lover","artist":"Charlie Puth","youtubeId":"GtGPP0bOJmQ","duration":197},
+  {"id":"r3K5smvApuI","title":"Good Morning","artist":"Charlie Puth","youtubeId":"r3K5smvApuI","duration":208},
+  {"id":"H1Z8EjFx89k","title":"Harder","artist":"Charlie Puth","youtubeId":"H1Z8EjFx89k","duration":176},
+  {"id":"5SDvJbKDRzU","title":"Hate Me","artist":"Charlie Puth","youtubeId":"5SDvJbKDRzU","duration":190},
+  {"id":"p5JpJbiwH5s","title":"Heart Attack","artist":"Charlie Puth","youtubeId":"p5JpJbiwH5s","duration":199},
+  {"id":"gN4QHKRN7_w","title":"Homesick","artist":"Charlie Puth","youtubeId":"gN4QHKRN7_w","duration":185},
+  {"id":"KQNz-rcEHaA","title":"How Long (Demo)","artist":"Charlie Puth","youtubeId":"KQNz-rcEHaA","duration":213},
+  {"id":"BT7PXqvOqdc","title":"I Don't Think I Like Her","artist":"Charlie Puth","youtubeId":"BT7PXqvOqdc","duration":161},
+  {"id":"fWZ_mKpKybc","title":"I Got You","artist":"Charlie Puth","youtubeId":"fWZ_mKpKybc","duration":185},
+  {"id":"0dQKAX9D5MA","title":"I Won't Tell a Soul","artist":"Charlie Puth","youtubeId":"0dQKAX9D5MA","duration":209},
+  {"id":"NbA1jULOetQ","title":"If I Get Lucky","artist":"Charlie Puth","youtubeId":"NbA1jULOetQ","duration":175},
+  {"id":"4bMksBuCZ2g","title":"Impersonator","artist":"Charlie Puth","youtubeId":"4bMksBuCZ2g","duration":192},
+  {"id":"LVjbvC0Rjow","title":"In Case","artist":"Charlie Puth","youtubeId":"LVjbvC0Rjow","duration":186},
+  {"id":"vPSEQx0GgmU","title":"In My Blood","artist":"Charlie Puth","youtubeId":"vPSEQx0GgmU","duration":223},
+  {"id":"YPdbQ9PHMXY","title":"Into Your Arms","artist":"Charlie Puth","youtubeId":"YPdbQ9PHMXY","duration":198},
+  {"id":"Gr2YJqNpQyw","title":"It's Not Right","artist":"Charlie Puth","youtubeId":"Gr2YJqNpQyw","duration":207},
+  {"id":"c1Qr9GHmSYM","title":"Just Friends","artist":"Charlie Puth","youtubeId":"c1Qr9GHmSYM","duration":179},
+  {"id":"8lbFSgScLOc","title":"Just Say You Love Me","artist":"Charlie Puth","youtubeId":"8lbFSgScLOc","duration":196},
+  {"id":"Y3L4UNaAkEY","title":"Keep It Between Us","artist":"Charlie Puth","youtubeId":"Y3L4UNaAkEY","duration":184},
+  {"id":"Km94oDhP0pU","title":"Killing Me Slowly (Demo)","artist":"Charlie Puth","youtubeId":"Km94oDhP0pU","duration":216},
+  {"id":"q0XFmv8rTAA","title":"Lay Me Down","artist":"Charlie Puth","youtubeId":"q0XFmv8rTAA","duration":188},
+  {"id":"G4IiUxN-dQ8","title":"Left Right Left","artist":"Charlie Puth","youtubeId":"G4IiUxN-dQ8","duration":170},
+  {"id":"yFBD8TZcqzk","title":"Light Switch (Early Demo)","artist":"Charlie Puth","youtubeId":"yFBD8TZcqzk","duration":193},
+  {"id":"e8qB2ArqOY4","title":"Mad At Me","artist":"Charlie Puth","youtubeId":"e8qB2ArqOY4","duration":172},
+  {"id":"O1d6GH0f_DE","title":"Make Something Up","artist":"Charlie Puth","youtubeId":"O1d6GH0f_DE","duration":201},
+  {"id":"eC0cNpiEZ9s","title":"Make You Say","artist":"Charlie Puth","youtubeId":"eC0cNpiEZ9s","duration":180},
+  {"id":"S6JMArlhviE","title":"Me and You","artist":"Charlie Puth","youtubeId":"S6JMArlhviE","duration":132},
+  {"id":"kpEydKdPKZk","title":"Next To You","artist":"Charlie Puth","youtubeId":"kpEydKdPKZk","duration":180},
+  {"id":"mliIn2wkuwA","title":"No Good","artist":"Charlie Puth","youtubeId":"mliIn2wkuwA","duration":147},
+  {"id":"UNzi8S3sUn4","title":"No Judgement","artist":"Charlie Puth","youtubeId":"UNzi8S3sUn4","duration":212},
+  {"id":"EvJOaKJrVm8","title":"Nothing Good","artist":"Charlie Puth","youtubeId":"EvJOaKJrVm8","duration":127},
+  {"id":"MV_LJHEFkgE","title":"One Call Away (Demo)","artist":"Charlie Puth","youtubeId":"MV_LJHEFkgE","duration":225},
+  {"id":"SKbpMuWXRHs","title":"Only You","artist":"Charlie Puth","youtubeId":"SKbpMuWXRHs","duration":178},
+  {"id":"XJrU5O6A-TM","title":"Over and Over","artist":"Charlie Puth","youtubeId":"XJrU5O6A-TM","duration":195},
+  {"id":"x9LlF9Nc3sI","title":"Pause","artist":"Charlie Puth","youtubeId":"x9LlF9Nc3sI","duration":183},
+  {"id":"xgFMCqp5lhs","title":"Peace Sign","artist":"Charlie Puth","youtubeId":"xgFMCqp5lhs","duration":176},
+  {"id":"VkdGMiGCdXM","title":"People You Know","artist":"Charlie Puth","youtubeId":"VkdGMiGCdXM","duration":212},
+  {"id":"a_gV0V79mYM","title":"Promises","artist":"Charlie Puth","youtubeId":"a_gV0V79mYM","duration":188},
+  {"id":"wLYbge-gSBk","title":"Psycho","artist":"Charlie Puth","youtubeId":"wLYbge-gSBk","duration":196},
+  {"id":"SAbfexQoRxE","title":"Purple Hoodie","artist":"Charlie Puth","youtubeId":"SAbfexQoRxE","duration":164},
+  {"id":"zQOCNvPAXJ8","title":"Real Friends","artist":"Charlie Puth","youtubeId":"zQOCNvPAXJ8","duration":205},
+  {"id":"jdFpHd3dVAY","title":"Right Now","artist":"Charlie Puth","youtubeId":"jdFpHd3dVAY","duration":173},
+  {"id":"FLLBhyFUDTs","title":"Run","artist":"Charlie Puth","youtubeId":"FLLBhyFUDTs","duration":198},
+  {"id":"v5bfSnWwJGU","title":"Save the Last Dance","artist":"Charlie Puth","youtubeId":"v5bfSnWwJGU","duration":185},
+  {"id":"IfUGJ5QgOzQ","title":"See You Again (Demo)","artist":"Charlie Puth","youtubeId":"IfUGJ5QgOzQ","duration":243},
+  {"id":"k78mBhqBXV0","title":"Self-Centered","artist":"Charlie Puth","youtubeId":"k78mBhqBXV0","duration":176},
+  {"id":"bfmWxVl9D3c","title":"She Knows","artist":"Charlie Puth","youtubeId":"bfmWxVl9D3c","duration":187},
+  {"id":"k3MVtg3nPGI","title":"Simple","artist":"Charlie Puth","youtubeId":"k3MVtg3nPGI","duration":171},
+  {"id":"PnJpx8DLWLA","title":"Slow It Down","artist":"Charlie Puth","youtubeId":"PnJpx8DLWLA","duration":204},
+  {"id":"G9K6HsOXR3Y","title":"Some Things","artist":"Charlie Puth","youtubeId":"G9K6HsOXR3Y","duration":191},
+  {"id":"Zf5Zs6S1c_E","title":"Sometimes","artist":"Charlie Puth","youtubeId":"Zf5Zs6S1c_E","duration":177},
+  {"id":"mI-RA3h_PKc","title":"Sorry Is Never Enough","artist":"Charlie Puth","youtubeId":"mI-RA3h_PKc","duration":213},
+  {"id":"cJrfbr9Tqzc","title":"Stoned","artist":"Charlie Puth","youtubeId":"cJrfbr9Tqzc","duration":169},
+  {"id":"XaV5pf_q72I","title":"Stressed Out (Cover)","artist":"Charlie Puth","youtubeId":"XaV5pf_q72I","duration":197},
+  {"id":"9XZCrPRcPGU","title":"Take Me Back","artist":"Charlie Puth","youtubeId":"9XZCrPRcPGU","duration":182},
+  {"id":"3c1m3W2Knz8","title":"Talk","artist":"Charlie Puth","youtubeId":"3c1m3W2Knz8","duration":190},
+  {"id":"GHnXwLTPX9M","title":"Tender","artist":"Charlie Puth","youtubeId":"GHnXwLTPX9M","duration":203},
+  {"id":"pYjf1eDQ7QY","title":"That's All Right","artist":"Charlie Puth","youtubeId":"pYjf1eDQ7QY","duration":186},
+  {"id":"4D9eR0gMXDw","title":"The Way I Am","artist":"Charlie Puth","youtubeId":"4D9eR0gMXDw","duration":194},
+  {"id":"xB9dOnFYvXE","title":"These Are the Words","artist":"Charlie Puth","youtubeId":"xB9dOnFYvXE","duration":201},
+  {"id":"jfYVWRMWa1k","title":"Through It All","artist":"Charlie Puth","youtubeId":"jfYVWRMWa1k","duration":207},
+  {"id":"3EWNHdFJbm8","title":"Together","artist":"Charlie Puth","youtubeId":"3EWNHdFJbm8","duration":179},
+  {"id":"L6M_BChbLV4","title":"Too Little Too Late","artist":"Charlie Puth","youtubeId":"L6M_BChbLV4","duration":196},
+  {"id":"LHp0TYGK1BM","title":"Treat You Better","artist":"Charlie Puth","youtubeId":"LHp0TYGK1BM","duration":184},
+  {"id":"EjEVmKH3oSE","title":"Uh Oh","artist":"Charlie Puth","youtubeId":"EjEVmKH3oSE","duration":165},
+  {"id":"nSKNExQiHo4","title":"Unraveling","artist":"Charlie Puth","youtubeId":"nSKNExQiHo4","duration":212},
+  {"id":"DWOAmj2yInE","title":"Used To","artist":"Charlie Puth","youtubeId":"DWOAmj2yInE","duration":178},
+  {"id":"r71jPKIIzSg","title":"Voicenotes Alt","artist":"Charlie Puth","youtubeId":"r71jPKIIzSg","duration":199},
+  {"id":"cAR4aTZDzc0","title":"Waiting On You","artist":"Charlie Puth","youtubeId":"cAR4aTZDzc0","duration":191},
+  {"id":"NyNBHK-GANA","title":"Whatever It Takes","artist":"Charlie Puth","youtubeId":"NyNBHK-GANA","duration":175},
+  {"id":"Xpqdf2jRQnA","title":"When I'm Gone (Demo)","artist":"Charlie Puth","youtubeId":"Xpqdf2jRQnA","duration":218},
+  {"id":"3t2oN8X53EM","title":"Without You","artist":"Charlie Puth","youtubeId":"3t2oN8X53EM","duration":187},
+  {"id":"ZorWVKNcTQc","title":"Your Name","artist":"Charlie Puth","youtubeId":"ZorWVKNcTQc","duration":188},
+  {"id":"9i6k9PYZbCk","title":"1984","artist":"Charlie Puth","youtubeId":"9i6k9PYZbCk","duration":198},
+  {"id":"VZBDnOXKUho","title":"Slow It Down (Alt Take)","artist":"Charlie Puth","youtubeId":"VZBDnOXKUho","duration":211}
 ];
 </script>
 
 <!-- ══════════════════════════════════════
-     APP LOGIC
+     APP JS ENGINE
 ══════════════════════════════════════ -->
 <script>
 (() => {
@@ -1061,186 +681,107 @@ const SONGS = [
   const $ = id => document.getElementById(id);
   const fmt = s => (!s || !isFinite(s) || s <= 0) ? '--:--' : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  const hashN = (str, n) => { let h = 5381; for (let i = 0; i < str.length; i++) h = (h * 33 ^ str.charCodeAt(i)) >>> 0; return h % n; };
 
-  // ─── DATA ───
   const cleanTitle = t => t.replace(/^charlie puth\s*[-—]\s*/i,'').trim();
   const songs = SONGS.map((s,i) => ({...s, _i:i, title: cleanTitle(s.title)}));
   let displayList = [...songs].sort((a,b) => a.title.localeCompare(b.title));
 
-  // ─── PERSISTENCE ───
-  const DUR_KEY   = 'grails_dur_v2';
-  const LIKES_KEY = 'grails_likes_v2';
-  const THEME_KEY = 'grails_theme_v2';
-  let durCache = {};
-  try { durCache = JSON.parse(localStorage.getItem(DUR_KEY)||'{}'); } catch(e){}
-  songs.forEach(s => { if (s.youtubeId && durCache[s.youtubeId]) s.duration = durCache[s.youtubeId]; });
-  const saveDurCache = () => { try { localStorage.setItem(DUR_KEY, JSON.stringify(durCache)); } catch(e){} };
+  const LIKES_KEY = 'charlie_likes_v1';
+  const THEME_KEY = 'charlie_theme_v1';
 
   let likes = new Set();
   try { JSON.parse(localStorage.getItem(LIKES_KEY)||'[]').forEach(id => likes.add(id)); } catch(e){}
   const saveLikes = () => { try { localStorage.setItem(LIKES_KEY, JSON.stringify([...likes])); } catch(e){} };
-  const isLiked  = s => s.youtubeId && likes.has(s.youtubeId);
+  const isLiked = s => s.youtubeId && likes.has(s.youtubeId);
 
-  // ─── STATE ───
   let curIdx = -1, curId = null, isPlaying = false, isLoading = false;
-  let showLikedOnly = false, searchQ = '', shuffleOn = false;
+  let showLikedOnly = false, searchQ = '', currentSort = 'title', shuffleOn = false;
   let ytP = null, ytReady = false, timer = null, isScrubbing = false;
-  const WF_BARS = 40;
 
-  // ─── THEME ───
+  // THEME
   let theme = localStorage.getItem(THEME_KEY) || 'dark';
   document.documentElement.setAttribute('data-theme', theme);
-  const syncThemeIcons = () => {
-    const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-    const sunSVG  = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
-    const ico = theme === 'light' ? moonSVG : sunSVG;
-    $('themeIcon').innerHTML = ico;
-    $('themeBtnIcon').innerHTML = ico;
-  };
-  syncThemeIcons();
   const toggleTheme = () => {
     theme = theme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem(THEME_KEY, theme);
-    syncThemeIcons();
   };
   $('themeBtn').addEventListener('click', toggleTheme);
-  $('railThemeBtn').addEventListener('click', toggleTheme);
 
-  // ─── MODALS ───
-  const openAbout = () => $('aboutModal').classList.add('open');
-  const closeAbout = () => $('aboutModal').classList.remove('open');
-  $('aboutBtn').addEventListener('click', openAbout);
-  $('railAboutBtn').addEventListener('click', openAbout);
-  $('closeAboutBtn').addEventListener('click', closeAbout);
-  $('aboutModal').addEventListener('click', e => { if (e.target === $('aboutModal')) closeAbout(); });
+  // ABOUT MODAL
+  $('aboutBtn').addEventListener('click', () => $('aboutModal').classList.add('open'));
+  $('closeAboutBtn').addEventListener('click', () => $('aboutModal').classList.remove('open'));
+  $('aboutModal').addEventListener('click', e => { if (e.target === $('aboutModal')) $('aboutModal').classList.remove('open'); });
 
-  // ─── WAVEFORM INIT ───
-  function buildWaveformBars() {
-    const container = $('waveformBars');
-    const heights = [40,65,90,55,80,100,45,70,85,60,75,50,95,65,40,80,55,90,70,45,85,60,100,50,75,40,90,65,55,80,70,45,95,60,85,50,75,40,65,90];
-    container.innerHTML = heights.map((h,i) =>
-      `<div class="wf-bar" data-i="${i}" style="height:${h}%"></div>`
-    ).join('');
-    container.addEventListener('click', scrubFromWaveform);
-  }
-  buildWaveformBars();
-
-  function updateWaveform(progress) {
-    const bars = $('waveformBars').querySelectorAll('.wf-bar');
-    const played = Math.floor(progress * WF_BARS);
-    bars.forEach((bar, i) => {
-      bar.classList.remove('played','current');
-      if (i < played) bar.classList.add('played');
-      else if (i === played) bar.classList.add('current');
-    });
-  }
-
-  function scrubFromWaveform(e) {
-    if (curIdx < 0 || !ytReady || !ytP) return;
-    const rect = $('waveformBars').getBoundingClientRect();
-    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    const d = ytP.getDuration() || 0;
-    if (d > 0) { ytP.seekTo(pct * d, true); updateWaveform(pct); $('wfCur').textContent = fmt(pct * d); }
-  }
-
-  // ─── VINYL LABEL COLOR ───
-  function setVinylColor(song) {
-    $('vinylLabel').style.background = song?.palette?.from
-      ? `linear-gradient(135deg, ${song.palette.from} 0%, ${song.palette.to} 100%)`
-      : 'linear-gradient(135deg, #e06c75, #be5046)';
-  }
-
-  // ─── FILTERS ───
+  // FILTERS & SORT
   function applyFilters() {
     let list = [...songs];
     if (showLikedOnly) list = list.filter(isLiked);
     if (searchQ) {
       const q = searchQ.toLowerCase();
-      list = list.filter(s => s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q));
+      list = list.filter(s => s.title.toLowerCase().includes(q));
     }
-    list.sort((a,b) => a.title.localeCompare(b.title));
+
+    if (currentSort === 'title') list.sort((a,b) => a.title.localeCompare(b.title));
+    else if (currentSort === 'title-desc') list.sort((a,b) => b.title.localeCompare(a.title));
+    else if (currentSort === 'duration') list.sort((a,b) => a.duration - b.duration);
+
     displayList = list;
     if (curId) curIdx = displayList.findIndex(s => s.youtubeId === curId);
     else curIdx = -1;
-    renderList();
-    $('trackCountBadge').textContent = `(${list.length})`;
+
+    renderTable();
   }
 
   $('searchInput').addEventListener('input', e => { searchQ = e.target.value.trim(); applyFilters(); });
+  $('tabAll').addEventListener('click', () => { showLikedOnly = false; $('tabAll').classList.add('active'); $('tabLiked').classList.remove('active'); applyFilters(); });
+  $('tabLiked').addEventListener('click', () => { showLikedOnly = true; $('tabLiked').classList.add('active'); $('tabAll').classList.remove('active'); applyFilters(); });
+  $('sortSelect').addEventListener('change', e => { currentSort = e.target.value; applyFilters(); });
 
-  $('tabAll').addEventListener('click', () => {
-    showLikedOnly = false;
-    $('tabAll').classList.add('active'); $('tabLiked').classList.remove('active');
-    $('filterAll').classList.add('active'); $('filterLiked').classList.remove('active');
-    applyFilters();
-  });
-  $('tabLiked').addEventListener('click', () => {
-    showLikedOnly = true;
-    $('tabLiked').classList.add('active'); $('tabAll').classList.remove('active');
-    $('filterLiked').classList.add('active'); $('filterAll').classList.remove('active');
-    applyFilters();
-  });
-  $('filterAll').addEventListener('click', () => $('tabAll').click());
-  $('filterLiked').addEventListener('click', () => $('tabLiked').click());
-
-  // ─── RENDER TRACK LIST ───
-  function renderList() {
-    const tl = $('trackList');
+  // RENDER TABLE
+  function renderTable() {
+    const table = $('trackTable');
     if (!displayList.length) {
-      tl.innerHTML = `<div style="padding:40px 20px;text-align:center;color:var(--text-3);font-size:13px;font-weight:500;">No tracks found</div>`;
+      table.innerHTML = `<div style="padding:40px;text-align:center;color:var(--text-muted);">No unreleased tracks found</div>`;
       return;
     }
-    tl.innerHTML = displayList.map((s, vi) => {
-      const isAct  = vi === curIdx;
-      const isPlay = isAct && isPlaying;
-      const liked  = isLiked(s);
-      const dur    = s.duration > 3 ? fmt(s.duration) : '--:--';
-      const thumb  = `https://img.youtube.com/vi/${s.youtubeId}/default.jpg`;
+    table.innerHTML = displayList.map((s, vi) => {
+      const isAct = vi === curIdx;
+      const liked = isLiked(s);
+      const thumb = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
       return `
-        <div class="playlist-row${isAct?' active':''}${isPlay?' playing':''}" data-vi="${vi}">
-          <div class="pl-num">${vi+1}</div>
-          <div class="pl-eq">
-            <div class="pl-eq-bar"></div><div class="pl-eq-bar"></div><div class="pl-eq-bar"></div>
+        <div class="track-row${isAct?' active':''}" data-vi="${vi}">
+          <div class="t-index">
+            <span class="t-num-span">${vi+1}</span>
+            <svg class="play-icon-hover" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
           </div>
-          <div class="pl-thumb">
-            <img src="${thumb}" alt="" loading="lazy"
-              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" >
-            <div class="pl-thumb-letter" style="display:none">${esc(s.letter||s.title[0])}</div>
+          <div class="t-main">
+            <div class="t-thumb"><img src="${thumb}" alt="" loading="lazy"></div>
+            <div class="t-details">
+              <div class="t-title">${esc(s.title)}</div>
+              <div class="t-artist">${esc(s.artist)}</div>
+            </div>
           </div>
-          <div class="pl-body">
-            <div class="pl-name">${esc(s.title)}</div>
-            <div class="pl-meta">${esc(s.artist)} · Unreleased</div>
-          </div>
-          <div class="pl-right">
-            <button class="pl-like-btn${liked?' liked':''}" data-vi="${vi}" aria-label="Like">
-              <svg width="13" height="13" viewBox="0 0 24 24" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </button>
-            <div class="pl-dur">${dur}</div>
-            <button class="pl-play-btn" data-vi="${vi}" aria-label="Play">
-              ${isAct && isPlaying
-                ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'
-                : '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'
-              }
+          <div><span class="t-tag">Unreleased</span></div>
+          <div class="t-dur">${fmt(s.duration)}</div>
+          <div>
+            <button class="like-btn${liked?' liked':''}" data-vi="${vi}">
+              <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             </button>
           </div>
         </div>`;
     }).join('');
 
-    tl.querySelectorAll('.playlist-row').forEach(row => {
+    table.querySelectorAll('.track-row').forEach(row => {
       row.addEventListener('click', e => {
         const vi = +row.dataset.vi;
-        const likeBtn = e.target.closest('.pl-like-btn');
-        const playBtn = e.target.closest('.pl-play-btn');
+        const likeBtn = e.target.closest('.like-btn');
         if (likeBtn) { e.stopPropagation(); toggleLike(vi); return; }
-        if (vi === curIdx) togglePlay();
-        else playTrack(vi);
+        if (vi === curIdx) togglePlay(); else playTrack(vi);
       });
     });
   }
 
-  // ─── LIKE ───
   function toggleLike(vi) {
     const s = displayList[vi];
     if (!s?.youtubeId) return;
@@ -1248,19 +789,23 @@ const SONGS = [
     else likes.add(s.youtubeId);
     saveLikes();
     if (showLikedOnly) applyFilters();
-    else {
-      const row = $('trackList').querySelector(`[data-vi="${vi}"]`);
-      const btn = row?.querySelector('.pl-like-btn');
-      if (btn) btn.classList.toggle('liked', isLiked(s));
+    else renderTable();
+    updateDockLikeState();
+  }
+
+  function updateDockLikeState() {
+    const btn = $('dockLikeBtn');
+    if (curIdx >= 0 && displayList[curIdx]) {
+      const liked = isLiked(displayList[curIdx]);
+      btn.classList.toggle('liked', liked);
+      btn.querySelector('svg').setAttribute('fill', liked ? 'var(--heart)' : 'none');
     }
-    updateDeckLikeCount();
   }
 
-  function updateDeckLikeCount() {
-    $('deckLikeCount').textContent = `${likes.size} Liked`;
-  }
+  $('dockLikeBtn').addEventListener('click', () => {
+    if (curIdx >= 0) toggleLike(curIdx);
+  });
 
-  // ─── PLAY TRACK ───
   function playTrack(vi) {
     if (vi < 0 || vi >= displayList.length) return;
     curIdx = vi;
@@ -1268,17 +813,16 @@ const SONGS = [
     curId = s.youtubeId;
     isPlaying = true;
 
-    // Deck UI
-    $('deckTitle').textContent = s.title;
-    $('deckTag').textContent = s.artist;
-    $('wfCur').textContent = '0:00';
-    $('wfTot').textContent = s.duration > 3 ? fmt(s.duration) : '--:--';
-    updateWaveform(0);
-    setVinylColor(s);
-    updateDeckLikeCount();
+    $('dockTitle').textContent = s.title;
+    $('dockArtist').textContent = s.artist;
+    $('dockArt').src = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
+    $('timeTot').textContent = fmt(s.duration);
+    $('timeCur').textContent = '0:00';
+    $('progressFill').style.width = '0%';
 
-    setLoadingState(true);
-    renderList();
+    updateDockLikeState();
+    renderTable();
+    updatePlayerState(true);
 
     if (s.youtubeId && ytReady && ytP) ytP.loadVideoById(s.youtubeId);
   }
@@ -1299,51 +843,33 @@ const SONGS = [
     playTrack((curIdx - 1 + displayList.length) % displayList.length);
   }
 
-  // ─── PLAYER STATE ───
-  function setLoadingState(on) {
-    isLoading = on;
-    $('iconPlay').style.display    = (on || isPlaying)  ? 'none' : '';
-    $('iconPause').style.display   = (!on && isPlaying) ? ''     : 'none';
-    $('iconLoading').style.display = on ? '' : 'none';
-  }
-
   function updatePlayerState(playing) {
     isPlaying = playing;
-    isLoading = false;
-    $('iconPlay').style.display    = playing ? 'none' : '';
-    $('iconPause').style.display   = playing ? ''     : 'none';
-    $('iconLoading').style.display = 'none';
-    $('turntableChassis').classList.toggle('playing', playing);
+    $('iconPlay').style.display  = playing ? 'none' : '';
+    $('iconPause').style.display = playing ? ''     : 'none';
     playing ? startTimer() : stopTimer();
-    // update rows without full re-render
-    $('trackList').querySelectorAll('.playlist-row').forEach(row => {
-      const vi = +row.dataset.vi;
-      const isAct = vi === curIdx;
-      row.classList.toggle('active', isAct);
-      row.classList.toggle('playing', isAct && playing);
-      const playBtn = row.querySelector('.pl-play-btn');
-      if (playBtn && isAct) {
-        playBtn.innerHTML = playing
-          ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'
-          : '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
-      }
-    });
   }
 
-  // ─── TIMER ───
   function startTimer() {
     stopTimer();
     timer = setInterval(() => {
       if (!ytReady || !ytP?.getCurrentTime || isScrubbing) return;
       const c = ytP.getCurrentTime() || 0;
       const d = ytP.getDuration() || 0;
-      $('wfCur').textContent = fmt(c);
-      if (d > 0) updateWaveform(c / d);
+      $('timeCur').textContent = fmt(c);
+      if (d > 0) $('progressFill').style.width = `${(c / d) * 100}%`;
     }, 250);
   }
   function stopTimer() { clearInterval(timer); }
 
-  // ─── CONTROLS ───
+  $('progressTrack').addEventListener('click', e => {
+    if (curIdx < 0 || !ytReady || !ytP) return;
+    const rect = $('progressTrack').getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const d = ytP.getDuration() || 0;
+    if (d > 0) { ytP.seekTo(pct * d, true); $('timeCur').textContent = fmt(pct * d); $('progressFill').style.width = `${pct * 100}%`; }
+  });
+
   $('btnPlay').addEventListener('click', togglePlay);
   $('btnNext').addEventListener('click', next);
   $('btnPrev').addEventListener('click', prev);
@@ -1351,56 +877,46 @@ const SONGS = [
     shuffleOn = !shuffleOn;
     $('btnShuffle').classList.toggle('active', shuffleOn);
   });
-  $('btnExpand').addEventListener('click', () => {
-    $('rightStage').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-  $('turntableChassis').addEventListener('click', togglePlay);
 
-  // ─── KEYBOARD ───
+  $('heroPlayBtn').addEventListener('click', () => playTrack(0));
+  $('heroShuffleBtn').addEventListener('click', () => { shuffleOn = true; $('btnShuffle').classList.add('active'); next(); });
+
+  const volRange = $('volRange');
+  volRange.addEventListener('input', () => {
+    if (ytReady && ytP) ytP.setVolume(+volRange.value);
+  });
+
+  // KEYBOARD CONTROLS
   document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT') return;
     if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
     if (e.code === 'ArrowRight') { e.preventDefault(); next(); }
-    if (e.code === 'ArrowLeft')  { e.preventDefault(); prev(); }
+    if (e.code === 'ArrowLeft') { e.preventDefault(); prev(); }
   });
 
-  // ─── YOUTUBE API ───
+  // YOUTUBE API
   window.onYouTubeIframeAPIReady = function() {
     ytP = new YT.Player('yt-player', {
       height:'1', width:'1',
       videoId: songs[0]?.youtubeId || '',
       playerVars: { playsinline:1, controls:0, rel:0, disablekb:1 },
       events: {
-        onReady() { ytReady = true; ytP.setVolume(85); },
+        onReady() { ytReady = true; ytP.setVolume(+volRange.value); },
         onStateChange(ev) {
           const S = YT.PlayerState;
           if (ev.data === S.PLAYING) {
-            setLoadingState(false);
             updatePlayerState(true);
-            const real = ytP.getDuration?.();
-            if (real > 3 && curIdx >= 0 && displayList[curIdx]) {
-              const s = displayList[curIdx];
-              if (!s.duration || s.duration <= 3) {
-                s.duration = real;
-                $('wfTot').textContent = fmt(real);
-                if (s.youtubeId) { durCache[s.youtubeId] = real; saveDurCache(); }
-              }
-            }
-          } else if (ev.data === S.BUFFERING) {
-            setLoadingState(true);
           } else if (ev.data === S.PAUSED) {
-            setLoadingState(false); updatePlayerState(false);
+            updatePlayerState(false);
           } else if (ev.data === S.ENDED) {
-            setLoadingState(false); updatePlayerState(false); next();
+            updatePlayerState(false); next();
           }
         }
       }
     });
   };
 
-  // ─── INIT ───
   applyFilters();
-  updateDeckLikeCount();
 
 })();
 </script>
