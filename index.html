@@ -902,105 +902,14 @@
       </div>
     </div>
 
-    <!-- RIGHT STAGE: Categories + Track List -->
+    <!-- RIGHT STAGE: Track List & Vault Content -->
     <div class="right-stage" id="rightStage">
-
-      <!-- ARTIST VAULTS SECTION -->
-      <div>
-        <div class="section-head">
-          <div class="section-title">Artist Vaults Directory</div>
-          <div class="cat-pills">
-            <button class="cat-pill active" data-cat="all">All Vaults</button>
-            <button class="cat-pill" data-cat="acoustic">Acoustic</button>
-            <button class="cat-pill" data-cat="demos">Demos</button>
-            <button class="cat-pill" data-cat="scrapped">Scrapped Albums</button>
-          </div>
-        </div>
-
-        <div class="vault-cards">
-          <!-- Charlie Puth -->
-          <div class="vault-card live" id="cardCP">
-            <div class="vault-card-art" style="background: #1a1212;">
-              <div class="vault-aura" style="background: #e06c75;"></div>
-              <div class="vault-initials">CP</div>
-              <div class="vault-play-overlay">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-            </div>
-            <div class="vault-card-body">
-              <div class="vault-badge live">LIVE VAULT</div>
-              <div class="vault-name">Charlie Puth</div>
-              <div class="vault-sub">99 Unreleased Demos &amp; Takes</div>
-            </div>
-          </div>
-          <!-- Frank Ocean -->
-          <div class="vault-card" onclick="alert('Frank Ocean vault — coming soon')">
-            <div class="vault-card-art" style="background: #101520;">
-              <div class="vault-aura" style="background: #3b82f6;"></div>
-              <div class="vault-initials">FO</div>
-            </div>
-            <div class="vault-card-body">
-              <div class="vault-badge soon">COMING SOON</div>
-              <div class="vault-name">Frank Ocean</div>
-              <div class="vault-sub">Look at Us We're in Love</div>
-            </div>
-          </div>
-          <!-- Kanye -->
-          <div class="vault-card" onclick="alert('Ye vault — coming soon')">
-            <div class="vault-card-art" style="background: #1a1500;">
-              <div class="vault-aura" style="background: #eab308;"></div>
-              <div class="vault-initials">YE</div>
-            </div>
-            <div class="vault-card-body">
-              <div class="vault-badge soon">COMING SOON</div>
-              <div class="vault-name">Kanye West (Ye)</div>
-              <div class="vault-sub">Yandhi &amp; Outtakes</div>
-            </div>
-          </div>
-          <!-- Travis Scott -->
-          <div class="vault-card" onclick="alert('Travis Scott vault — coming soon')">
-            <div class="vault-card-art" style="background: #130a1a;">
-              <div class="vault-aura" style="background: #a855f7;"></div>
-              <div class="vault-initials">TS</div>
-            </div>
-            <div class="vault-card-body">
-              <div class="vault-badge soon">COMING SOON</div>
-              <div class="vault-name">Travis Scott</div>
-              <div class="vault-sub">Dystopia Sessions</div>
-            </div>
-          </div>
-          <!-- Drake -->
-          <div class="vault-card" onclick="alert('Drake vault — coming soon')">
-            <div class="vault-card-art" style="background: #001518;">
-              <div class="vault-aura" style="background: #06b6d4;"></div>
-              <div class="vault-initials">6IX</div>
-            </div>
-            <div class="vault-card-body">
-              <div class="vault-badge soon">COMING SOON</div>
-              <div class="vault-name">Drake</div>
-              <div class="vault-sub">Care Package 2</div>
-            </div>
-          </div>
-          <!-- Juice WRLD -->
-          <div class="vault-card" onclick="alert('Juice WRLD vault — coming soon')">
-            <div class="vault-card-art" style="background: #1a0a12;">
-              <div class="vault-aura" style="background: #ec4899;"></div>
-              <div class="vault-initials">JW</div>
-            </div>
-            <div class="vault-card-body">
-              <div class="vault-badge soon">COMING SOON</div>
-              <div class="vault-name">Juice WRLD</div>
-              <div class="vault-sub">The Abyss &amp; Vault Tapes</div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- TRACK LIST SECTION -->
       <div class="playlist-section">
         <div class="section-head">
           <div>
-            <div class="section-title">Charlie Puth — Vault <span id="trackCountBadge" style="font-size:14px;font-weight:500;color:var(--text-3)">(99)</span></div>
+            <div class="section-title">Charlie's Vault <span id="trackCountBadge" style="font-size:14px;font-weight:500;color:var(--text-3)">(99)</span></div>
           </div>
           <div class="filter-group">
             <button class="filter-pill active" id="filterAll">All</button>
@@ -1446,11 +1355,6 @@ const SONGS = [
     $('rightStage').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
   $('turntableChassis').addEventListener('click', togglePlay);
-
-  // ─── CARD CP ───
-  $('cardCP').addEventListener('click', () => {
-    if (displayList.length) playTrack(0);
-  });
 
   // ─── KEYBOARD ───
   document.addEventListener('keydown', e => {
