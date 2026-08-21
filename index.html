@@ -7,17 +7,18 @@
   <meta name="description" content="GRAILS — Unreleased Charlie Puth Music Archive & Vinyl Turntable Deck">
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'unsafe-inline' https://www.youtube.com https://s.ytimg.com;
+    script-src 'unsafe-inline' https://www.youtube.com https://s.ytimg.com https://unpkg.com;
     style-src 'unsafe-inline' https://fonts.googleapis.com;
     font-src https://fonts.gstatic.com;
     frame-src https://www.youtube.com https://www.youtube-nocookie.com;
-    img-src 'self' https://img.youtube.com https://i.ytimg.com data:;
+    img-src 'self' https://img.youtube.com https://i.ytimg.com https://images.unsplash.com data:;
     connect-src 'self';
     object-src 'none';
   ">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Silkscreen:wght@400;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
     /* ══════════════════════════════════════
@@ -80,18 +81,17 @@
     }
 
     /* ══════════════════════════════════════
-       TOP HEADER BAR (RESPONSIVE & GREAT)
+       TOP HEADER BAR (NO BORDER, CLEAN & RESPONSIVE)
     ══════════════════════════════════════ */
     .topbar {
       min-height: 64px;
-      padding: 12px 28px;
+      padding: 14px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 20px;
-      background: rgba(28, 28, 30, 0.95);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: #1c1c1e;
+      border-bottom: none;
       flex-shrink: 0;
       z-index: 50;
       transition: all 0.2s ease;
@@ -1109,6 +1109,7 @@ const SONGS = [
   };
 
   renderPlaylists();
+  if (window.lucide) { try { lucide.createIcons(); } catch(e){} }
 
 })();
 </script>
