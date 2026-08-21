@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MUSIC2D — Unreleased Music Archive</title>
-  <meta name="description" content="MUSIC2D — Unreleased Music Archive & Vinyl Turntable Deck">
+  <title>GRAILS — Unreleased Music Archive</title>
+  <meta name="description" content="GRAILS — Unreleased Charlie Puth Music Archive & Vinyl Turntable Deck">
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'unsafe-inline' https://www.youtube.com https://s.ytimg.com;
@@ -17,7 +17,7 @@
   ">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Silkscreen:wght@400;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     /* ══════════════════════════════════════
@@ -48,11 +48,16 @@
     html, body {
       width: 100vw; height: 100vh;
       overflow: hidden;
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-family: 'Outfit', 'Space Grotesk', system-ui, sans-serif;
       background: #141416;
       color: var(--text);
       font-size: 14px;
       line-height: 1.5;
+    }
+
+    .brand-font {
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -0.03em;
     }
 
     .pixel-text {
@@ -75,49 +80,119 @@
     }
 
     /* ══════════════════════════════════════
-       TOP HEADER BAR
+       TOP HEADER BAR (RESPONSIVE & GREAT)
     ══════════════════════════════════════ */
     .topbar {
-      height: 64px;
-      padding: 0 28px;
+      min-height: 64px;
+      padding: 12px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
-      background: #1c1c1e;
+      gap: 20px;
+      background: rgba(28, 28, 30, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
       flex-shrink: 0;
-      z-index: 20;
+      z-index: 50;
+      transition: all 0.2s ease;
     }
 
+    .brand-group {
+      display: flex; align-items: center; gap: 10px;
+      flex-shrink: 0;
+    }
     .brand-logo {
-      font-size: 22px; font-weight: 700;
-      color: #fff; letter-spacing: -0.02em;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px; font-weight: 800;
+      color: #ffffff; letter-spacing: -0.03em;
       display: flex; align-items: center; gap: 8px;
+    }
+    .brand-pill {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.1); color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.15);
     }
 
     .search-box {
-      flex: 0 1 420px;
+      flex: 1 1 360px;
+      max-width: 480px;
       position: relative;
-    }
-    .search-box svg {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: #8e8e93; pointer-events: none;
-    }
-    .search-input {
-      width: 100%; height: 36px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: var(--radius-full);
-      padding: 0 16px 0 40px;
-      font-size: 13px; font-weight: 500;
-      color: #fff; outline: none;
       transition: all 0.2s ease;
     }
+    .search-box svg.search-icn {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: #8e8e93; pointer-events: none; transition: color 0.2s;
+    }
+    .search-input {
+      width: 100%; height: 38px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-full);
+      padding: 0 36px 0 40px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 500;
+      color: #ffffff; outline: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
     .search-input::placeholder { color: #8e8e93; }
-    .search-input:focus { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.09); }
+    .search-input:focus {
+      border-color: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.1);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.08);
+    }
+    .search-box:focus-within svg.search-icn { color: #ffffff; }
+
+    .search-clear-btn {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(255,255,255,0.2); color: #fff;
+      display: none; align-items: center; justify-content: center;
+      font-size: 12px; cursor: pointer; transition: background 0.15s;
+    }
+    .search-clear-btn:hover { background: rgba(255,255,255,0.35); }
 
     .topbar-icons {
-      display: flex; align-items: center; gap: 16px;
+      display: flex; align-items: center; gap: 12px;
+      flex-shrink: 0;
+    }
+    .top-icn-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      color: #8e8e93; transition: all 0.2s ease;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .top-icn-btn:hover { color: #ffffff; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
+    .user-avatar-badge {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #ffffff, #a1a1aa);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px; font-weight: 800; color: #000000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* RESPONSIVE MEDIA QUERIES */
+    @media (max-width: 768px) {
+      .topbar {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+      }
+      .brand-group { order: 1; }
+      .topbar-icons { order: 2; gap: 8px; }
+      .search-box {
+        order: 3; flex: 1 1 100%; max-width: 100%; margin-top: 4px;
+      }
+      .body-shell {
+        flex-direction: column;
+      }
+      .main-stage {
+        grid-template-columns: 1fr;
+        padding: 16px; gap: 24px;
+      }
     }
     .top-icn-btn {
       color: #8e8e93; transition: color 0.15s;
@@ -506,23 +581,26 @@
 
 <div id="app">
 
-  <!-- TOP HEADER BAR -->
+  <!-- TOP HEADER BAR (RESPONSIVE & GREAT) -->
   <header class="topbar">
-    <div class="brand-logo pixel-text">MUSIC2D</div>
+    <div class="brand-group">
+      <div class="brand-logo brand-font">GRAILS</div>
+      <div class="brand-pill">UNRELEASED</div>
+    </div>
 
     <div class="search-box">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="searchInput" class="search-input" placeholder="Search for songs, artists..." autocomplete="off">
+      <svg class="search-icn" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search unreleased grails, demos..." autocomplete="off">
     </div>
 
     <div class="topbar-icons">
-      <button class="top-icn-btn" id="aboutBtn" title="About MUSIC2D">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <button class="top-icn-btn" id="aboutBtn" title="About GRAILS">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       </button>
-      <button class="top-icn-btn" title="Notifications">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <button class="top-icn-btn" id="themeBtn" title="Toggle Theme">
+        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
       </button>
-      <div class="user-avatar-badge pixel-text">CP</div>
+      <div class="user-avatar-badge brand-font">CP</div>
     </div>
   </header>
 
