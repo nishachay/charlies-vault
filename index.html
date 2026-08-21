@@ -84,8 +84,8 @@
        TOP HEADER BAR (NO BORDER, CLEAN & RESPONSIVE)
     ══════════════════════════════════════ */
     .topbar {
-      min-height: 64px;
-      padding: 14px 28px;
+      min-height: 56px;
+      padding: 12px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -98,81 +98,81 @@
     }
 
     .brand-group {
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center; gap: 8px;
       flex-shrink: 0;
     }
     .brand-logo {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 22px; font-weight: 800;
+      font-size: 20px; font-weight: 800;
       color: #ffffff; letter-spacing: -0.03em;
-      display: flex; align-items: center; gap: 8px;
     }
     .brand-pill {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 9px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      padding: 3px 8px; border-radius: var(--radius-full);
-      background: rgba(255,255,255,0.1); color: #ffffff;
-      border: 1px solid rgba(255,255,255,0.15);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 2px 7px; border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.08); color: #9ca3af;
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
     .search-box {
       flex: 1 1 360px;
-      max-width: 480px;
+      max-width: 440px;
       position: relative;
       transition: all 0.2s ease;
     }
-    .search-box svg.search-icn {
+    .search-box i[data-lucide="search"] {
+      width: 15px; height: 15px;
+      stroke-width: 1.75px;
       position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: #8e8e93; pointer-events: none; transition: color 0.2s;
+      color: #9ca3af; pointer-events: none; transition: color 0.2s;
     }
     .search-input {
-      width: 100%; height: 38px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
+      width: 100%; height: 36px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: var(--radius-full);
-      padding: 0 36px 0 40px;
+      padding: 0 32px 0 38px;
       font-family: 'Outfit', sans-serif;
       font-size: 13px; font-weight: 500;
       color: #ffffff; outline: none;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .search-input::placeholder { color: #8e8e93; }
+    .search-input::placeholder { color: #9ca3af; }
     .search-input:focus {
-      border-color: rgba(255,255,255,0.4);
-      background: rgba(255,255,255,0.1);
-      box-shadow: 0 0 0 3px rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
     }
-    .search-box:focus-within svg.search-icn { color: #ffffff; }
-
-    .search-clear-btn {
-      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-      width: 20px; height: 20px; border-radius: 50%;
-      background: rgba(255,255,255,0.2); color: #fff;
-      display: none; align-items: center; justify-content: center;
-      font-size: 12px; cursor: pointer; transition: background 0.15s;
-    }
-    .search-clear-btn:hover { background: rgba(255,255,255,0.35); }
 
     .topbar-icons {
-      display: flex; align-items: center; gap: 12px;
+      display: flex; align-items: center; gap: 4px;
       flex-shrink: 0;
     }
     .top-icn-btn {
-      width: 36px; height: 36px; border-radius: 50%;
-      color: #8e8e93; transition: all 0.2s ease;
+      width: 34px; height: 34px; border-radius: 8px;
+      color: #9ca3af; transition: all 0.15s ease;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: transparent; border: none;
     }
-    .top-icn-btn:hover { color: #ffffff; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
+    .top-icn-btn:hover { color: #ffffff; background: rgba(255,255,255,0.06); }
+    
     .user-avatar-badge {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: linear-gradient(135deg, #ffffff, #a1a1aa);
+      width: 28px; height: 28px; border-radius: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.15);
       display: flex; align-items: center; justify-content: center;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 12px; font-weight: 800; color: #000000;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      font-size: 11px; font-weight: 800; color: #ffffff;
+      margin-left: 6px;
+    }
+
+    /* LUCIDE ICON SYSTEM STYLING */
+    i[data-lucide] {
+      width: 18px; height: 18px;
+      stroke-width: 1.75px;
+      display: inline-block;
+      vertical-align: middle;
     }
 
     /* RESPONSIVE MEDIA QUERIES */
@@ -182,7 +182,7 @@
         flex-wrap: wrap;
       }
       .brand-group { order: 1; }
-      .topbar-icons { order: 2; gap: 8px; }
+      .topbar-icons { order: 2; gap: 4px; }
       .search-box {
         order: 3; flex: 1 1 100%; max-width: 100%; margin-top: 4px;
       }
@@ -192,18 +192,6 @@
       .main-stage {
         grid-template-columns: 1fr;
         padding: 16px; gap: 24px;
-      }
-    }
-    .top-icn-btn {
-      color: #8e8e93; transition: color 0.15s;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .top-icn-btn:hover { color: #fff; }
-    .user-avatar-badge {
-      width: 28px; height: 28px; border-radius: 6px;
-      background: linear-gradient(135deg, #a855f7, #3b82f6);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 800; color: #fff;
     }
 
     /* ══════════════════════════════════════
