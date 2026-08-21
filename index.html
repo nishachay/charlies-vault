@@ -78,6 +78,7 @@
       width: 100vw; height: 100vh;
       background: #1c1c1e;
       overflow: hidden;
+      position: relative;
     }
 
     /* ══════════════════════════════════════
@@ -143,6 +144,18 @@
     }
     .top-icn-btn:hover { color: #ffffff; background: rgba(255,255,255,0.06); }
     
+    .now-playing-toggle-btn {
+      display: flex; align-items: center; gap: 6px;
+      height: 32px; padding: 0 12px; border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      color: #ffffff; font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px; font-weight: 700; cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .now-playing-toggle-btn:hover {
+      background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2);
+    }
+
     .user-avatar-badge {
       width: 28px; height: 28px; border-radius: 8px;
       background: rgba(255,255,255,0.12);
@@ -150,7 +163,7 @@
       display: flex; align-items: center; justify-content: center;
       font-family: 'Space Grotesk', sans-serif;
       font-size: 11px; font-weight: 800; color: #ffffff;
-      margin-left: 6px;
+      margin-left: 4px;
     }
 
     /* LUCIDE ICON SYSTEM STYLING */
@@ -169,36 +182,16 @@
       stroke-width: 1.75px;
     }
 
-    /* RESPONSIVE MEDIA QUERIES */
-    @media (max-width: 768px) {
-      .topbar {
-        padding: 12px 16px;
-        flex-wrap: wrap;
-      }
-      .brand-group { order: 1; }
-      .topbar-icons { order: 2; gap: 4px; }
-      .search-box {
-        order: 3; flex: 1 1 100%; max-width: 100%; margin-top: 4px;
-      }
-      .body-shell {
-        flex-direction: column;
-      }
-      .main-stage {
-        grid-template-columns: 1fr;
-        padding: 16px; gap: 24px;
-      }
-    }
-
     /* ══════════════════════════════════════
-       MAIN BODY (RAIL + 2-COLUMN STAGE)
+       MAIN BODY (RAIL + DISCOVERY FULL WIDTH)
     ══════════════════════════════════════ */
     .body-shell {
       flex: 1; min-height: 0;
       display: flex; flex-direction: row;
-      overflow: hidden;
+      overflow: hidden; position: relative;
     }
 
-    /* ─── FAR LEFT ICON RAIL (MATCHING HEADER DESIGN SYSTEM) ─── */
+    /* ─── FAR LEFT ICON RAIL ─── */
     .icon-rail {
       width: 64px;
       height: 100%;
@@ -206,6 +199,7 @@
       display: flex; flex-direction: column; align-items: center;
       padding: 16px 0; gap: 12px;
       background: #1c1c1e;
+      z-index: 10;
     }
     .rail-btn {
       width: 34px; height: 34px; border-radius: 8px;
@@ -222,26 +216,67 @@
       background: rgba(255,255,255,0.12);
     }
 
-    /* ─── 2-COLUMN STAGE CANVAS (DISCOVERY CENTER, VINYL PLAYER RIGHT) ─── */
+    /* ─── MAIN STAGE CANVAS (FULL DISCOVERY FOCUS) ─── */
     .main-stage {
       flex: 1; min-width: 0;
-      display: grid;
-      grid-template-columns: 1fr 420px;
-      gap: 36px;
-      padding: 16px 32px 36px 20px;
+      padding: 24px 36px 40px;
       overflow-y: auto;
-      align-items: start;
     }
 
     /* ══════════════════════════════════════
-       LEFT STAGE: TURNTABLE PLAYER DECK
+       NOW PLAYING RIGHT DRAWER (APPLE MUSIC / SPOTIFY STYLE)
+    ══════════════════════════════════════ */
+    .now-playing-drawer {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 420px;
+      background: rgba(24, 24, 27, 0.96);
+      backdrop-filter: blur(24px);
+      border-left: 1px solid rgba(255,255,255,0.08);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 24px 28px;
+      gap: 20px;
+      overflow-y: auto;
+      box-shadow: -10px 0 40px rgba(0,0,0,0.6);
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .now-playing-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .drawer-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px; font-weight: 800;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: #ffffff;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .drawer-close-btn {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #9ca3af; background: rgba(255,255,255,0.05);
+      transition: all 0.15s; border: none; cursor: pointer;
+    }
+    .drawer-close-btn:hover {
+      color: #ffffff; background: rgba(255,255,255,0.12);
+    }
+
+    /* ══════════════════════════════════════
+       METALLIC TURNTABLE DECK IN DRAWER
     ══════════════════════════════════════ */
     .player-stage {
       display: flex; flex-direction: column; gap: 20px;
       width: 100%;
     }
 
-    /* METALLIC TURNTABLE CHASSIS (REFERENCE EXACT) */
     .turntable-chassis {
       width: 100%;
       aspect-ratio: 1.05;
@@ -258,7 +293,6 @@
       cursor: pointer;
     }
 
-    /* Screws on corner */
     .screw {
       width: 10px; height: 10px; border-radius: 50%;
       background: linear-gradient(135deg, #e5e7eb, #9ca3af);
@@ -276,7 +310,6 @@
     .screw.bl { bottom: 12px; left: 12px; }
     .screw.br { bottom: 12px; right: 12px; }
 
-    /* Recessed Platter */
     .platter-well {
       position: absolute;
       top: 50%; left: 44%;
@@ -329,7 +362,6 @@
       background: #111; border: 2px solid #d1d5db; margin-top: 2px;
     }
 
-    /* Tonearm Assembly */
     .tonearm-assembly {
       position: absolute;
       top: 8%; right: 8%;
@@ -362,7 +394,6 @@
       width: 3px; height: 6px; background: #ef4444; border-radius: 1px;
     }
 
-    /* Chassis dials */
     .chassis-power {
       position: absolute; bottom: 16px; left: 16px;
       width: 16px; height: 16px; border-radius: 50%;
@@ -378,12 +409,11 @@
       width: 12px; height: 6px; background: #e5e7eb; border-radius: 2px; border: 1px solid #374151;
     }
 
-    /* ─── DECK METADATA & TITLE ─── */
     .deck-info-box {
       display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
     }
     .deck-title-text {
-      font-size: 28px; font-weight: 700; color: #fff;
+      font-size: 26px; font-weight: 700; color: #fff;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       line-height: 1.1;
     }
@@ -400,9 +430,7 @@
       font-family: 'Silkscreen', cursive, sans-serif;
       font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0;
     }
-    .deck-like-counter svg { color: #fff; fill: #fff; }
 
-    /* ─── WAVEFORM SCRUBBER ─── */
     .waveform-box {
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
       margin-top: 4px;
@@ -422,7 +450,6 @@
     }
     .wf-single-bar.active { background: #ffffff; }
 
-    /* ─── PLAYER CONTROLS BAR ─── */
     .player-controls-row {
       display: flex; align-items: center; justify-content: space-between;
       margin-top: 8px;
@@ -443,11 +470,11 @@
     .ctrl-main-play-btn:active { transform: scale(0.95); }
 
     /* ══════════════════════════════════════
-       RIGHT STAGE: CATEGORIES & PLAYLISTS
+       DISCOVERY STAGE & GRID
     ══════════════════════════════════════ */
     .discovery-stage {
       display: flex; flex-direction: column; gap: 28px;
-      width: 100%; min-width: 0;
+      width: 100%; max-width: 1200px; margin: 0 auto;
     }
 
     .section-pixel-title {
@@ -460,7 +487,6 @@
       text-decoration: underline; text-underline-offset: 4px; cursor: pointer;
     }
 
-    /* CATEGORY PILLS */
     .category-pills-row {
       display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;
     }
@@ -476,17 +502,16 @@
       background: #ffffff; color: #000000;
     }
 
-    /* CATEGORY CARDS GRID */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px; margin-top: 16px;
+      gap: 20px; margin-top: 16px;
     }
     .card-item {
       display: flex; flex-direction: column; gap: 8px; cursor: pointer;
     }
     .card-img-wrap {
-      width: 100%; aspect-ratio: 0.95;
+      width: 100%; aspect-ratio: 1;
       border-radius: 16px; overflow: hidden; background: #28282b;
       position: relative;
     }
@@ -495,14 +520,9 @@
       transition: filter 0.3s, transform 0.3s;
     }
     .card-item:hover .card-img-wrap img { filter: grayscale(0%); transform: scale(1.03); }
-    .card-item-title {
-      font-size: 13px; font-weight: 700; color: #fff;
-    }
-    .card-item-sub {
-      font-size: 10px; color: #8e8e93; margin-top: 1px;
-    }
+    .card-item-title { font-size: 14px; font-weight: 700; color: #fff; }
+    .card-item-sub { font-size: 11px; color: #8e8e93; margin-top: 1px; }
 
-    /* FAVORITE PLAYLISTS / TRACK ROWS */
     .playlists-list {
       display: flex; flex-direction: column; gap: 12px; margin-top: 14px;
     }
@@ -528,11 +548,8 @@
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .playlist-row-item.active .row-title { color: #ffffff; text-decoration: underline; }
-    .row-sub {
-      font-size: 12px; color: #8e8e93; margin-top: 2px;
-    }
+    .row-sub { font-size: 12px; color: #8e8e93; margin-top: 2px; }
 
-    /* Circular Play Button on Far Right */
     .row-play-circle {
       width: 42px; height: 42px; border-radius: 50%;
       border: 2px solid #ffffff;
@@ -571,7 +588,7 @@
 
 <div id="app">
 
-  <!-- TOP HEADER BAR (NO BORDER, CLEAN & RESPONSIVE) -->
+  <!-- TOP HEADER BAR -->
   <header class="topbar">
     <div class="brand-group">
       <div class="brand-logo brand-font">{ GRAILS }</div>
@@ -583,6 +600,10 @@
     </div>
 
     <div class="topbar-icons">
+      <button class="now-playing-toggle-btn" id="topNowPlayingBtn" title="Toggle Now Playing Drawer">
+        <i data-lucide="disc"></i>
+        <span>Now Playing</span>
+      </button>
       <button class="top-icn-btn" title="Mail / Feedback">
         <i data-lucide="mail"></i>
       </button>
@@ -599,10 +620,10 @@
     </div>
   </header>
 
-  <!-- MAIN BODY SHELL (RAIL + 2 COLUMNS) -->
+  <!-- MAIN BODY SHELL (RAIL + DISCOVERY FULL WIDTH) -->
   <div class="body-shell">
 
-    <!-- FAR LEFT ICON RAIL -->
+    <!-- FAR LEFT ICON RAIL (LOCKED) -->
     <nav class="icon-rail">
       <button class="rail-btn active" id="railHome" title="Home">
         <i data-lucide="home"></i>
@@ -613,7 +634,7 @@
       <button class="rail-btn" title="Music Note">
         <i data-lucide="music"></i>
       </button>
-      <button class="rail-btn" id="railVinyl" title="Vinyl Record">
+      <button class="rail-btn" id="railVinyl" title="Toggle Now Playing Vinyl Drawer">
         <i data-lucide="disc"></i>
       </button>
       <button class="rail-btn" title="Sliders/EQ">
@@ -624,10 +645,8 @@
       </button>
     </nav>
 
-    <!-- 2-COLUMN MAIN STAGE (DISCOVERY CENTER, VINYL PLAYER RIGHT) -->
+    <!-- CENTER MAIN STAGE (FULL DISCOVERY CANVAS) -->
     <main class="main-stage">
-
-      <!-- LEFT/CENTER COLUMN: DISCOVERY STAGE -->
       <section class="discovery-stage">
 
         <!-- TOP SECTION: MUSIC CATEGORIES -->
@@ -674,7 +693,7 @@
 
         <!-- BOTTOM SECTION: FAVORITE PLAYLISTS -->
         <div>
-          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
             <h2 class="section-pixel-title pixel-text">Favorite Playlists (<span id="playlistCount">99</span>)</h2>
           </div>
 
@@ -684,79 +703,86 @@
         </div>
 
       </section>
-
-      <!-- RIGHT COLUMN: METALLIC TURNTABLE PLAYER DECK -->
-      <section class="player-stage">
-
-        <!-- Metallic Silver Turntable Chassis -->
-        <div class="turntable-chassis" id="turntableChassis">
-          <div class="screw tl"></div>
-          <div class="screw tr"></div>
-          <div class="screw bl"></div>
-          <div class="screw br"></div>
-
-          <div class="platter-well">
-            <div class="vinyl-disc"></div>
-            <div class="vinyl-label-center" id="vinylLabel">
-              <span class="vinyl-label-text">33⅓ RPM</span>
-              <div class="vinyl-spindle"></div>
-            </div>
-          </div>
-
-          <div class="tonearm-assembly" id="tonearm">
-            <div class="arm-base"></div>
-            <div class="arm-rod"></div>
-            <div class="arm-headshell"></div>
-          </div>
-
-          <div class="chassis-power"></div>
-          <div class="chassis-slider"></div>
-        </div>
-
-        <!-- Track Title & Meta -->
-        <div class="deck-info-box">
-          <div>
-            <h1 class="deck-title-text pixel-text" id="deckTitle">1984</h1>
-            <div class="deck-tag-pill pixel-text" id="deckTag">Classic</div>
-          </div>
-          <button class="deck-like-counter" id="likeCounterBtn">
-            <i data-lucide="plus"></i>
-            <span id="likeCountNum">392</span>
-          </button>
-        </div>
-
-        <!-- Waveform Scrubber -->
-        <div class="waveform-box">
-          <span class="wf-timestamp" id="wfCur">1:54</span>
-          <div class="wf-bars-wrap" id="wfBarsWrap">
-            <!-- 28 Waveform Bars -->
-          </div>
-          <span class="wf-timestamp" id="wfTot" style="text-align: right;">3:35</span>
-        </div>
-
-        <!-- Player Controls Row -->
-        <div class="player-controls-row">
-          <button class="ctrl-icn-btn" id="btnExpand" title="Expand">
-            <i data-lucide="maximize-2"></i>
-          </button>
-          <button class="ctrl-icn-btn" id="btnPrev" title="Previous">
-            <i data-lucide="skip-back"></i>
-          </button>
-          <button class="ctrl-main-play-btn" id="btnPlay" title="Play/Pause">
-            <i data-lucide="play" id="iconPlay" style="fill: currentColor;"></i>
-            <i data-lucide="pause" id="iconPause" style="display:none; fill: currentColor;"></i>
-          </button>
-          <button class="ctrl-icn-btn" id="btnNext" title="Next">
-            <i data-lucide="skip-forward"></i>
-          </button>
-          <button class="ctrl-icn-btn" id="btnShuffle" title="Shuffle">
-            <i data-lucide="shuffle"></i>
-          </button>
-        </div>
-
-      </section>
-
     </main>
+
+    <!-- NOW PLAYING RIGHT DRAWER (APPLE MUSIC / SPOTIFY STYLE) -->
+    <aside class="now-playing-drawer" id="nowPlayingDrawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <i data-lucide="disc"></i>
+          NOW PLAYING
+        </div>
+        <button class="drawer-close-btn" id="closeDrawerBtn" title="Close Now Playing Drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <!-- Metallic Silver Turntable Chassis -->
+      <div class="turntable-chassis" id="turntableChassis">
+        <div class="screw tl"></div>
+        <div class="screw tr"></div>
+        <div class="screw bl"></div>
+        <div class="screw br"></div>
+
+        <div class="platter-well">
+          <div class="vinyl-disc"></div>
+          <div class="vinyl-label-center" id="vinylLabel">
+            <span class="vinyl-label-text">33⅓ RPM</span>
+            <div class="vinyl-spindle"></div>
+          </div>
+        </div>
+
+        <div class="tonearm-assembly" id="tonearm">
+          <div class="arm-base"></div>
+          <div class="arm-rod"></div>
+          <div class="arm-headshell"></div>
+        </div>
+
+        <div class="chassis-power"></div>
+        <div class="chassis-slider"></div>
+      </div>
+
+      <!-- Track Title & Meta -->
+      <div class="deck-info-box">
+        <div>
+          <h1 class="deck-title-text pixel-text" id="deckTitle">1984</h1>
+          <div class="deck-tag-pill pixel-text" id="deckTag">Classic</div>
+        </div>
+        <button class="deck-like-counter" id="likeCounterBtn">
+          <i data-lucide="plus"></i>
+          <span id="likeCountNum">392</span>
+        </button>
+      </div>
+
+      <!-- Waveform Scrubber -->
+      <div class="waveform-box">
+        <span class="wf-timestamp" id="wfCur">1:54</span>
+        <div class="wf-bars-wrap" id="wfBarsWrap">
+          <!-- 28 Waveform Bars -->
+        </div>
+        <span class="wf-timestamp" id="wfTot" style="text-align: right;">3:35</span>
+      </div>
+
+      <!-- Player Controls Row -->
+      <div class="player-controls-row">
+        <button class="ctrl-icn-btn" id="btnExpand" title="Expand">
+          <i data-lucide="maximize-2"></i>
+        </button>
+        <button class="ctrl-icn-btn" id="btnPrev" title="Previous">
+          <i data-lucide="skip-back"></i>
+        </button>
+        <button class="ctrl-main-play-btn" id="btnPlay" title="Play/Pause">
+          <i data-lucide="play" id="iconPlay" style="fill: currentColor;"></i>
+          <i data-lucide="pause" id="iconPause" style="display:none; fill: currentColor;"></i>
+        </button>
+        <button class="ctrl-icn-btn" id="btnNext" title="Next">
+          <i data-lucide="skip-forward"></i>
+        </button>
+        <button class="ctrl-icn-btn" id="btnShuffle" title="Shuffle">
+          <i data-lucide="shuffle"></i>
+        </button>
+      </div>
+    </aside>
 
   </div>
 
@@ -766,7 +792,7 @@
 <div class="modal-overlay" id="aboutModal">
   <div class="modal-card">
     <button class="modal-close" id="closeAboutBtn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <i data-lucide="x"></i>
     </button>
     <h2 class="pixel-text" style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">MUSIC2D</h2>
     <p style="font-size: 12px; color: #8e8e93; margin-bottom: 16px;">Unreleased Charlie Puth Vault &amp; Vinyl Turntable Player</p>
@@ -884,7 +910,7 @@ const SONGS = [
 </script>
 
 <!-- ══════════════════════════════════════
-     MUSIC2D JS LOGIC & AUDIO ENGINE
+     MUSIC2D JS LOGIC & DRAWER CONTROLS
 ══════════════════════════════════════ -->
 <script>
 (() => {
@@ -902,11 +928,20 @@ const SONGS = [
   let likes = new Set([392]);
   let likeCount = 392;
   try { JSON.parse(localStorage.getItem(LIKES_KEY)||'[]').forEach(id => likes.add(id)); } catch(e){}
-  const saveLikes = () => { try { localStorage.setItem(LIKES_KEY, JSON.stringify([...likes])); } catch(e){} };
 
   let curIdx = 0, curId = songs[0]?.youtubeId, isPlaying = false, shuffleOn = false;
   let ytP = null, ytReady = false, timer = null, isScrubbing = false;
   const BAR_COUNT = 28;
+
+  // NOW PLAYING DRAWER CONTROLS (SPOTIFY / APPLE MUSIC STYLE)
+  const drawer = $('nowPlayingDrawer');
+  const openDrawer = () => drawer.classList.add('open');
+  const closeDrawer = () => drawer.classList.remove('open');
+  const toggleDrawer = () => drawer.classList.toggle('open');
+
+  $('topNowPlayingBtn')?.addEventListener('click', toggleDrawer);
+  $('railVinyl')?.addEventListener('click', toggleDrawer);
+  $('closeDrawerBtn')?.addEventListener('click', closeDrawer);
 
   // BUILD WAVEFORM BARS
   function initWaveform() {
@@ -976,7 +1011,7 @@ const SONGS = [
     if (window.lucide) { try { lucide.createIcons(); } catch(e){} }
   }
 
-  // PLAY TRACK
+  // PLAY TRACK (AUTO OPENS DRAWER LIKE SPOTIFY/APPLE MUSIC)
   function playTrack(vi) {
     if (vi < 0 || vi >= displayList.length) return;
     curIdx = vi;
@@ -991,6 +1026,7 @@ const SONGS = [
 
     renderPlaylists();
     updatePlayerState(true);
+    openDrawer(); // Auto open Now Playing Drawer!
 
     if (s.youtubeId && ytReady && ytP) ytP.loadVideoById(s.youtubeId);
   }
@@ -1057,16 +1093,10 @@ const SONGS = [
     renderPlaylists();
   });
 
-  // ABOUT MODAL & RAIL LISTENERS
+  // ABOUT MODAL & KEYBOARD
   $('aboutBtn').addEventListener('click', () => $('aboutModal').classList.add('open'));
   $('closeAboutBtn').addEventListener('click', () => $('aboutModal').classList.remove('open'));
   $('aboutModal').addEventListener('click', e => { if (e.target === $('aboutModal')) $('aboutModal').classList.remove('open'); });
-  $('railVinyl')?.addEventListener('click', () => {
-    document.querySelector('.player-stage')?.scrollIntoView({ behavior: 'smooth' });
-  });
-  $('railHome')?.addEventListener('click', () => {
-    document.querySelector('.discovery-stage')?.scrollIntoView({ behavior: 'smooth' });
-  });
 
   // CATEGORY PILLS
   document.querySelectorAll('.cat-pill-item').forEach(pill => {
@@ -1081,9 +1111,10 @@ const SONGS = [
   $('cardSimple').addEventListener('click', () => playTrack(1));
   $('cardNotSoGood').addEventListener('click', () => playTrack(2));
 
-  // KEYBOARD
+  // KEYBOARD CONTROLS (ESC TO CLOSE DRAWER)
   document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT') return;
+    if (e.code === 'Escape') closeDrawer();
     if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
     if (e.code === 'ArrowRight') { e.preventDefault(); next(); }
     if (e.code === 'ArrowLeft') { e.preventDefault(); prev(); }
