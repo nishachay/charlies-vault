@@ -102,17 +102,19 @@
       flex-shrink: 0;
     }
     .brand-logo {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 20px; font-weight: 800;
-      color: #ffffff; letter-spacing: -0.03em;
+      font-family: 'Inter', 'Space Grotesk', system-ui, sans-serif;
+      font-size: 18px; font-weight: 900;
+      letter-spacing: -0.8px;
+      color: var(--text);
     }
-    .brand-pill {
-      font-family: 'Space Grotesk', sans-serif;
+    .brand-logo em {
+      font-style: normal;
       font-size: 9px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 2px 7px; border-radius: var(--radius-full);
-      background: rgba(255,255,255,0.08); color: #9ca3af;
-      border: 1px solid rgba(255,255,255,0.1);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #e8ff5a;
+      vertical-align: super;
+      margin-left: 4px;
     }
 
     .search-box {
@@ -573,10 +575,7 @@
 
   <!-- TOP HEADER BAR (NO BORDER, CLEAN & RESPONSIVE) -->
   <header class="topbar">
-    <div class="brand-group">
-      <div class="brand-logo brand-font">GRAILS</div>
-      <div class="brand-pill">UNRELEASED</div>
-    </div>
+    <div class="brand-logo">GRAILS<em>UNRELEASED</em></div>
 
     <div class="search-box">
       <i data-lucide="search" class="search-icn"></i>
