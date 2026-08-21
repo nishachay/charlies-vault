@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Charlie's Vault — Unreleased Archive</title>
-  <meta name="description" content="Stream 99 unreleased Charlie Puth tracks — demos, early studio concepts, and acoustic recordings.">
+  <title>MUSIC2D — Unreleased Music Archive</title>
+  <meta name="description" content="MUSIC2D — Unreleased Music Archive & Vinyl Turntable Deck">
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'unsafe-inline' https://www.youtube.com https://s.ytimg.com;
@@ -17,402 +17,486 @@
   ">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     /* ══════════════════════════════════════
-       MODERN DARK/LIGHT DESIGN SYSTEM
+       MUSIC2D DESIGN TOKENS
     ══════════════════════════════════════ */
     :root {
-      --bg:             #09090b;
-      --surface:        #121215;
-      --surface-hover:  #1c1c21;
-      --surface-active: #27272a;
+      --bg:             #1c1c1e;
+      --surface:        #28282b;
+      --surface-hover:  #323236;
       --border:         rgba(255,255,255,0.08);
       --border-subtle:  rgba(255,255,255,0.04);
-      --text:           #fafafa;
-      --text-muted:     #a1a1aa;
-      --text-dim:       #52525b;
-      --accent:         #6366f1; /* Modern Indigo Accent */
-      --accent-hover:   #4f46e5;
-      --accent-glow:    rgba(99,102,241,0.25);
-      --heart:          #f43f5e;
-      --heart-dim:      rgba(244,63,94,0.15);
+      --text:           #ffffff;
+      --text-muted:     #9a9a9e;
+      --text-dim:       #66666a;
+      --accent:         #ffffff;
       --radius-sm:      8px;
-      --radius-md:      12px;
-      --radius-lg:      16px;
+      --radius-md:      14px;
+      --radius-lg:      20px;
       --radius-full:    9999px;
-      --player-h:       84px;
-    }
-
-    [data-theme="light"] {
-      --bg:             #f8fafc;
-      --surface:        #ffffff;
-      --surface-hover:  #f1f5f9;
-      --surface-active: #e2e8f0;
-      --border:         rgba(0,0,0,0.08);
-      --border-subtle:  rgba(0,0,0,0.04);
-      --text:           #0f172a;
-      --text-muted:     #64748b;
-      --text-dim:       #94a3b8;
-      --accent:         #4f46e5;
-      --accent-hover:   #4338ca;
-      --accent-glow:    rgba(79,70,229,0.15);
-      --heart:          #e11d48;
-      --heart-dim:      rgba(225,29,72,0.1);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--surface-active); border-radius: var(--radius-full); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: var(--radius-full); }
 
     html, body {
-      width: 100%; height: 100%;
+      width: 100vw; height: 100vh;
       overflow: hidden;
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-      background: var(--bg);
+      background: #141416;
       color: var(--text);
       font-size: 14px;
       line-height: 1.5;
+    }
+
+    .pixel-text {
+      font-family: 'Silkscreen', cursive, sans-serif;
+      letter-spacing: -0.02em;
     }
 
     button { background: none; border: none; cursor: pointer; font-family: inherit; color: inherit; }
     input  { font-family: inherit; }
 
     /* ══════════════════════════════════════
-       APP CONTAINER
+       APP CONTAINER CANVAS
     ══════════════════════════════════════ */
     #app {
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      width: 100vw;
+      width: 100vw; height: 100vh;
+      background: #1c1c1e;
       overflow: hidden;
-      position: relative;
     }
 
     /* ══════════════════════════════════════
-       HEADER BAR
+       TOP HEADER BAR
     ══════════════════════════════════════ */
-    .header {
+    .topbar {
       height: 64px;
-      padding: 0 24px;
+      padding: 0 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 24px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
+      background: #1c1c1e;
       flex-shrink: 0;
-      z-index: 10;
+      z-index: 20;
     }
 
-    .brand {
-      display: flex; align-items: center; gap: 10px;
-    }
-    .brand-icon {
-      width: 32px; height: 32px;
-      border-radius: var(--radius-sm);
-      background: linear-gradient(135deg, var(--accent), #a855f7);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; box-shadow: 0 4px 12px var(--accent-glow);
-    }
-    .brand-title {
-      font-size: 16px; font-weight: 800; letter-spacing: -0.02em; color: var(--text);
-    }
-    .brand-badge {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
-      text-transform: uppercase; padding: 2px 8px; border-radius: var(--radius-full);
-      background: var(--surface-hover); color: var(--accent); border: 1px solid var(--border);
+    .brand-logo {
+      font-size: 22px; font-weight: 700;
+      color: #fff; letter-spacing: -0.02em;
+      display: flex; align-items: center; gap: 8px;
     }
 
-    .search-bar {
+    .search-box {
       flex: 0 1 420px;
       position: relative;
     }
-    .search-bar svg {
+    .search-box svg {
       position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: var(--text-muted); pointer-events: none;
+      color: #8e8e93; pointer-events: none;
     }
     .search-input {
-      width: 100%; height: 38px;
-      background: var(--bg);
-      border: 1px solid var(--border);
+      width: 100%; height: 36px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
       border-radius: var(--radius-full);
-      padding: 0 16px 0 42px;
+      padding: 0 16px 0 40px;
       font-size: 13px; font-weight: 500;
-      color: var(--text); outline: none;
+      color: #fff; outline: none;
       transition: all 0.2s ease;
     }
-    .search-input::placeholder { color: var(--text-muted); }
-    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+    .search-input::placeholder { color: #8e8e93; }
+    .search-input:focus { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.09); }
 
-    .header-actions {
-      display: flex; align-items: center; gap: 12px;
-    }
-    .btn-icon {
-      width: 36px; height: 36px;
-      border-radius: var(--radius-full);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-muted); background: transparent;
-      border: 1px solid var(--border);
-      transition: all 0.2s ease;
-    }
-    .btn-icon:hover { color: var(--text); background: var(--surface-hover); border-color: var(--border); }
-
-    /* ══════════════════════════════════════
-       MAIN CONTENT VIEW (SCROLLABLE)
-    ══════════════════════════════════════ */
-    .main-content {
-      flex: 1; min-height: 0;
-      overflow-y: auto;
-      padding: 24px 32px calc(var(--player-h) + 24px);
-      display: flex; flex-direction: column; gap: 32px;
-    }
-
-    /* HERO FEATURED BANNER */
-    .hero-banner {
-      width: 100%;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(168,85,247,0.1) 50%, var(--surface) 100%);
-      border: 1px solid var(--border);
-      padding: 32px;
-      display: flex; align-items: center; justify-content: space-between; gap: 24px;
-      position: relative; overflow: hidden;
-    }
-    .hero-banner::before {
-      content: ''; position: absolute; -100px: top; right: -100px; width: 300px; height: 300px;
-      border-radius: 50%; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero-info { max-width: 560px; z-index: 1; }
-    .hero-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
-      color: var(--accent); margin-bottom: 12px;
-    }
-    .hero-title {
-      font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2;
-      color: var(--text); margin-bottom: 10px;
-    }
-    .hero-subtitle {
-      font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;
-    }
-    .hero-actions { display: flex; align-items: center; gap: 12px; }
-    .btn-primary {
-      height: 42px; padding: 0 20px;
-      border-radius: var(--radius-full);
-      background: var(--accent); color: #fff;
-      font-size: 13px; font-weight: 700;
-      display: flex; align-items: center; gap: 8px;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 16px var(--accent-glow);
-    }
-    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
-    .btn-secondary {
-      height: 42px; padding: 0 20px;
-      border-radius: var(--radius-full);
-      background: var(--surface); color: var(--text);
-      border: 1px solid var(--border);
-      font-size: 13px; font-weight: 600;
-      transition: all 0.2s ease;
-    }
-    .btn-secondary:hover { background: var(--surface-hover); }
-
-    /* CONTROLS & FILTER ROW */
-    .controls-row {
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      flex-wrap: wrap;
-    }
-    .filter-tabs {
-      display: flex; items-center; gap: 6px; background: var(--surface);
-      padding: 4px; border-radius: var(--radius-full); border: 1px solid var(--border);
-    }
-    .tab-btn {
-      height: 32px; padding: 0 16px; border-radius: var(--radius-full);
-      font-size: 12px; font-weight: 600; color: var(--text-muted);
-      transition: all 0.2s ease; display: flex; align-items: center; gap: 6px;
-    }
-    .tab-btn:hover { color: var(--text); }
-    .tab-btn.active { background: var(--surface-active); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .tab-btn.active svg { color: var(--heart); fill: var(--heart); }
-
-    .sort-select {
-      height: 36px; padding: 0 32px 0 14px;
-      border-radius: var(--radius-full);
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); font-size: 12px; font-weight: 600;
-      outline: none; cursor: pointer; appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 12px center;
-    }
-
-    /* STREAMING TRACK TABLE */
-    .table-container {
-      width: 100%; display: flex; flex-direction: column; gap: 4px;
-    }
-    .table-header {
-      display: grid; grid-template-columns: 48px 1fr 120px 80px 48px;
-      padding: 8px 16px; font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim);
-      border-bottom: 1px solid var(--border-subtle);
-    }
-    .track-row {
-      display: grid; grid-template-columns: 48px 1fr 120px 80px 48px;
-      align-items: center; padding: 10px 16px;
-      border-radius: var(--radius-md);
-      background: transparent; cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .track-row:hover { background: var(--surface); }
-    .track-row.active { background: var(--surface-hover); border: 1px solid var(--border); }
-
-    .t-index {
-      font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text-dim);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .track-row.active .t-index { color: var(--accent); }
-    .play-icon-hover { display: none; }
-    .track-row:hover .t-num-span { display: none; }
-    .track-row:hover .play-icon-hover { display: block; color: var(--text); }
-
-    .t-main { display: flex; align-items: center; gap: 14px; min-width: 0; }
-    .t-thumb {
-      width: 42px; height: 42px; border-radius: var(--radius-sm);
-      background: var(--surface-active); flex-shrink: 0; overflow: hidden;
-      position: relative;
-    }
-    .t-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .t-details { min-width: 0; }
-    .t-title {
-      font-size: 14px; font-weight: 600; color: var(--text);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .track-row.active .t-title { color: var(--accent); }
-    .t-artist { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-    .t-tag {
-      font-size: 11px; font-weight: 600; color: var(--text-muted);
-      padding: 4px 10px; border-radius: var(--radius-full);
-      background: var(--surface-hover); border: 1px solid var(--border-subtle);
-      width: fit-content;
-    }
-    .t-dur {
-      font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; color: var(--text-muted);
-    }
-    .like-btn {
-      width: 32px; height: 32px; border-radius: var(--radius-full);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-dim); transition: all 0.15s ease;
-    }
-    .like-btn:hover { color: var(--heart); background: var(--heart-dim); }
-    .like-btn.liked { color: var(--heart); }
-    .like-btn.liked svg { fill: var(--heart); }
-
-    /* ══════════════════════════════════════
-       PERSISTENT BOTTOM PLAYER DOCK
-    ══════════════════════════════════════ */
-    .player-dock {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      height: var(--player-h);
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      padding: 0 28px;
-      display: flex; align-items: center; justify-content: space-between; gap: 24px;
-      z-index: 100;
-      backdrop-filter: blur(12px);
-    }
-
-    .dock-track-info {
-      display: flex; align-items: center; gap: 14px; width: 280px; flex-shrink: 0;
-    }
-    .dock-thumb {
-      width: 48px; height: 48px; border-radius: var(--radius-sm);
-      background: var(--surface-active); overflow: hidden; flex-shrink: 0;
-    }
-    .dock-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .dock-meta { min-width: 0; }
-    .dock-title {
-      font-size: 14px; font-weight: 700; color: var(--text);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .dock-artist { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-    .dock-controls-center {
-      flex: 0 1 540px;
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-    }
-    .dock-buttons {
+    .topbar-icons {
       display: flex; align-items: center; gap: 16px;
     }
-    .dock-btn {
-      width: 34px; height: 34px; border-radius: var(--radius-full);
+    .top-icn-btn {
+      color: #8e8e93; transition: color 0.15s;
       display: flex; align-items: center; justify-content: center;
-      color: var(--text-muted); transition: all 0.15s ease;
     }
-    .dock-btn:hover { color: var(--text); }
-    .dock-btn.active { color: var(--accent); }
-
-    .dock-play-main {
-      width: 42px; height: 42px; border-radius: var(--radius-full);
-      background: var(--text); color: var(--bg);
+    .top-icn-btn:hover { color: #fff; }
+    .user-avatar-badge {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: linear-gradient(135deg, #a855f7, #3b82f6);
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
-      transition: all 0.15s ease;
+      font-size: 12px; font-weight: 800; color: #fff;
     }
-    .dock-play-main:hover { transform: scale(1.05); background: var(--accent); }
-    [data-theme="light"] .dock-play-main:hover { color: #fff; }
 
-    .progress-bar-row {
-      width: 100%; display: flex; align-items: center; gap: 12px;
+    /* ══════════════════════════════════════
+       MAIN BODY (RAIL + 2-COLUMN STAGE)
+    ══════════════════════════════════════ */
+    .body-shell {
+      flex: 1; min-height: 0;
+      display: flex; flex-direction: row;
+      overflow: hidden;
     }
-    .time-stamp {
-      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: var(--text-dim);
-      width: 36px; flex-shrink: 0;
-    }
-    .progress-track {
-      flex: 1; height: 4px; background: var(--surface-active);
-      border-radius: var(--radius-full); cursor: pointer; position: relative;
-    }
-    .progress-fill {
-      height: 100%; width: 0%; background: var(--text); border-radius: var(--radius-full);
-      position: relative; transition: width 0.1s linear;
-    }
-    .progress-track:hover .progress-fill { background: var(--accent); }
 
-    .dock-right {
-      display: flex; align-items: center; gap: 12px; width: 200px; justify-content: flex-end; flex-shrink: 0;
+    /* ─── FAR LEFT ICON RAIL ─── */
+    .icon-rail {
+      width: 64px;
+      height: 100%;
+      flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 20px 0; gap: 24px;
+      background: #1c1c1e;
     }
-    .vol-icon { color: var(--text-muted); }
-    .vol-range {
-      width: 100px; height: 4px;
-      -webkit-appearance: none; appearance: none;
-      background: var(--surface-active); border-radius: var(--radius-full); outline: none; cursor: pointer;
+    .rail-btn {
+      color: #636366; transition: color 0.15s, transform 0.15s;
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 10px;
     }
-    .vol-range::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 12px; height: 12px;
-      border-radius: 50%; background: var(--text); cursor: pointer;
+    .rail-btn:hover { color: #b0b0b5; }
+    .rail-btn.active { color: #ffffff; }
+
+    /* ─── 2-COLUMN STAGE CANVAS ─── */
+    .main-stage {
+      flex: 1; min-width: 0;
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 36px;
+      padding: 12px 36px 36px 12px;
+      overflow-y: auto;
+      align-items: start;
+    }
+
+    /* ══════════════════════════════════════
+       LEFT STAGE: TURNTABLE PLAYER DECK
+    ══════════════════════════════════════ */
+    .player-stage {
+      display: flex; flex-direction: column; gap: 20px;
+      width: 100%;
+    }
+
+    /* METALLIC TURNTABLE CHASSIS (REFERENCE EXACT) */
+    .turntable-chassis {
+      width: 100%;
+      aspect-ratio: 1.05;
+      background: linear-gradient(145deg, #d2d5da 0%, #a3a8b0 40%, #888d96 100%);
+      border-radius: 24px;
+      border: 2px solid #e5e7eb;
+      box-shadow:
+        inset 0 2px 4px rgba(255,255,255,0.8),
+        inset 0 -2px 6px rgba(0,0,0,0.4),
+        0 24px 60px rgba(0,0,0,0.6);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    /* Screws on corner */
+    .screw {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: linear-gradient(135deg, #e5e7eb, #9ca3af);
+      border: 1px solid #6b7280;
+      position: absolute;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .screw::after {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%) rotate(45deg);
+      width: 60%; height: 1.5px; background: #4b5563;
+    }
+    .screw.tl { top: 12px; left: 12px; }
+    .screw.tr { top: 12px; right: 12px; }
+    .screw.bl { bottom: 12px; left: 12px; }
+    .screw.br { bottom: 12px; right: 12px; }
+
+    /* Recessed Platter */
+    .platter-well {
+      position: absolute;
+      top: 50%; left: 44%;
+      transform: translate(-50%, -50%);
+      width: 74%; aspect-ratio: 1;
+      border-radius: 50%;
+      background: #111;
+      box-shadow:
+        inset 0 4px 12px rgba(0,0,0,0.9),
+        0 2px 8px rgba(255,255,255,0.4);
+      border: 3px solid #6b7280;
+      position: relative;
+      overflow: hidden;
+    }
+    .vinyl-disc {
+      position: absolute; inset: 2.5%;
+      border-radius: 50%;
+      background: #0f0f0f;
+      background-image: repeating-radial-gradient(
+        circle at center,
+        #0f0f0f 0px,
+        #0f0f0f 2px,
+        #1c1c1c 3px,
+        #0f0f0f 4px
+      );
+      box-shadow: 0 4px 16px rgba(0,0,0,0.8);
+      animation: vinyl-spin 4s linear infinite;
+      animation-play-state: paused;
+    }
+    .turntable-chassis.playing .vinyl-disc { animation-play-state: running; }
+    @keyframes vinyl-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    .vinyl-label-center {
+      position: absolute; inset: 32%;
+      border-radius: 50%;
+      background: #e5e5e0;
+      border: 2px solid #9ca3af;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      animation: vinyl-spin 4s linear infinite;
+      animation-play-state: paused;
+    }
+    .turntable-chassis.playing .vinyl-label-center { animation-play-state: running; }
+    .vinyl-label-text {
+      font-family: 'JetBrains Mono', monospace; font-size: 7px; font-weight: 700;
+      color: #4b5563; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .vinyl-spindle {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #111; border: 2px solid #d1d5db; margin-top: 2px;
+    }
+
+    /* Tonearm Assembly */
+    .tonearm-assembly {
+      position: absolute;
+      top: 8%; right: 8%;
+      width: 28%; height: 72%;
+      transform-origin: 50% 8%;
+      transform: rotate(-26deg);
+      transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .turntable-chassis.playing .tonearm-assembly { transform: rotate(-10deg); }
+    .arm-base {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 22px; height: 22px; border-radius: 50%;
+      background: linear-gradient(135deg, #e5e7eb, #9ca3af);
+      border: 2px solid #4b5563; box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .arm-rod {
+      position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+      width: 5px; height: calc(100% - 18px);
+      background: linear-gradient(to bottom, #d1d5db, #6b7280, #374151);
+      border-radius: 3px; box-shadow: 1px 0 3px rgba(0,0,0,0.3);
+    }
+    .arm-headshell {
+      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotate(25deg);
+      width: 14px; height: 22px;
+      background: linear-gradient(135deg, #d1d5db, #4b5563);
+      border-radius: 3px; border: 1px solid #374151;
+    }
+    .arm-headshell::after {
+      content: ''; position: absolute; bottom: -3px; left: 50%; transform: translateX(-50%);
+      width: 3px; height: 6px; background: #ef4444; border-radius: 1px;
+    }
+
+    /* Chassis dials */
+    .chassis-power {
+      position: absolute; bottom: 16px; left: 16px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: linear-gradient(135deg, #e5e7eb, #6b7280);
+      border: 1px solid #374151; box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
+    }
+    .chassis-slider {
+      position: absolute; bottom: 16px; right: 20px;
+      width: 4px; height: 36px; background: #4b5563; border-radius: 2px;
+    }
+    .chassis-slider::after {
+      content: ''; position: absolute; top: 40%; left: 50%; transform: translateX(-50%);
+      width: 12px; height: 6px; background: #e5e7eb; border-radius: 2px; border: 1px solid #374151;
+    }
+
+    /* ─── DECK METADATA & TITLE ─── */
+    .deck-info-box {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+    }
+    .deck-title-text {
+      font-size: 28px; font-weight: 700; color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      line-height: 1.1;
+    }
+    .deck-tag-pill {
+      display: inline-flex; align-items: center;
+      height: 24px; padding: 0 12px; border-radius: var(--radius-full);
+      background: #000000; color: #ffffff; border: 1px solid rgba(255,255,255,0.2);
+      font-size: 11px; font-weight: 700; margin-top: 8px;
+    }
+    .deck-like-counter {
+      display: flex; align-items: center; gap: 6px;
+      height: 32px; padding: 0 12px; border-radius: 8px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+      font-family: 'Silkscreen', cursive, sans-serif;
+      font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .deck-like-counter svg { color: #fff; fill: #fff; }
+
+    /* ─── WAVEFORM SCRUBBER ─── */
+    .waveform-box {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      margin-top: 4px;
+    }
+    .wf-timestamp {
+      font-family: 'Silkscreen', cursive, sans-serif;
+      font-size: 13px; font-weight: 700; color: #fff; width: 36px; flex-shrink: 0;
+    }
+    .wf-bars-wrap {
+      flex: 1; height: 32px;
+      display: flex; align-items: center; gap: 3px;
+      cursor: pointer;
+    }
+    .wf-single-bar {
+      flex: 1; background: rgba(255,255,255,0.25); border-radius: 2px;
+      transition: background 0.15s, height 0.15s;
+    }
+    .wf-single-bar.active { background: #ffffff; }
+
+    /* ─── PLAYER CONTROLS BAR ─── */
+    .player-controls-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 8px;
+    }
+    .ctrl-icn-btn {
+      color: #ffffff; transition: transform 0.15s, opacity 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ctrl-icn-btn:hover { opacity: 0.8; transform: scale(1.05); }
+    .ctrl-main-play-btn {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #ffffff; color: #000000;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.15s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .ctrl-main-play-btn:hover { transform: scale(1.08); }
+    .ctrl-main-play-btn:active { transform: scale(0.95); }
+
+    /* ══════════════════════════════════════
+       RIGHT STAGE: CATEGORIES & PLAYLISTS
+    ══════════════════════════════════════ */
+    .discovery-stage {
+      display: flex; flex-direction: column; gap: 28px;
+      width: 100%; min-width: 0;
+    }
+
+    .section-pixel-title {
+      font-size: 22px; font-weight: 700; color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .view-all-link {
+      font-family: 'Silkscreen', cursive, sans-serif;
+      font-size: 11px; font-weight: 700; color: #fff;
+      text-decoration: underline; text-underline-offset: 4px; cursor: pointer;
+    }
+
+    /* CATEGORY PILLS */
+    .category-pills-row {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;
+    }
+    .cat-pill-item {
+      height: 28px; padding: 0 16px;
+      border-radius: var(--radius-full);
+      border: 1px solid #ffffff;
+      font-family: 'Silkscreen', cursive, sans-serif;
+      font-size: 11px; font-weight: 700; color: #ffffff;
+      background: transparent; cursor: pointer; transition: all 0.15s;
+    }
+    .cat-pill-item.active {
+      background: #ffffff; color: #000000;
+    }
+
+    /* CATEGORY CARDS GRID */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-top: 16px;
+    }
+    .card-item {
+      display: flex; flex-direction: column; gap: 8px; cursor: pointer;
+    }
+    .card-img-wrap {
+      width: 100%; aspect-ratio: 0.95;
+      border-radius: 16px; overflow: hidden; background: #28282b;
+      position: relative;
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%);
+      transition: filter 0.3s, transform 0.3s;
+    }
+    .card-item:hover .card-img-wrap img { filter: grayscale(0%); transform: scale(1.03); }
+    .card-item-title {
+      font-size: 13px; font-weight: 700; color: #fff;
+    }
+    .card-item-sub {
+      font-size: 10px; color: #8e8e93; margin-top: 1px;
+    }
+
+    /* FAVORITE PLAYLISTS / TRACK ROWS */
+    .playlists-list {
+      display: flex; flex-direction: column; gap: 12px; margin-top: 14px;
+    }
+    .playlist-row-item {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 10px 14px; border-radius: 14px;
+      background: transparent; transition: background 0.15s; cursor: pointer;
+    }
+    .playlist-row-item:hover, .playlist-row-item.active {
+      background: rgba(255,255,255,0.06);
+    }
+    .row-left-info {
+      display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1;
+    }
+    .row-thumb {
+      width: 48px; height: 48px; border-radius: 10px;
+      background: #28282b; overflow: hidden; flex-shrink: 0;
+    }
+    .row-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .row-details { min-width: 0; }
+    .row-title {
+      font-size: 15px; font-weight: 700; color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .playlist-row-item.active .row-title { color: #ffffff; text-decoration: underline; }
+    .row-sub {
+      font-size: 12px; color: #8e8e93; margin-top: 2px;
+    }
+
+    /* Circular Play Button on Far Right */
+    .row-play-circle {
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 2px solid #ffffff;
+      display: flex; align-items: center; justify-content: center;
+      color: #ffffff; flex-shrink: 0;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+    }
+    .playlist-row-item:hover .row-play-circle,
+    .playlist-row-item.active .row-play-circle {
+      background: #ffffff; color: #000000; transform: scale(1.05);
     }
 
     /* ABOUT MODAL */
     .modal-overlay {
       position: fixed; inset: 0; z-index: 1000;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(12px);
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(10px);
       display: none; align-items: center; justify-content: center;
     }
     .modal-overlay.open { display: flex; }
     .modal-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 32px; max-width: 460px; width: 90%;
-      position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      background: #28282b; border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px; padding: 32px; max-width: 440px; width: 90%;
+      position: relative;
     }
     .modal-close {
-      position: absolute; top: 20px; right: 20px;
-      width: 32px; height: 32px; border-radius: var(--radius-full);
+      position: absolute; top: 16px; right: 16px;
+      width: 32px; height: 32px; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      color: var(--text-muted); background: var(--surface-hover);
+      color: #8e8e93; background: rgba(255,255,255,0.06);
     }
 
     #yt-mount { position: fixed; width: 1px; height: 1px; opacity: 0.001; bottom: 0; left: 0; pointer-events: none; }
@@ -422,130 +506,186 @@
 
 <div id="app">
 
-  <!-- HEADER BAR -->
-  <header class="header">
-    <div class="brand">
-      <div class="brand-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-      </div>
-      <span class="brand-title">Charlie's Vault</span>
-      <span class="brand-badge">99 Grails</span>
-    </div>
+  <!-- TOP HEADER BAR -->
+  <header class="topbar">
+    <div class="brand-logo pixel-text">MUSIC2D</div>
 
-    <div class="search-bar">
+    <div class="search-box">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="searchInput" class="search-input" placeholder="Search unreleased tracks or demos..." autocomplete="off">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search for songs, artists..." autocomplete="off">
     </div>
 
-    <div class="header-actions">
-      <button class="btn-icon" id="aboutBtn" title="About Charlie's Vault">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div class="topbar-icons">
+      <button class="top-icn-btn" id="aboutBtn" title="About MUSIC2D">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       </button>
-      <button class="btn-icon" id="themeBtn" title="Toggle Theme">
-        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <button class="top-icn-btn" title="Notifications">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       </button>
+      <div class="user-avatar-badge pixel-text">CP</div>
     </div>
   </header>
 
-  <!-- MAIN SCROLLABLE CONTENT -->
-  <main class="main-content">
+  <!-- MAIN BODY SHELL (RAIL + 2 COLUMNS) -->
+  <div class="body-shell">
 
-    <!-- HERO FEATURED SPOTLIGHT -->
-    <div class="hero-banner">
-      <div class="hero-info">
-        <div class="hero-pill">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          Unreleased Studio Archive
-        </div>
-        <h1 class="hero-title">Charlie Puth — 99 Unreleased Grails &amp; Demos</h1>
-        <p class="hero-subtitle">Rare Voicenotes studio concepts, early acoustic arrangements, and unreleased takes in a clean high-fidelity audio engine.</p>
-        <div class="hero-actions">
-          <button class="btn-primary" id="heroPlayBtn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            Play Vault
-          </button>
-          <button class="btn-secondary" id="heroShuffleBtn">Shuffle Tracks</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- CONTROLS & FILTERS -->
-    <div class="controls-row">
-      <div class="filter-tabs">
-        <button class="tab-btn active" id="tabAll">All Grails (99)</button>
-        <button class="tab-btn" id="tabLiked">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          Liked Grails
-        </button>
-      </div>
-
-      <select class="sort-select" id="sortSelect">
-        <option value="title">Alphabetical (A-Z)</option>
-        <option value="title-desc">Alphabetical (Z-A)</option>
-        <option value="duration">Duration (Shortest)</option>
-      </select>
-    </div>
-
-    <!-- STREAMING TRACK TABLE -->
-    <div class="table-container">
-      <div class="table-header">
-        <div style="text-align: center;">#</div>
-        <div>Title</div>
-        <div>Category</div>
-        <div style="text-align: right;">Time</div>
-        <div></div>
-      </div>
-      <div id="trackTable"></div>
-    </div>
-
-  </main>
-
-  <!-- PERSISTENT BOTTOM PLAYER DOCK -->
-  <footer class="player-dock">
-    <div class="dock-track-info">
-      <div class="dock-thumb">
-        <img id="dockArt" src="https://img.youtube.com/vi/RbQ1bpBlmp4/mqdefault.jpg" alt="">
-      </div>
-      <div class="dock-meta">
-        <div class="dock-title" id="dockTitle">Select a Track</div>
-        <div class="dock-artist" id="dockArtist">Charlie Puth</div>
-      </div>
-      <button class="like-btn" id="dockLikeBtn" style="margin-left: 6px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <!-- FAR LEFT ICON RAIL -->
+    <nav class="icon-rail">
+      <button class="rail-btn active" id="railHome" title="Home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       </button>
-    </div>
+      <button class="rail-btn" id="railLiked" title="Favorites">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </button>
+      <button class="rail-btn" title="Music Note">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+      </button>
+      <button class="rail-btn" title="Vinyl Record">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+      <button class="rail-btn" title="Sliders/EQ">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+      </button>
+      <button class="rail-btn" title="Tag">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+      </button>
+    </nav>
 
-    <div class="dock-controls-center">
-      <div class="dock-buttons">
-        <button class="dock-btn" id="btnShuffle" title="Shuffle">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
-        </button>
-        <button class="dock-btn" id="btnPrev" title="Previous">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-        </button>
-        <button class="dock-play-main" id="btnPlay" title="Play / Pause">
-          <svg id="iconPlay" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          <svg id="iconPause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-        </button>
-        <button class="dock-btn" id="btnNext" title="Next">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg>
-        </button>
-      </div>
+    <!-- 2-COLUMN MAIN STAGE -->
+    <main class="main-stage">
 
-      <div class="progress-bar-row">
-        <span class="time-stamp" id="timeCur">0:00</span>
-        <div class="progress-track" id="progressTrack">
-          <div class="progress-fill" id="progressFill"></div>
+      <!-- LEFT COLUMN: PINNED METALLIC TURNTABLE PLAYER DECK -->
+      <section class="player-stage">
+
+        <!-- Metallic Silver Turntable Chassis -->
+        <div class="turntable-chassis" id="turntableChassis">
+          <div class="screw tl"></div>
+          <div class="screw tr"></div>
+          <div class="screw bl"></div>
+          <div class="screw br"></div>
+
+          <div class="platter-well">
+            <div class="vinyl-disc"></div>
+            <div class="vinyl-label-center" id="vinylLabel">
+              <span class="vinyl-label-text">33⅓ RPM</span>
+              <div class="vinyl-spindle"></div>
+            </div>
+          </div>
+
+          <div class="tonearm-assembly" id="tonearm">
+            <div class="arm-base"></div>
+            <div class="arm-rod"></div>
+            <div class="arm-headshell"></div>
+          </div>
+
+          <div class="chassis-power"></div>
+          <div class="chassis-slider"></div>
         </div>
-        <span class="time-stamp" id="timeTot" style="text-align: right;">--:--</span>
-      </div>
-    </div>
 
-    <div class="dock-right">
-      <svg class="vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-      <input type="range" class="vol-range" id="volRange" min="0" max="100" value="85">
-    </div>
-  </footer>
+        <!-- Track Title & Meta -->
+        <div class="deck-info-box">
+          <div>
+            <h1 class="deck-title-text pixel-text" id="deckTitle">1984</h1>
+            <div class="deck-tag-pill pixel-text" id="deckTag">Classic</div>
+          </div>
+          <button class="deck-like-counter" id="likeCounterBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            <span id="likeCountNum">392</span>
+          </button>
+        </div>
+
+        <!-- Waveform Scrubber -->
+        <div class="waveform-box">
+          <span class="wf-timestamp" id="wfCur">1:54</span>
+          <div class="wf-bars-wrap" id="wfBarsWrap">
+            <!-- 28 Waveform Bars -->
+          </div>
+          <span class="wf-timestamp" id="wfTot" style="text-align: right;">3:35</span>
+        </div>
+
+        <!-- Player Controls Row -->
+        <div class="player-controls-row">
+          <button class="ctrl-icn-btn" id="btnExpand" title="Expand">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          </button>
+          <button class="ctrl-icn-btn" id="btnPrev" title="Previous">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+          </button>
+          <button class="ctrl-main-play-btn" id="btnPlay" title="Play/Pause">
+            <svg id="iconPlay" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="iconPause" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <button class="ctrl-icn-btn" id="btnNext" title="Next">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg>
+          </button>
+          <button class="ctrl-icn-btn" id="btnShuffle" title="Shuffle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: DISCOVERY STAGE -->
+      <section class="discovery-stage">
+
+        <!-- TOP SECTION: MUSIC CATEGORIES -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <h2 class="section-pixel-title pixel-text">Music Categories</h2>
+            <span class="view-all-link">View all</span>
+          </div>
+
+          <div class="category-pills-row">
+            <button class="cat-pill-item active" data-cat="classic">Classic</button>
+            <button class="cat-pill-item" data-cat="90s">90s</button>
+            <button class="cat-pill-item" data-cat="new">New</button>
+            <button class="cat-pill-item" data-cat="instrumental">Instrumental</button>
+            <button class="cat-pill-item" data-cat="modern">Modern play...</button>
+          </div>
+
+          <div class="cards-grid">
+            <div class="card-item" id="cardChaos">
+              <div class="card-img-wrap">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop" alt="Daily Chaos">
+              </div>
+              <div class="card-item-title pixel-text">Daily Chaos</div>
+              <div class="card-item-sub pixel-text">by Emily Bryan</div>
+            </div>
+
+            <div class="card-item" id="cardSimple">
+              <div class="card-img-wrap">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop" alt="Simple Things">
+              </div>
+              <div class="card-item-title pixel-text">Simple Things</div>
+              <div class="card-item-sub pixel-text">by Ryan Poppin</div>
+            </div>
+
+            <div class="card-item" id="cardNotSoGood">
+              <div class="card-img-wrap">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop" alt="Not so good">
+              </div>
+              <div class="card-item-title pixel-text">Not so good</div>
+              <div class="card-item-sub pixel-text">by Bryan Thomas</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM SECTION: FAVORITE PLAYLISTS -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <h2 class="section-pixel-title pixel-text">Favorite Playlists (<span id="playlistCount">99</span>)</h2>
+          </div>
+
+          <div class="playlists-list" id="playlistsList">
+            <!-- Dynamically populated from 99 Charlie Puth unreleased tracks -->
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
 
 </div>
 
@@ -555,17 +695,16 @@
     <button class="modal-close" id="closeAboutBtn">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
-    <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">Charlie's Vault</h2>
-    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Unreleased Charlie Puth Audio Archive</p>
-    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">A private listening archive featuring 99 unreleased Charlie Puth tracks — curated studio demos, Voicenotes-era concepts, and acoustic recordings.</p>
-    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">No audio files are hosted locally. Playback uses YouTube's IFrame API. Built purely for archival and private listening.</p>
+    <h2 class="pixel-text" style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">MUSIC2D</h2>
+    <p style="font-size: 12px; color: #8e8e93; margin-bottom: 16px;">Unreleased Charlie Puth Vault &amp; Vinyl Turntable Player</p>
+    <p style="font-size: 13px; color: #8e8e93; line-height: 1.6; margin-bottom: 12px;">A private listening archive featuring 99 unreleased Charlie Puth tracks — curated studio demos, early concepts, and acoustic recordings.</p>
   </div>
 </div>
 
 <div id="yt-mount"><div id="yt-player"></div></div>
 
 <!-- ══════════════════════════════════════
-     SONG DATABASE
+     SONGS DATA (99 UNRELEASED TRACKS)
 ══════════════════════════════════════ -->
 <script>
 const SONGS = [
@@ -672,140 +811,97 @@ const SONGS = [
 </script>
 
 <!-- ══════════════════════════════════════
-     APP JS ENGINE
+     MUSIC2D JS LOGIC & AUDIO ENGINE
 ══════════════════════════════════════ -->
 <script>
 (() => {
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const fmt = s => (!s || !isFinite(s) || s <= 0) ? '--:--' : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+  const fmt = s => (!s || !isFinite(s) || s <= 0) ? '0:00' : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
   const cleanTitle = t => t.replace(/^charlie puth\s*[-—]\s*/i,'').trim();
   const songs = SONGS.map((s,i) => ({...s, _i:i, title: cleanTitle(s.title)}));
-  let displayList = [...songs].sort((a,b) => a.title.localeCompare(b.title));
+  let displayList = [...songs];
 
-  const LIKES_KEY = 'charlie_likes_v1';
-  const THEME_KEY = 'charlie_theme_v1';
-
-  let likes = new Set();
+  const LIKES_KEY = 'm2d_likes_v1';
+  let likes = new Set([392]);
+  let likeCount = 392;
   try { JSON.parse(localStorage.getItem(LIKES_KEY)||'[]').forEach(id => likes.add(id)); } catch(e){}
   const saveLikes = () => { try { localStorage.setItem(LIKES_KEY, JSON.stringify([...likes])); } catch(e){} };
-  const isLiked = s => s.youtubeId && likes.has(s.youtubeId);
 
-  let curIdx = -1, curId = null, isPlaying = false, isLoading = false;
-  let showLikedOnly = false, searchQ = '', currentSort = 'title', shuffleOn = false;
+  let curIdx = 0, curId = songs[0]?.youtubeId, isPlaying = false, shuffleOn = false;
   let ytP = null, ytReady = false, timer = null, isScrubbing = false;
+  const BAR_COUNT = 28;
 
-  // THEME
-  let theme = localStorage.getItem(THEME_KEY) || 'dark';
-  document.documentElement.setAttribute('data-theme', theme);
-  const toggleTheme = () => {
-    theme = theme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(THEME_KEY, theme);
-  };
-  $('themeBtn').addEventListener('click', toggleTheme);
+  // BUILD WAVEFORM BARS
+  function initWaveform() {
+    const wrap = $('wfBarsWrap');
+    const heights = [45,70,95,60,85,100,50,75,90,65,80,55,95,70,45,85,60,90,75,50,85,65,100,55,80,45,70,90];
+    wrap.innerHTML = heights.map((h, i) =>
+      `<div class="wf-single-bar" data-i="${i}" style="height: ${h}%;"></div>`
+    ).join('');
+    wrap.addEventListener('click', scrubWaveform);
+  }
+  initWaveform();
 
-  // ABOUT MODAL
-  $('aboutBtn').addEventListener('click', () => $('aboutModal').classList.add('open'));
-  $('closeAboutBtn').addEventListener('click', () => $('aboutModal').classList.remove('open'));
-  $('aboutModal').addEventListener('click', e => { if (e.target === $('aboutModal')) $('aboutModal').classList.remove('open'); });
-
-  // FILTERS & SORT
-  function applyFilters() {
-    let list = [...songs];
-    if (showLikedOnly) list = list.filter(isLiked);
-    if (searchQ) {
-      const q = searchQ.toLowerCase();
-      list = list.filter(s => s.title.toLowerCase().includes(q));
-    }
-
-    if (currentSort === 'title') list.sort((a,b) => a.title.localeCompare(b.title));
-    else if (currentSort === 'title-desc') list.sort((a,b) => b.title.localeCompare(a.title));
-    else if (currentSort === 'duration') list.sort((a,b) => a.duration - b.duration);
-
-    displayList = list;
-    if (curId) curIdx = displayList.findIndex(s => s.youtubeId === curId);
-    else curIdx = -1;
-
-    renderTable();
+  function updateWaveformProgress(progressPct) {
+    const bars = $('wfBarsWrap').querySelectorAll('.wf-single-bar');
+    const activeCount = Math.floor(progressPct * BAR_COUNT);
+    bars.forEach((bar, i) => {
+      bar.classList.toggle('active', i <= activeCount);
+    });
   }
 
-  $('searchInput').addEventListener('input', e => { searchQ = e.target.value.trim(); applyFilters(); });
-  $('tabAll').addEventListener('click', () => { showLikedOnly = false; $('tabAll').classList.add('active'); $('tabLiked').classList.remove('active'); applyFilters(); });
-  $('tabLiked').addEventListener('click', () => { showLikedOnly = true; $('tabLiked').classList.add('active'); $('tabAll').classList.remove('active'); applyFilters(); });
-  $('sortSelect').addEventListener('change', e => { currentSort = e.target.value; applyFilters(); });
-
-  // RENDER TABLE
-  function renderTable() {
-    const table = $('trackTable');
-    if (!displayList.length) {
-      table.innerHTML = `<div style="padding:40px;text-align:center;color:var(--text-muted);">No unreleased tracks found</div>`;
-      return;
+  function scrubWaveform(e) {
+    if (curIdx < 0 || !ytReady || !ytP) return;
+    const rect = $('wfBarsWrap').getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const d = ytP.getDuration() || 0;
+    if (d > 0) {
+      ytP.seekTo(pct * d, true);
+      updateWaveformProgress(pct);
+      $('wfCur').textContent = fmt(pct * d);
     }
-    table.innerHTML = displayList.map((s, vi) => {
+  }
+
+  // RENDER PLAYLISTS / TRACK ROWS
+  function renderPlaylists() {
+    const container = $('playlistsList');
+    container.innerHTML = displayList.map((s, vi) => {
       const isAct = vi === curIdx;
-      const liked = isLiked(s);
       const thumb = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
       return `
-        <div class="track-row${isAct?' active':''}" data-vi="${vi}">
-          <div class="t-index">
-            <span class="t-num-span">${vi+1}</span>
-            <svg class="play-icon-hover" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <div class="t-main">
-            <div class="t-thumb"><img src="${thumb}" alt="" loading="lazy"></div>
-            <div class="t-details">
-              <div class="t-title">${esc(s.title)}</div>
-              <div class="t-artist">${esc(s.artist)}</div>
+        <div class="playlist-row-item${isAct ? ' active' : ''}" data-vi="${vi}">
+          <div class="row-left-info">
+            <div class="row-thumb">
+              <img src="${thumb}" alt="" loading="lazy">
+            </div>
+            <div class="row-details">
+              <div class="row-title">${esc(s.title)}</div>
+              <div class="row-sub">32 songs in this list · ${fmt(s.duration)}</div>
             </div>
           </div>
-          <div><span class="t-tag">Unreleased</span></div>
-          <div class="t-dur">${fmt(s.duration)}</div>
-          <div>
-            <button class="like-btn${liked?' liked':''}" data-vi="${vi}">
-              <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </button>
-          </div>
-        </div>`;
+          <button class="row-play-circle" data-vi="${vi}">
+            ${isAct && isPlaying
+              ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'
+              : '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'
+            }
+          </button>
+        </div>
+      `;
     }).join('');
 
-    table.querySelectorAll('.track-row').forEach(row => {
-      row.addEventListener('click', e => {
+    container.querySelectorAll('.playlist-row-item').forEach(row => {
+      row.addEventListener('click', () => {
         const vi = +row.dataset.vi;
-        const likeBtn = e.target.closest('.like-btn');
-        if (likeBtn) { e.stopPropagation(); toggleLike(vi); return; }
         if (vi === curIdx) togglePlay(); else playTrack(vi);
       });
     });
   }
 
-  function toggleLike(vi) {
-    const s = displayList[vi];
-    if (!s?.youtubeId) return;
-    if (likes.has(s.youtubeId)) likes.delete(s.youtubeId);
-    else likes.add(s.youtubeId);
-    saveLikes();
-    if (showLikedOnly) applyFilters();
-    else renderTable();
-    updateDockLikeState();
-  }
-
-  function updateDockLikeState() {
-    const btn = $('dockLikeBtn');
-    if (curIdx >= 0 && displayList[curIdx]) {
-      const liked = isLiked(displayList[curIdx]);
-      btn.classList.toggle('liked', liked);
-      btn.querySelector('svg').setAttribute('fill', liked ? 'var(--heart)' : 'none');
-    }
-  }
-
-  $('dockLikeBtn').addEventListener('click', () => {
-    if (curIdx >= 0) toggleLike(curIdx);
-  });
-
+  // PLAY TRACK
   function playTrack(vi) {
     if (vi < 0 || vi >= displayList.length) return;
     curIdx = vi;
@@ -813,15 +909,12 @@ const SONGS = [
     curId = s.youtubeId;
     isPlaying = true;
 
-    $('dockTitle').textContent = s.title;
-    $('dockArtist').textContent = s.artist;
-    $('dockArt').src = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
-    $('timeTot').textContent = fmt(s.duration);
-    $('timeCur').textContent = '0:00';
-    $('progressFill').style.width = '0%';
+    $('deckTitle').textContent = s.title;
+    $('wfCur').textContent = '0:00';
+    $('wfTot').textContent = fmt(s.duration);
+    updateWaveformProgress(0);
 
-    updateDockLikeState();
-    renderTable();
+    renderPlaylists();
     updatePlayerState(true);
 
     if (s.youtubeId && ytReady && ytP) ytP.loadVideoById(s.youtubeId);
@@ -847,7 +940,10 @@ const SONGS = [
     isPlaying = playing;
     $('iconPlay').style.display  = playing ? 'none' : '';
     $('iconPause').style.display = playing ? ''     : 'none';
+    $('turntableChassis').classList.toggle('playing', playing);
     playing ? startTimer() : stopTimer();
+
+    renderPlaylists();
   }
 
   function startTimer() {
@@ -856,37 +952,55 @@ const SONGS = [
       if (!ytReady || !ytP?.getCurrentTime || isScrubbing) return;
       const c = ytP.getCurrentTime() || 0;
       const d = ytP.getDuration() || 0;
-      $('timeCur').textContent = fmt(c);
-      if (d > 0) $('progressFill').style.width = `${(c / d) * 100}%`;
+      $('wfCur').textContent = fmt(c);
+      if (d > 0) updateWaveformProgress(c / d);
     }, 250);
   }
   function stopTimer() { clearInterval(timer); }
 
-  $('progressTrack').addEventListener('click', e => {
-    if (curIdx < 0 || !ytReady || !ytP) return;
-    const rect = $('progressTrack').getBoundingClientRect();
-    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    const d = ytP.getDuration() || 0;
-    if (d > 0) { ytP.seekTo(pct * d, true); $('timeCur').textContent = fmt(pct * d); $('progressFill').style.width = `${pct * 100}%`; }
-  });
-
+  // CONTROLS
   $('btnPlay').addEventListener('click', togglePlay);
   $('btnNext').addEventListener('click', next);
   $('btnPrev').addEventListener('click', prev);
   $('btnShuffle').addEventListener('click', () => {
     shuffleOn = !shuffleOn;
-    $('btnShuffle').classList.toggle('active', shuffleOn);
+    $('btnShuffle').style.opacity = shuffleOn ? '1' : '0.5';
+  });
+  $('turntableChassis').addEventListener('click', togglePlay);
+
+  $('likeCounterBtn').addEventListener('click', () => {
+    likeCount++;
+    $('likeCountNum').textContent = likeCount;
   });
 
-  $('heroPlayBtn').addEventListener('click', () => playTrack(0));
-  $('heroShuffleBtn').addEventListener('click', () => { shuffleOn = true; $('btnShuffle').classList.add('active'); next(); });
-
-  const volRange = $('volRange');
-  volRange.addEventListener('input', () => {
-    if (ytReady && ytP) ytP.setVolume(+volRange.value);
+  // SEARCH
+  $('searchInput').addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    if (!q) displayList = [...songs];
+    else displayList = songs.filter(s => s.title.toLowerCase().includes(q));
+    $('playlistCount').textContent = displayList.length;
+    renderPlaylists();
   });
 
-  // KEYBOARD CONTROLS
+  // ABOUT MODAL
+  $('aboutBtn').addEventListener('click', () => $('aboutModal').classList.add('open'));
+  $('closeAboutBtn').addEventListener('click', () => $('aboutModal').classList.remove('open'));
+  $('aboutModal').addEventListener('click', e => { if (e.target === $('aboutModal')) $('aboutModal').classList.remove('open'); });
+
+  // CATEGORY PILLS
+  document.querySelectorAll('.cat-pill-item').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.cat-pill-item').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+    });
+  });
+
+  // CARDS CLICK
+  $('cardChaos').addEventListener('click', () => playTrack(0));
+  $('cardSimple').addEventListener('click', () => playTrack(1));
+  $('cardNotSoGood').addEventListener('click', () => playTrack(2));
+
+  // KEYBOARD
   document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT') return;
     if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
@@ -901,7 +1015,7 @@ const SONGS = [
       videoId: songs[0]?.youtubeId || '',
       playerVars: { playsinline:1, controls:0, rel:0, disablekb:1 },
       events: {
-        onReady() { ytReady = true; ytP.setVolume(+volRange.value); },
+        onReady() { ytReady = true; ytP.setVolume(85); },
         onStateChange(ev) {
           const S = YT.PlayerState;
           if (ev.data === S.PLAYING) {
@@ -916,7 +1030,7 @@ const SONGS = [
     });
   };
 
-  applyFilters();
+  renderPlaylists();
 
 })();
 </script>
