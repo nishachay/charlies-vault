@@ -144,16 +144,76 @@
     }
     .top-icn-btn:hover { color: #ffffff; background: rgba(255,255,255,0.06); }
     
-    .now-playing-toggle-btn {
-      display: flex; align-items: center; gap: 6px;
-      height: 32px; padding: 0 12px; border-radius: var(--radius-full);
-      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-      color: #ffffff; font-family: 'Space Grotesk', sans-serif;
-      font-size: 11px; font-weight: 700; cursor: pointer;
+    /* TOPBAR NOW PLAYING CAPSULE WIDGET (STRICT DESIGN SYSTEM MATCH) */
+    .now-playing-capsule {
+      display: flex; align-items: center; gap: 10px;
+      height: 36px; padding: 4px 6px 4px 4px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
       transition: all 0.15s ease;
     }
-    .now-playing-toggle-btn:hover {
-      background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2);
+    .now-playing-capsule:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .np-thumb-wrap {
+      width: 28px; height: 28px; border-radius: 8px;
+      overflow: hidden; flex-shrink: 0; background: #28282b;
+      position: relative; border: 1px solid rgba(255,255,255,0.1);
+    }
+    .np-thumb-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .np-text-group {
+      display: flex; flex-direction: column; justify-content: center;
+      max-width: 120px; min-width: 85px; text-align: left;
+    }
+    .np-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px; font-weight: 700; color: #ffffff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      line-height: 1.2;
+    }
+    .np-artist {
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px; font-weight: 500; color: #9ca3af;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      line-height: 1.2;
+    }
+
+    .np-action-btns {
+      display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+    }
+    .np-play-circle {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #ffffff; color: #000000;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.15s ease, background 0.15s;
+      border: none; cursor: pointer;
+    }
+    .np-play-circle:hover { transform: scale(1.06); background: #e5e7eb; }
+    
+    .np-heart-circle {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #9ca3af;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.15s ease, color 0.15s, background 0.15s;
+      border: none; cursor: pointer;
+    }
+    .np-heart-circle:hover {
+      transform: scale(1.06); color: #ffffff;
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .np-heart-circle.liked {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.2);
     }
 
     .user-avatar-badge {
@@ -600,10 +660,25 @@
     </div>
 
     <div class="topbar-icons">
-      <button class="now-playing-toggle-btn" id="topNowPlayingBtn" title="Toggle Now Playing Drawer">
-        <i data-lucide="disc"></i>
-        <span>Now Playing</span>
-      </button>
+      <!-- NOW PLAYING CAPSULE WIDGET (REFERENCE MATCH) -->
+      <div class="now-playing-capsule" id="topNowPlayingBtn" title="Click to view Now Playing Vinyl Turntable">
+        <div class="np-thumb-wrap" id="npThumbWrap">
+          <img src="https://img.youtube.com/vi/9i6k9PYZbCk/mqdefault.jpg" id="npThumbImg" alt="Now Playing">
+        </div>
+        <div class="np-text-group">
+          <span class="np-title" id="npTitleText">1984</span>
+          <span class="np-artist" id="npArtistText">Charlie Puth</span>
+        </div>
+        <div class="np-action-btns">
+          <button class="np-play-circle" id="npPlayBtn" title="Play/Pause">
+            <i data-lucide="play" id="npPlayIcn" style="width:12px;height:12px;fill:currentColor;"></i>
+            <i data-lucide="pause" id="npPauseIcn" style="width:12px;height:12px;fill:currentColor;display:none;"></i>
+          </button>
+          <button class="np-heart-circle" id="npHeartBtn" title="Like Track">
+            <i data-lucide="heart" style="width:12px;height:12px;fill:currentColor;"></i>
+          </button>
+        </div>
+      </div>
       <button class="top-icn-btn" title="Mail / Feedback">
         <i data-lucide="mail"></i>
       </button>
@@ -1020,6 +1095,9 @@ const SONGS = [
     isPlaying = true;
 
     $('deckTitle').textContent = s.title;
+    $('npTitleText').textContent = s.title;
+    $('npArtistText').textContent = s.artist || 'Charlie Puth';
+    $('npThumbImg').src = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
     $('wfCur').textContent = '0:00';
     $('wfTot').textContent = fmt(s.duration);
     updateWaveformProgress(0);
@@ -1051,6 +1129,9 @@ const SONGS = [
     isPlaying = playing;
     $('iconPlay').style.display  = playing ? 'none' : '';
     $('iconPause').style.display = playing ? ''     : 'none';
+    $('npPlayIcn').style.display = playing ? 'none' : '';
+    $('npPauseIcn').style.display = playing ? ''    : 'none';
+    $('npThumbWrap').classList.toggle('playing', playing);
     $('turntableChassis').classList.toggle('playing', playing);
     playing ? startTimer() : stopTimer();
 
@@ -1071,6 +1152,12 @@ const SONGS = [
 
   // CONTROLS
   $('btnPlay').addEventListener('click', togglePlay);
+  $('npPlayBtn').addEventListener('click', e => { e.stopPropagation(); togglePlay(); });
+  $('npHeartBtn').addEventListener('click', e => {
+    e.stopPropagation();
+    likeCount++;
+    $('likeCountNum').textContent = likeCount;
+  });
   $('btnNext').addEventListener('click', next);
   $('btnPrev').addEventListener('click', prev);
   $('btnShuffle').addEventListener('click', () => {
