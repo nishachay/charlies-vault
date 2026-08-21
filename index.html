@@ -145,89 +145,128 @@
     .top-icn-btn:hover { color: #ffffff; background: rgba(255,255,255,0.06); }
     
     /* ══════════════════════════════════════
-       NOW PLAYING CARD WIDGET (REFERENCE MATCH IMAGE 2)
+       RESPONSIVE IN-FLOW NOW PLAYING SIDEBAR PANEL
     ══════════════════════════════════════ */
-    .now-playing-card-widget {
+    .now-playing-sidebar {
+      width: 0;
+      opacity: 0;
+      visibility: hidden;
+      background: #1c1c1e;
+      border-left: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      gap: 20px;
+      overflow-y: auto;
+      flex-shrink: 0;
+      transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, padding 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .now-playing-sidebar.open {
+      width: 400px;
+      opacity: 1;
+      visibility: visible;
+      padding: 20px 24px 28px;
+    }
+
+    .drawer-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+    .drawer-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px; font-weight: 800;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: #ffffff;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .drawer-close-btn {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #9ca3af; background: rgba(255,255,255,0.05);
+      transition: all 0.15s; border: none; cursor: pointer;
+    }
+    .drawer-close-btn:hover {
+      color: #ffffff; background: rgba(255,255,255,0.12);
+    }
+
+    /* ══════════════════════════════════════
+       CLEAN BOTTOM-RIGHT NOW PLAYING CAPSULE (NO BIG COVER ART)
+    ══════════════════════════════════════ */
+    .floating-now-playing {
       position: fixed;
       bottom: 24px; right: 28px;
       z-index: 150;
-      width: 230px;
-      padding: 12px;
-      border-radius: 22px;
-      background: rgba(24, 24, 27, 0.95);
+      display: flex; align-items: center; gap: 12px;
+      height: 44px; padding: 6px 8px 6px 6px;
+      border-radius: var(--radius-full);
+      background: rgba(24, 24, 27, 0.94);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(24px);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
-      display: flex; flex-direction: column; gap: 10px;
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
-    }
-    .now-playing-card-widget:hover {
-      border-color: rgba(255, 255, 255, 0.25);
-      transform: translateY(-2px);
-    }
-    .now-playing-card-widget.drawer-open {
-      opacity: 0; pointer-events: none; transform: translateY(12px);
-    }
-
-    .npc-cover-wrap {
-      width: 100%; aspect-ratio: 1;
-      border-radius: 14px; overflow: hidden; background: #28282b;
-      position: relative; border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
       cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, background 0.15s;
     }
-    .npc-cover-wrap img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    .floating-now-playing:hover {
+      transform: translateY(-2px);
+      background: rgba(32, 32, 36, 0.96);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
     }
-    .now-playing-card-widget:hover .npc-cover-wrap img {
-      transform: scale(1.03);
+    .floating-now-playing.drawer-open {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
     }
 
-    .npc-footer-row {
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    .fnp-thumb {
+      width: 32px; height: 32px; border-radius: 8px;
+      overflow: hidden; flex-shrink: 0; background: #28282b;
+      border: 1px solid rgba(255,255,255,0.12);
     }
-    .npc-meta {
-      min-width: 0; flex: 1; text-align: left;
+    .fnp-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
     }
-    .npc-title {
+
+    .fnp-info {
+      display: flex; flex-direction: column; justify-content: center;
+      max-width: 140px; min-width: 90px; text-align: left;
+    }
+    .fnp-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 13px; font-weight: 700; color: #ffffff;
+      font-size: 12px; font-weight: 700; color: #ffffff;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       line-height: 1.2;
     }
-    .npc-artist {
+    .fnp-artist {
       font-family: 'Outfit', sans-serif;
       font-size: 10px; font-weight: 500; color: #9ca3af;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      margin-top: 2px;
+      line-height: 1.2;
     }
 
-    .npc-controls-cluster {
-      display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+    .fnp-controls {
+      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
     }
-    .npc-btn {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #9ca3af;
+    .fnp-btn {
+      width: 28px; height: 28px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      transition: transform 0.15s, color 0.15s, background 0.15s;
-      cursor: pointer;
+      border: none; cursor: pointer; transition: transform 0.15s, background 0.15s;
     }
-    .npc-btn:hover {
-      color: #ffffff; background: rgba(255, 255, 255, 0.16);
+    .fnp-btn.play {
+      background: #ffffff; color: #000000;
+    }
+    .fnp-btn.play:hover { transform: scale(1.08); background: #e5e7eb; }
+    .fnp-btn.expand {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+    .fnp-btn.expand:hover {
       transform: scale(1.08);
-    }
-    .npc-btn.play {
-      width: 30px; height: 30px;
-      background: #ffffff; color: #000000; border: none;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-    .npc-btn.play:hover {
-      transform: scale(1.08); background: #e5e7eb;
-    }
-    .now-playing-card-widget.playing .npc-btn.play {
-      box-shadow: 0 0 0 2px #ffffff, 0 4px 12px rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.25);
     }
 
     .user-avatar-badge {
@@ -880,14 +919,14 @@
       </section>
     </main>
 
-    <!-- NOW PLAYING RIGHT DRAWER (APPLE MUSIC / SPOTIFY STYLE) -->
-    <aside class="now-playing-drawer" id="nowPlayingDrawer">
+    <!-- RESPONSIVE IN-FLOW NOW PLAYING SIDEBAR PANEL -->
+    <aside class="now-playing-sidebar" id="nowPlayingSidebar">
       <div class="drawer-header">
         <div class="drawer-title">
           <i data-lucide="disc"></i>
           NOW PLAYING
         </div>
-        <button class="drawer-close-btn" id="closeDrawerBtn" title="Close Now Playing Drawer">
+        <button class="drawer-close-btn" id="closeDrawerBtn" title="Collapse Panel">
           <i data-lucide="x"></i>
         </button>
       </div>
@@ -963,31 +1002,23 @@
 
 </div>
 
-<!-- FLOATING NOW PLAYING CARD WIDGET (REFERENCE MATCH IMAGE 2) -->
-<div class="now-playing-card-widget" id="floatingNowPlaying">
-  <div class="npc-cover-wrap" id="npcCoverWrap" title="Click to view Vinyl Turntable Drawer">
-    <img src="https://img.youtube.com/vi/9i6k9PYZbCk/mqdefault.jpg" id="npcCoverImg" alt="Now Playing">
+<!-- CLEAN BOTTOM-RIGHT NOW PLAYING CAPSULE (NO BIG COVER ART) -->
+<div class="floating-now-playing" id="floatingNowPlaying" title="Click to expand Now Playing panel">
+  <div class="fnp-thumb">
+    <img src="https://img.youtube.com/vi/9i6k9PYZbCk/mqdefault.jpg" id="fnpThumbImg" alt="Now Playing">
   </div>
-  <div class="npc-footer-row">
-    <div class="npc-meta">
-      <div class="npc-title" id="npcTitleText">1984</div>
-      <div class="npc-artist" id="npcArtistText">Charlie Puth</div>
-    </div>
-    <div class="npc-controls-cluster">
-      <button class="npc-btn" id="npcPrevBtn" title="Previous Track">
-        <i data-lucide="skip-back" style="width:11px;height:11px;"></i>
-      </button>
-      <button class="npc-btn play" id="npcPlayBtn" title="Play/Pause">
-        <i data-lucide="play" id="npcPlayIcn" style="width:13px;height:13px;fill:currentColor;margin-left:1px;"></i>
-        <i data-lucide="pause" id="npcPauseIcn" style="width:13px;height:13px;fill:currentColor;display:none;"></i>
-      </button>
-      <button class="npc-btn" id="npcNextBtn" title="Next Track">
-        <i data-lucide="skip-forward" style="width:11px;height:11px;"></i>
-      </button>
-      <button class="npc-btn" id="npcExpandBtn" title="Expand Vinyl Drawer">
-        <i data-lucide="maximize-2" style="width:11px;height:11px;"></i>
-      </button>
-    </div>
+  <div class="fnp-info">
+    <span class="fnp-title" id="fnpTitleText">1984</span>
+    <span class="fnp-artist" id="fnpArtistText">Charlie Puth</span>
+  </div>
+  <div class="fnp-controls">
+    <button class="fnp-btn play" id="fnpPlayBtn" title="Play/Pause">
+      <i data-lucide="play" id="fnpPlayIcn" style="width:12px;height:12px;fill:currentColor;"></i>
+      <i data-lucide="pause" id="fnpPauseIcn" style="width:12px;height:12px;fill:currentColor;display:none;"></i>
+    </button>
+    <button class="fnp-btn expand" id="fnpExpandBtn" title="Expand Now Playing Panel">
+      <i data-lucide="panel-right-open" style="width:13px;height:13px;"></i>
+    </button>
   </div>
 </div>
 
@@ -1136,30 +1167,28 @@ const SONGS = [
   let ytP = null, ytReady = false, timer = null, isScrubbing = false;
   const BAR_COUNT = 28;
 
-  // NOW PLAYING DRAWER & FLOATING CARD CONTROLS
-  const drawer = $('nowPlayingDrawer');
+  // RESPONSIVE IN-FLOW NOW PLAYING SIDEBAR & FLOATING CAPSULE CONTROLS
+  const sidebar = $('nowPlayingSidebar');
   const fnp = $('floatingNowPlaying');
 
-  const openDrawer = () => {
-    drawer.classList.add('open');
+  const openSidebar = () => {
+    sidebar?.classList.add('open');
     fnp?.classList.add('drawer-open');
   };
-  const closeDrawer = () => {
-    drawer.classList.remove('open');
+  const closeSidebar = () => {
+    sidebar?.classList.remove('open');
     fnp?.classList.remove('drawer-open');
   };
-  const toggleDrawer = () => {
-    if (drawer.classList.contains('open')) closeDrawer(); else openDrawer();
+  const toggleSidebar = () => {
+    if (sidebar?.classList.contains('open')) closeSidebar(); else openSidebar();
   };
 
-  $('railVinyl')?.addEventListener('click', toggleDrawer);
-  $('closeDrawerBtn')?.addEventListener('click', closeDrawer);
-  
-  $('npcCoverWrap')?.addEventListener('click', openDrawer);
-  $('npcExpandBtn')?.addEventListener('click', e => { e.stopPropagation(); openDrawer(); });
-  $('npcPlayBtn')?.addEventListener('click', e => { e.stopPropagation(); togglePlay(); });
-  $('npcPrevBtn')?.addEventListener('click', e => { e.stopPropagation(); prev(); });
-  $('npcNextBtn')?.addEventListener('click', e => { e.stopPropagation(); next(); });
+  $('railVinyl')?.addEventListener('click', toggleSidebar);
+  $('closeDrawerBtn')?.addEventListener('click', closeSidebar);
+
+  fnp?.addEventListener('click', openSidebar);
+  $('fnpExpandBtn')?.addEventListener('click', e => { e.stopPropagation(); openSidebar(); });
+  $('fnpPlayBtn')?.addEventListener('click', e => { e.stopPropagation(); togglePlay(); });
 
   // BUILD WAVEFORM BARS
   function initWaveform() {
@@ -1238,16 +1267,16 @@ const SONGS = [
     isPlaying = true;
 
     $('deckTitle').textContent = s.title;
-    if ($('npcTitleText')) $('npcTitleText').textContent = s.title;
-    if ($('npcArtistText')) $('npcArtistText').textContent = s.artist || 'Charlie Puth';
-    if ($('npcCoverImg')) $('npcCoverImg').src = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
+    if ($('fnpTitleText')) $('fnpTitleText').textContent = s.title;
+    if ($('fnpArtistText')) $('fnpArtistText').textContent = s.artist || 'Charlie Puth';
+    if ($('fnpThumbImg')) $('fnpThumbImg').src = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
     $('wfCur').textContent = '0:00';
     $('wfTot').textContent = fmt(s.duration);
     updateWaveformProgress(0);
 
     renderPlaylists();
     updatePlayerState(true);
-    openDrawer(); // Auto open Now Playing Drawer!
+    openSidebar(); // Auto expand Now Playing Sidebar!
 
     if (s.youtubeId && ytReady && ytP) ytP.loadVideoById(s.youtubeId);
   }
@@ -1272,9 +1301,8 @@ const SONGS = [
     isPlaying = playing;
     $('iconPlay').style.display  = playing ? 'none' : '';
     $('iconPause').style.display = playing ? ''     : 'none';
-    if ($('npcPlayIcn')) $('npcPlayIcn').style.display = playing ? 'none' : '';
-    if ($('npcPauseIcn')) $('npcPauseIcn').style.display = playing ? ''    : 'none';
-    $('floatingNowPlaying')?.classList.toggle('playing', playing);
+    if ($('fnpPlayIcn')) $('fnpPlayIcn').style.display = playing ? 'none' : '';
+    if ($('fnpPauseIcn')) $('fnpPauseIcn').style.display = playing ? ''    : 'none';
     $('turntableChassis').classList.toggle('playing', playing);
     playing ? startTimer() : stopTimer();
 
