@@ -102,19 +102,9 @@
       flex-shrink: 0;
     }
     .brand-logo {
-      font-family: 'Inter', 'Space Grotesk', system-ui, sans-serif;
-      font-size: 18px; font-weight: 900;
-      letter-spacing: -0.8px;
-      color: var(--text);
-    }
-    .brand-logo em {
-      font-style: normal;
-      font-size: 9px; font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #e8ff5a;
-      vertical-align: super;
-      margin-left: 4px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px; font-weight: 800;
+      color: #ffffff; letter-spacing: -0.03em;
     }
 
     .search-box {
@@ -142,7 +132,7 @@
     }
 
     .topbar-icons {
-      display: flex; align-items: center; gap: 4px;
+      display: flex; align-items: center; gap: 12px;
       flex-shrink: 0;
     }
     .top-icn-btn {
@@ -175,7 +165,8 @@
       color: #9ca3af; pointer-events: none; transition: color 0.2s;
     }
     .rail-btn svg.lucide {
-      width: 20px; height: 20px;
+      width: 18px; height: 18px;
+      stroke-width: 1.75px;
     }
 
     /* RESPONSIVE MEDIA QUERIES */
@@ -207,30 +198,37 @@
       overflow: hidden;
     }
 
-    /* ─── FAR LEFT ICON RAIL ─── */
+    /* ─── FAR LEFT ICON RAIL (MATCHING HEADER DESIGN SYSTEM) ─── */
     .icon-rail {
       width: 64px;
       height: 100%;
       flex-shrink: 0;
       display: flex; flex-direction: column; align-items: center;
-      padding: 20px 0; gap: 24px;
+      padding: 16px 0; gap: 12px;
       background: #1c1c1e;
     }
     .rail-btn {
-      color: #636366; transition: color 0.15s, transform 0.15s;
+      width: 34px; height: 34px; border-radius: 8px;
+      color: #9ca3af; transition: all 0.15s ease;
       display: flex; align-items: center; justify-content: center;
-      width: 36px; height: 36px; border-radius: 10px;
+      background: transparent; border: none;
     }
-    .rail-btn:hover { color: #b0b0b5; }
-    .rail-btn.active { color: #ffffff; }
+    .rail-btn:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.06);
+    }
+    .rail-btn.active {
+      color: #ffffff;
+      background: rgba(255,255,255,0.12);
+    }
 
-    /* ─── 2-COLUMN STAGE CANVAS ─── */
+    /* ─── 2-COLUMN STAGE CANVAS (DISCOVERY CENTER, VINYL PLAYER RIGHT) ─── */
     .main-stage {
       flex: 1; min-width: 0;
       display: grid;
-      grid-template-columns: 460px 1fr;
+      grid-template-columns: 1fr 420px;
       gap: 36px;
-      padding: 12px 36px 36px 12px;
+      padding: 16px 32px 36px 20px;
       overflow-y: auto;
       align-items: start;
     }
@@ -575,7 +573,9 @@
 
   <!-- TOP HEADER BAR (NO BORDER, CLEAN & RESPONSIVE) -->
   <header class="topbar">
-    <div class="brand-logo">GRAILS<em>UNRELEASED</em></div>
+    <div class="brand-group">
+      <div class="brand-logo brand-font">{ GRAILS }</div>
+    </div>
 
     <div class="search-box">
       <i data-lucide="search" class="search-icn"></i>
@@ -613,7 +613,7 @@
       <button class="rail-btn" title="Music Note">
         <i data-lucide="music"></i>
       </button>
-      <button class="rail-btn" title="Vinyl Record">
+      <button class="rail-btn" id="railVinyl" title="Vinyl Record">
         <i data-lucide="disc"></i>
       </button>
       <button class="rail-btn" title="Sliders/EQ">
@@ -624,10 +624,68 @@
       </button>
     </nav>
 
-    <!-- 2-COLUMN MAIN STAGE -->
+    <!-- 2-COLUMN MAIN STAGE (DISCOVERY CENTER, VINYL PLAYER RIGHT) -->
     <main class="main-stage">
 
-      <!-- LEFT COLUMN: PINNED METALLIC TURNTABLE PLAYER DECK -->
+      <!-- LEFT/CENTER COLUMN: DISCOVERY STAGE -->
+      <section class="discovery-stage">
+
+        <!-- TOP SECTION: MUSIC CATEGORIES -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="section-pixel-title pixel-text">Music Categories</h2>
+            <span class="view-all-link">View all</span>
+          </div>
+
+          <div class="category-pills-row">
+            <button class="cat-pill-item active" data-cat="classic">Classic</button>
+            <button class="cat-pill-item" data-cat="90s">90s</button>
+            <button class="cat-pill-item" data-cat="new">New</button>
+            <button class="cat-pill-item" data-cat="instrumental">Instrumental</button>
+            <button class="cat-pill-item" data-cat="modern">Modern play...</button>
+          </div>
+
+          <div class="cards-grid">
+            <div class="card-item" id="cardChaos">
+              <div class="card-img-wrap">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop" alt="Daily Chaos">
+              </div>
+              <div class="card-item-title pixel-text">Daily Chaos</div>
+              <div class="card-item-sub pixel-text">by Emily Bryan</div>
+            </div>
+
+            <div class="card-item" id="cardSimple">
+              <div class="card-img-wrap">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop" alt="Simple Things">
+              </div>
+              <div class="card-item-title pixel-text">Simple Things</div>
+              <div class="card-item-sub pixel-text">by Ryan Poppin</div>
+            </div>
+
+            <div class="card-item" id="cardNotSoGood">
+              <div class="card-img-wrap">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop" alt="Not so good">
+              </div>
+              <div class="card-item-title pixel-text">Not so good</div>
+              <div class="card-item-sub pixel-text">by Bryan Thomas</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM SECTION: FAVORITE PLAYLISTS -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <h2 class="section-pixel-title pixel-text">Favorite Playlists (<span id="playlistCount">99</span>)</h2>
+          </div>
+
+          <div class="playlists-list" id="playlistsList">
+            <!-- Dynamically populated from 99 Charlie Puth unreleased tracks -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: METALLIC TURNTABLE PLAYER DECK -->
       <section class="player-stage">
 
         <!-- Metallic Silver Turntable Chassis -->
@@ -694,64 +752,6 @@
           <button class="ctrl-icn-btn" id="btnShuffle" title="Shuffle">
             <i data-lucide="shuffle"></i>
           </button>
-        </div>
-
-      </section>
-
-      <!-- RIGHT COLUMN: DISCOVERY STAGE -->
-      <section class="discovery-stage">
-
-        <!-- TOP SECTION: MUSIC CATEGORIES -->
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: baseline;">
-            <h2 class="section-pixel-title pixel-text">Music Categories</h2>
-            <span class="view-all-link">View all</span>
-          </div>
-
-          <div class="category-pills-row">
-            <button class="cat-pill-item active" data-cat="classic">Classic</button>
-            <button class="cat-pill-item" data-cat="90s">90s</button>
-            <button class="cat-pill-item" data-cat="new">New</button>
-            <button class="cat-pill-item" data-cat="instrumental">Instrumental</button>
-            <button class="cat-pill-item" data-cat="modern">Modern play...</button>
-          </div>
-
-          <div class="cards-grid">
-            <div class="card-item" id="cardChaos">
-              <div class="card-img-wrap">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop" alt="Daily Chaos">
-              </div>
-              <div class="card-item-title pixel-text">Daily Chaos</div>
-              <div class="card-item-sub pixel-text">by Emily Bryan</div>
-            </div>
-
-            <div class="card-item" id="cardSimple">
-              <div class="card-img-wrap">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop" alt="Simple Things">
-              </div>
-              <div class="card-item-title pixel-text">Simple Things</div>
-              <div class="card-item-sub pixel-text">by Ryan Poppin</div>
-            </div>
-
-            <div class="card-item" id="cardNotSoGood">
-              <div class="card-img-wrap">
-                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop" alt="Not so good">
-              </div>
-              <div class="card-item-title pixel-text">Not so good</div>
-              <div class="card-item-sub pixel-text">by Bryan Thomas</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- BOTTOM SECTION: FAVORITE PLAYLISTS -->
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: baseline;">
-            <h2 class="section-pixel-title pixel-text">Favorite Playlists (<span id="playlistCount">99</span>)</h2>
-          </div>
-
-          <div class="playlists-list" id="playlistsList">
-            <!-- Dynamically populated from 99 Charlie Puth unreleased tracks -->
-          </div>
         </div>
 
       </section>
@@ -1057,10 +1057,16 @@ const SONGS = [
     renderPlaylists();
   });
 
-  // ABOUT MODAL
+  // ABOUT MODAL & RAIL LISTENERS
   $('aboutBtn').addEventListener('click', () => $('aboutModal').classList.add('open'));
   $('closeAboutBtn').addEventListener('click', () => $('aboutModal').classList.remove('open'));
   $('aboutModal').addEventListener('click', e => { if (e.target === $('aboutModal')) $('aboutModal').classList.remove('open'); });
+  $('railVinyl')?.addEventListener('click', () => {
+    document.querySelector('.player-stage')?.scrollIntoView({ behavior: 'smooth' });
+  });
+  $('railHome')?.addEventListener('click', () => {
+    document.querySelector('.discovery-stage')?.scrollIntoView({ behavior: 'smooth' });
+  });
 
   // CATEGORY PILLS
   document.querySelectorAll('.cat-pill-item').forEach(pill => {
