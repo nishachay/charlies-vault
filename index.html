@@ -118,30 +118,44 @@
 
     .nav-brand-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 4px 6px 8px 10px; min-height: 40px; width: 100%;
+      padding: 2px 4px 6px; min-height: 40px; width: 100%;
     }
     .left-nav-sidebar.collapsed .nav-brand-header {
       justify-content: center; padding: 2px 0;
     }
     .nav-brand-logo {
-      font-family: var(--display-font);
-      font-size: 18px; font-weight: 800;
-      color: #ffffff; letter-spacing: -0.02em;
-      white-space: nowrap; transition: all 0.2s ease;
-      cursor: pointer;
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer; user-select: none;
     }
-    .logo-full { display: inline-block; }
-    .logo-compact { display: none; }
-    .left-nav-sidebar.collapsed .logo-full { display: none; }
-    .left-nav-sidebar.collapsed .logo-compact {
+    .logo-mark-badge {
+      width: 32px; height: 32px; border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; font-weight: 800; color: #ffffff;
-      width: 40px; height: 40px; border-radius: 12px;
-      background: transparent; border: none;
-      transition: all 0.15s ease;
+      font-family: var(--display-font);
+      font-size: 14px; font-weight: 800; color: #ffffff;
+      flex-shrink: 0; transition: all 0.15s ease;
     }
-    .left-nav-sidebar.collapsed .logo-compact:hover {
-      background: rgba(255,255,255,0.08);
+    .nav-brand-logo:hover .logo-mark-badge {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.22);
+      transform: scale(1.05);
+    }
+    .logo-full-text {
+      font-family: var(--display-font);
+      font-size: 18px; font-weight: 800; color: #ffffff;
+      letter-spacing: -0.02em; white-space: nowrap;
+    }
+    .left-nav-sidebar.collapsed .logo-full-text {
+      display: none;
+    }
+    .left-nav-sidebar.collapsed .logo-mark-badge {
+      width: 40px; height: 40px; border-radius: 12px;
+      font-size: 16px; margin: 0 auto;
+      background: transparent; border: 1px solid transparent;
+    }
+    .left-nav-sidebar.collapsed .logo-mark-badge:hover {
+      background: rgba(255, 255, 255, 0.08);
       transform: scale(1.05);
     }
 
@@ -1113,8 +1127,8 @@
     <!-- Brand Header & Collapse Toggle -->
     <div class="nav-brand-header">
       <div class="nav-brand-logo" id="brandLogo" data-tooltip="Expand Sidebar">
-        <span class="logo-full">{ GRAILS }</span>
-        <span class="logo-compact">{ G }</span>
+        <div class="logo-mark-badge">{ G }</div>
+        <span class="logo-full-text">GRAILS</span>
       </div>
       <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" data-tooltip="Collapse Sidebar" title="Toggle Sidebar Collapse">
         <i data-lucide="panel-left-close" id="sidebarToggleIcon"></i>
