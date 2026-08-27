@@ -523,12 +523,17 @@
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       line-height: 1.1; letter-spacing: -0.02em;
     }
+    .deck-artist-sub {
+      font-family: var(--body-font);
+      font-size: 12px; font-weight: 600; color: #9ca3af;
+      margin-top: 2px;
+    }
     .deck-tag-pill {
       display: inline-flex; align-items: center;
       height: 24px; padding: 0 12px; border-radius: var(--radius-full);
       background: rgba(255,255,255,0.08); color: #ffffff; border: 1px solid rgba(255,255,255,0.15);
       font-family: var(--body-font);
-      font-size: 11px; font-weight: 600; margin-top: 8px;
+      font-size: 11px; font-weight: 600; margin-top: 6px;
     }
     .deck-like-counter {
       display: flex; align-items: center; gap: 6px;
@@ -1310,7 +1315,20 @@
           <div class="chassis-slider"></div>
         </div>
 
-        <!-- Middle Box: Sleek Audio Progress Bar -->
+        <!-- Middle Box 1: Track Title, Artist, Tag & Like Counter -->
+        <div class="deck-info-box">
+          <div>
+            <h1 class="deck-title-text pixel-text" id="deckTitle">1984</h1>
+            <div class="deck-artist-sub" id="deckArtist">Charlie Puth</div>
+            <div class="deck-tag-pill pixel-text" id="deckTag">Classic</div>
+          </div>
+          <button class="deck-like-counter" id="likeCounterBtn" title="Like Track">
+            <i data-lucide="plus"></i>
+            <span id="likeCountNum">392</span>
+          </button>
+        </div>
+
+        <!-- Middle Box 2: Sleek Audio Progress Bar -->
         <div class="progress-bar-box">
           <span class="progress-timestamp" id="wfCur">1:54</span>
           <div class="progress-track-wrap" id="progressTrackWrap">
@@ -1323,34 +1341,22 @@
           <span class="progress-timestamp" id="wfTot" style="text-align: right;">3:35</span>
         </div>
 
-        <!-- Bottom Box: Track Title & Meta -->
-        <div class="deck-info-box">
-          <div>
-            <h1 class="deck-title-text pixel-text" id="deckTitle">1984</h1>
-            <div class="deck-tag-pill pixel-text" id="deckTag">Classic</div>
-          </div>
-          <button class="deck-like-counter" id="likeCounterBtn">
-            <i data-lucide="plus"></i>
-            <span id="likeCountNum">392</span>
-          </button>
-        </div>
-
-        <!-- Bottom Box: Player Controls Row -->
+        <!-- Bottom Box: Symmetrical Player Controls Row -->
         <div class="player-controls-row">
-          <button class="ctrl-icn-btn" id="btnExpand" title="Expand">
-            <i data-lucide="maximize-2"></i>
+          <button class="ctrl-icn-btn" id="btnRepeat" title="Repeat Mode" style="opacity: 0.5;">
+            <i data-lucide="repeat"></i>
           </button>
-          <button class="ctrl-icn-btn" id="btnPrev" title="Previous">
+          <button class="ctrl-icn-btn" id="btnPrev" title="Previous Track">
             <i data-lucide="skip-back"></i>
           </button>
-          <button class="ctrl-main-play-btn" id="btnPlay" title="Play/Pause">
-            <i data-lucide="play" id="iconPlay" style="fill: currentColor;"></i>
+          <button class="ctrl-main-play-btn" id="btnPlay" title="Play / Pause">
+            <i data-lucide="play" id="iconPlay" style="fill: currentColor; margin-left: 2px;"></i>
             <i data-lucide="pause" id="iconPause" style="display:none; fill: currentColor;"></i>
           </button>
-          <button class="ctrl-icn-btn" id="btnNext" title="Next">
+          <button class="ctrl-icn-btn" id="btnNext" title="Next Track">
             <i data-lucide="skip-forward"></i>
           </button>
-          <button class="ctrl-icn-btn" id="btnShuffle" title="Shuffle">
+          <button class="ctrl-icn-btn" id="btnShuffle" title="Shuffle Playback" style="opacity: 0.5;">
             <i data-lucide="shuffle"></i>
           </button>
         </div>
@@ -1646,6 +1652,7 @@ const SONGS = [
     isPlaying = true;
 
     $('deckTitle').textContent = s.title;
+    if ($('deckArtist')) $('deckArtist').textContent = s.artist || 'Charlie Puth';
     if ($('fnpTitleText')) $('fnpTitleText').textContent = s.title;
     if ($('fnpArtistText')) $('fnpArtistText').textContent = s.artist || 'Charlie Puth';
     if ($('fnpThumbImg')) $('fnpThumbImg').src = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
@@ -1701,12 +1708,17 @@ const SONGS = [
   function stopTimer() { clearInterval(timer); }
 
   // CONTROLS
+  let repeatOn = false;
   $('btnPlay').addEventListener('click', togglePlay);
   $('btnNext').addEventListener('click', next);
   $('btnPrev').addEventListener('click', prev);
   $('btnShuffle').addEventListener('click', () => {
     shuffleOn = !shuffleOn;
     $('btnShuffle').style.opacity = shuffleOn ? '1' : '0.5';
+  });
+  $('btnRepeat')?.addEventListener('click', () => {
+    repeatOn = !repeatOn;
+    $('btnRepeat').style.opacity = repeatOn ? '1' : '0.5';
   });
   $('turntableChassis').addEventListener('click', togglePlay);
 
