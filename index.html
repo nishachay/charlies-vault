@@ -598,26 +598,27 @@
     .ctrl-main-play-btn:active { transform: scale(0.95); }
 
     /* ══════════════════════════════════════
-       FLOATING NOW PLAYING CAPSULE (CONCENTRIC CURVATURE ENGINEERING)
+       FLOATING NOW PLAYING MINI-BAR (MATCHING 360PX COLUMN 3)
     ══════════════════════════════════════ */
     .floating-now-playing {
       position: fixed;
-      bottom: 28px; right: 32px;
+      bottom: 16px; right: 16px;
       z-index: 150;
-      display: flex; align-items: center; gap: 14px;
-      height: 56px; padding: 6px 14px 6px 6px;
-      border-radius: 28px;
+      width: 360px; height: 68px;
+      padding: 10px 14px;
+      border-radius: 24px;
       background: rgba(22, 22, 25, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(24px);
       box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
       cursor: pointer;
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, background 0.15s, border-color 0.15s;
     }
     .floating-now-playing:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       background: rgba(30, 30, 34, 0.98);
-      border-color: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.22);
       box-shadow: 0 20px 48px rgba(0,0,0,0.7);
     }
 
@@ -632,9 +633,9 @@
     }
 
     .fnp-thumb {
-      width: 44px; height: 44px; border-radius: 22px;
+      width: 48px; height: 48px; border-radius: 14px;
       overflow: hidden; flex-shrink: 0; background: #28282b;
-      border: 1px solid rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.14); position: relative;
     }
     .fnp-thumb img {
       width: 100%; height: 100%; object-fit: cover;
@@ -642,19 +643,43 @@
 
     .fnp-info {
       display: flex; flex-direction: column; justify-content: center;
-      max-width: 180px; min-width: 110px; text-align: left;
+      min-width: 0; flex: 1; text-align: left;
     }
     .fnp-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 14px; font-weight: 800; color: #ffffff;
+      font-family: var(--display-font);
+      font-size: 14px; font-weight: 700; color: #ffffff;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      line-height: 1.25; letter-spacing: -0.02em;
+      line-height: 1.2; letter-spacing: -0.02em;
     }
     .fnp-artist {
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--body-font);
       font-size: 11px; font-weight: 500; color: #9ca3af;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      line-height: 1.2; margin-top: 1px;
+      line-height: 1.2; margin-top: 2px;
+    }
+
+    .fnp-controls {
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    }
+    .fnp-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: none; cursor: pointer; transition: transform 0.15s, background 0.15s, color 0.15s;
+    }
+    .fnp-btn.play {
+      background: #ffffff; color: #000000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .fnp-btn.play:hover { transform: scale(1.08); background: #e5e7eb; }
+    .fnp-btn.expand {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+    }
+    .fnp-btn.expand:hover {
+      transform: scale(1.08);
+      background: rgba(255, 255, 255, 0.18);
+    }2; margin-top: 1px;
     }
 
     .fnp-controls {
