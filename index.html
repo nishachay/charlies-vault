@@ -118,15 +118,15 @@
 
     .nav-brand-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 2px 4px 6px; min-height: 36px; width: 100%;
+      padding: 4px 6px 8px 10px; min-height: 40px; width: 100%;
     }
     .left-nav-sidebar.collapsed .nav-brand-header {
       justify-content: center; padding: 2px 0;
     }
     .nav-brand-logo {
       font-family: var(--display-font);
-      font-size: 22px; font-weight: 800;
-      color: #ffffff; letter-spacing: -0.04em;
+      font-size: 18px; font-weight: 800;
+      color: #ffffff; letter-spacing: -0.02em;
       white-space: nowrap; transition: all 0.2s ease;
       cursor: pointer;
     }
@@ -871,17 +871,6 @@
       font-family: 'Silkscreen', cursive, sans-serif;
       font-size: 13px; font-weight: 700; color: #fff; width: 36px; flex-shrink: 0;
     }
-    .wf-bars-wrap {
-      flex: 1; height: 32px;
-      display: flex; align-items: center; gap: 3px;
-      cursor: pointer;
-    }
-    .wf-single-bar {
-      flex: 1; background: rgba(255,255,255,0.25); border-radius: 2px;
-      transition: background 0.15s, height 0.15s;
-    }
-    .wf-single-bar.active { background: #ffffff; }
-
     .player-controls-row {
       display: flex; align-items: center; justify-content: space-between;
       margin-top: 8px;
@@ -1047,7 +1036,7 @@
     }
     .playlist-row-item.active .row-title { color: #ffffff; text-decoration: none; }
     .row-sub {
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--body-font);
       font-size: 12px; font-weight: 500; color: #9ca3af; margin-top: 2px;
     }
 
@@ -1112,9 +1101,9 @@
 
     <!-- Primary Navigation Items -->
     <nav class="nav-menu-group">
-      <button class="nav-item-btn active" id="railHome" data-tooltip="Home / Discovery">
+      <button class="nav-item-btn active" id="railHome" data-tooltip="Home">
         <i data-lucide="home"></i>
-        <span>Home / Discovery</span>
+        <span>Home</span>
       </button>
       <button class="nav-item-btn" id="railLiked" data-tooltip="Favorites">
         <i data-lucide="heart"></i>
