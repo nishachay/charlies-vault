@@ -468,10 +468,20 @@
     }
     .deck-like-counter {
       display: flex; align-items: center; gap: 6px;
-      height: 32px; padding: 0 12px; border-radius: 8px;
-      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+      height: 32px; padding: 0 12px; border-radius: 10px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
       font-family: var(--body-font);
-      font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0;
+      font-size: 12px; font-weight: 700; color: #ffffff; flex-shrink: 0;
+      cursor: pointer; transition: all 0.15s ease;
+    }
+    .deck-like-counter:hover {
+      background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.22);
+      transform: scale(1.04);
+    }
+    .deck-like-counter.liked {
+      background: rgba(239, 68, 68, 0.16);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #f87171;
     }
 
     /* ══════════════════════════════════════
@@ -1381,8 +1391,8 @@
             <div class="deck-artist-sub" id="deckArtist">Charlie Puth</div>
             <div class="deck-tag-pill pixel-text" id="deckTag">Classic</div>
           </div>
-          <button class="deck-like-counter" id="likeCounterBtn" title="Like Track">
-            <i data-lucide="plus"></i>
+          <button class="deck-like-counter" id="likeCounterBtn" title="Like / Favorite Track">
+            <i data-lucide="heart" id="likeIcon" style="width:14px;height:14px;"></i>
             <span id="likeCountNum">392</span>
           </button>
         </div>
@@ -1781,9 +1791,16 @@ const SONGS = [
   });
   $('turntableChassis').addEventListener('click', togglePlay);
 
+  let isLiked = false;
   $('likeCounterBtn').addEventListener('click', () => {
-    likeCount++;
+    isLiked = !isLiked;
+    likeCount = isLiked ? likeCount + 1 : likeCount - 1;
     $('likeCountNum').textContent = likeCount;
+    $('likeCounterBtn').classList.toggle('liked', isLiked);
+    if ($('likeIcon')) {
+      $('likeIcon').style.fill = isLiked ? '#f87171' : 'none';
+      $('likeIcon').style.stroke = isLiked ? '#f87171' : 'currentColor';
+    }
   });
 
   // SEARCH
