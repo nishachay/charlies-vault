@@ -135,15 +135,14 @@
     .left-nav-sidebar.collapsed .logo-full { display: none; }
     .left-nav-sidebar.collapsed .logo-compact {
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; font-weight: 800;
+      font-size: 18px; font-weight: 800; color: #ffffff;
       width: 40px; height: 40px; border-radius: 12px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: transparent; border: 1px solid transparent;
       transition: all 0.15s ease;
     }
     .left-nav-sidebar.collapsed .logo-compact:hover {
-      background: rgba(255,255,255,0.14);
-      border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.15);
     }
 
     .sidebar-collapse-btn {
@@ -176,7 +175,13 @@
       transition: all 0.2s ease;
     }
     .left-nav-sidebar.collapsed .nav-search-box {
-      display: flex; justify-content: center; width: 100%;
+      display: flex; justify-content: center; align-items: center;
+      width: 40px; height: 40px; margin: 0 auto; border-radius: 12px;
+      background: transparent; border: 1px solid transparent;
+      cursor: pointer; transition: all 0.15s ease;
+    }
+    .left-nav-sidebar.collapsed .nav-search-box:hover {
+      background: rgba(255,255,255,0.06); color: #ffffff;
     }
     .left-nav-sidebar.collapsed .nav-search-input {
       display: none;
@@ -188,13 +193,10 @@
     }
     .left-nav-sidebar.collapsed .nav-search-icn {
       position: relative; left: auto; top: auto; transform: none;
-      width: 40px; height: 40px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-      cursor: pointer; pointer-events: auto; transition: all 0.15s;
+      width: 18px; height: 18px; color: #9ca3af; pointer-events: auto;
     }
-    .left-nav-sidebar.collapsed .nav-search-icn:hover {
-      background: rgba(255,255,255,0.12); color: #ffffff; border-color: rgba(255,255,255,0.2);
+    .left-nav-sidebar.collapsed .nav-search-box:hover .nav-search-icn {
+      color: #ffffff;
     }
 
     .nav-menu-group {
