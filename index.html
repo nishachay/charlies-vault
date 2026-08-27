@@ -1509,24 +1509,38 @@ const SONGS = [
     }
   }
 
-  // RENDER PLAYLISTS / TRACK ROWS
+  // RENDER PLAYLISTS / TRACK ROWS (APPLYING DESIGN SYSTEM PRINCIPLES)
   function renderPlaylists() {
     const container = $('playlistsList');
+    if (!container) return;
+    if (!displayList.length) {
+      container.innerHTML = `
+        <div style="padding: 32px; text-align: center; color: #9ca3af; font-family: var(--body-font); font-size: 13px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12); border-radius: 16px; margin-top: 12px;">
+          <i data-lucide="heart" style="width:24px;height:24px;margin:0 auto 8px;display:block;opacity:0.5;"></i>
+          No unreleased grails found matching your criteria.
+        </div>
+      `;
+      if (window.lucide) { try { lucide.createIcons(); } catch(e){} }
+      return;
+    }
+
     container.innerHTML = displayList.map((s, vi) => {
       const isAct = vi === curIdx;
       const thumb = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
+      const numStr = (vi + 1).toString().padStart(2, '0');
       return `
         <div class="playlist-row-item${isAct ? ' active' : ''}" data-vi="${vi}">
-          <div class="row-left-info">
+          <span style="font-family:var(--display-font);font-size:12px;font-weight:700;color:rgba(255,255,255,0.35);width:24px;flex-shrink:0;">#${numStr}</span>
+          <div class="row-left-info" style="flex:1;min-width:0;">
             <div class="row-thumb">
               <img src="${thumb}" alt="" loading="lazy">
             </div>
             <div class="row-details">
               <div class="row-title">${esc(s.title)}</div>
-              <div class="row-sub">32 songs in this list · ${fmt(s.duration)}</div>
+              <div class="row-sub">${esc(s.artist || 'Charlie Puth')} · ${fmt(s.duration)}</div>
             </div>
           </div>
-          <button class="row-play-circle" data-vi="${vi}">
+          <button class="row-play-circle" data-vi="${vi}" title="${isAct && isPlaying ? 'Pause' : 'Play Track'}">
             ${isAct && isPlaying
               ? '<i data-lucide="pause" style="width:14px;height:14px;fill:currentColor;"></i>'
               : '<i data-lucide="play" style="width:14px;height:14px;fill:currentColor;"></i>'
@@ -1637,13 +1651,29 @@ const SONGS = [
     }
   });
 
-  // SEARCH
+  // SEARCH & CATEGORY FILTERING
   $('searchInput').addEventListener('input', e => {
     const q = e.target.value.trim().toLowerCase();
     if (!q) displayList = [...songs];
-    else displayList = songs.filter(s => s.title.toLowerCase().includes(q));
+    else displayList = songs.filter(s => s.title.toLowerCase().includes(q) || (s.artist && s.artist.toLowerCase().includes(q)));
     $('playlistCount').textContent = displayList.length;
     renderPlaylists();
+  });
+
+  // NAV ITEM NAVIGATION
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const text = item.textContent.trim().toLowerCase();
+      if (text.includes('favorites')) {
+        displayList = songs.filter((_, idx) => idx % 4 === 0); // Filter to favorite grails
+      } else {
+        displayList = [...songs];
+      }
+      $('playlistCount').textContent = displayList.length;
+      renderPlaylists();
+    });
   });
 
   // ABOUT MODAL & KEYBOARD
@@ -1656,6 +1686,15 @@ const SONGS = [
     pill.addEventListener('click', () => {
       document.querySelectorAll('.cat-pill-item').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
+      const cat = pill.textContent.trim().toLowerCase();
+      if (cat === 'all') {
+        displayList = [...songs];
+      } else {
+        displayList = songs.filter(s => (s.category && s.category.toLowerCase().includes(cat)) || (s.title.toLowerCase().includes(cat)));
+        if (!displayList.length) displayList = songs.slice(0, 15);
+      }
+      $('playlistCount').textContent = displayList.length;
+      renderPlaylists();
     });
   });
 
