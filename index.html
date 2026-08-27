@@ -399,9 +399,10 @@
       display: block;
     }
 
-    /* VINYL SPINNING ANIMATION */
+    /* VINYL SPINNING ANIMATION (CENTERED EXACTLY AT 0 0 INSIDE PARENT G TRANSFORM) */
     .vinyl-group {
-      transform-origin: 180px 190px;
+      transform-box: fill-box;
+      transform-origin: center center;
       transition: transform 0.8s ease;
       animation: svg-spin 4s linear infinite;
       animation-play-state: paused;
