@@ -245,7 +245,11 @@
       position: relative; margin-top: 4px;
     }
     .left-nav-sidebar.collapsed .nav-user-card {
-      padding: 6px; border-radius: 14px; justify-content: center; width: 40px; margin: auto auto 0;
+      padding: 0; background: transparent; border: none;
+      justify-content: center; width: 40px; margin: auto auto 0;
+    }
+    .left-nav-sidebar.collapsed .nav-user-card:hover {
+      background: transparent; border: none;
     }
     .left-nav-sidebar.collapsed .nav-user-meta {
       display: none;
@@ -261,7 +265,11 @@
       display: flex; align-items: center; justify-content: center;
       font-family: var(--display-font);
       font-size: 12px; font-weight: 800; color: #ffffff;
-      flex-shrink: 0;
+      flex-shrink: 0; transition: all 0.2s ease;
+    }
+    .left-nav-sidebar.collapsed .nav-user-avatar {
+      width: 38px; height: 38px; border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
     .nav-user-meta {
       min-width: 0; flex: 1;
@@ -510,18 +518,43 @@
       font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0;
     }
 
-    .waveform-box {
+    /* ══════════════════════════════════════
+       SLEEK AUDIO PROGRESS BAR (PRO AUDIO SCRUBBER)
+    ══════════════════════════════════════ */
+    .progress-bar-box {
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      margin-top: 4px;
+      margin-top: 4px; width: 100%; user-select: none;
     }
-    .wf-timestamp {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px; font-weight: 600; color: #9ca3af; width: 36px; flex-shrink: 0;
+    .progress-timestamp {
+      font-family: var(--body-font);
+      font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7);
+      width: 36px; flex-shrink: 0; font-variant-numeric: tabular-nums;
     }
-    .wf-bars-wrap {
-      flex: 1; height: 32px;
-      display: flex; align-items: center; gap: 3px;
-      cursor: pointer;
+    .progress-track-wrap {
+      flex: 1; height: 24px; display: flex; align-items: center;
+      cursor: pointer; position: relative;
+    }
+    .progress-track-bg {
+      width: 100%; height: 4px; background: rgba(255, 255, 255, 0.12);
+      border-radius: 9999px; position: relative; transition: height 0.15s ease;
+    }
+    .progress-track-wrap:hover .progress-track-bg {
+      height: 6px; background: rgba(255, 255, 255, 0.18);
+    }
+    .progress-track-fill {
+      height: 100%; background: #ffffff;
+      border-radius: 9999px; position: relative;
+      transition: background 0.15s;
+    }
+    .progress-track-thumb {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #ffffff; position: absolute; right: -6px; top: 50%;
+      transform: translateY(-50%) scale(0);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      transition: transform 0.15s ease, background 0.15s;
+    }
+    .progress-track-wrap:hover .progress-track-thumb {
+      transform: translateY(-50%) scale(1);
     }
 
     .player-controls-row {
@@ -1243,13 +1276,17 @@
           <div class="chassis-slider"></div>
         </div>
 
-        <!-- Middle Box: Waveform Scrubber Pill -->
-        <div class="waveform-box">
-          <span class="wf-timestamp" id="wfCur">1:54</span>
-          <div class="wf-bars-wrap" id="wfBarsWrap">
-            <!-- 28 Waveform Bars -->
+        <!-- Middle Box: Sleek Audio Progress Bar -->
+        <div class="progress-bar-box">
+          <span class="progress-timestamp" id="wfCur">1:54</span>
+          <div class="progress-track-wrap" id="progressTrackWrap">
+            <div class="progress-track-bg">
+              <div class="progress-track-fill" id="progressFill" style="width: 45%;">
+                <div class="progress-track-thumb"></div>
+              </div>
+            </div>
           </div>
-          <span class="wf-timestamp" id="wfTot" style="text-align: right;">3:35</span>
+          <span class="progress-timestamp" id="wfTot" style="text-align: right;">3:35</span>
         </div>
 
         <!-- Bottom Box: Track Title & Meta -->
@@ -1495,33 +1532,34 @@ const SONGS = [
 
   collapseBtn?.addEventListener('click', toggleLeftSidebar);
 
-  // BUILD WAVEFORM BARS
-  function initWaveform() {
-    const wrap = $('wfBarsWrap');
-    const heights = [45,70,95,60,85,100,50,75,90,65,80,55,95,70,45,85,60,90,75,50,85,65,100,55,80,45,70,90];
-    wrap.innerHTML = heights.map((h, i) =>
-      `<div class="wf-single-bar" data-i="${i}" style="height: ${h}%;"></div>`
-    ).join('');
-    wrap.addEventListener('click', scrubWaveform);
-  }
-  initWaveform();
+  // AUDIO PROGRESS BAR SCRUBBER
+  function initProgressBar() {
+    const wrap = $('progressTrackWrap');
+    if (!wrap) return;
+    wrap.addEventListener('click', scrubProgressBar);
 
-  function updateWaveformProgress(progressPct) {
-    const bars = $('wfBarsWrap').querySelectorAll('.wf-single-bar');
-    const activeCount = Math.floor(progressPct * BAR_COUNT);
-    bars.forEach((bar, i) => {
-      bar.classList.toggle('active', i <= activeCount);
-    });
+    let isDragging = false;
+    wrap.addEventListener('mousedown', e => { isDragging = true; isScrubbing = true; scrubProgressBar(e); });
+    window.addEventListener('mousemove', e => { if (isDragging) scrubProgressBar(e); });
+    window.addEventListener('mouseup', () => { if (isDragging) { isDragging = false; isScrubbing = false; } });
+  }
+  initProgressBar();
+
+  function updateProgressBar(progressPct) {
+    const fill = $('progressFill');
+    if (fill) fill.style.width = `${Math.max(0, Math.min(100, progressPct * 100))}%`;
   }
 
-  function scrubWaveform(e) {
+  function scrubProgressBar(e) {
     if (curIdx < 0 || !ytReady || !ytP) return;
-    const rect = $('wfBarsWrap').getBoundingClientRect();
+    const wrap = $('progressTrackWrap');
+    if (!wrap) return;
+    const rect = wrap.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     const d = ytP.getDuration() || 0;
     if (d > 0) {
       ytP.seekTo(pct * d, true);
-      updateWaveformProgress(pct);
+      updateProgressBar(pct);
       $('wfCur').textContent = fmt(pct * d);
     }
   }
@@ -1577,7 +1615,7 @@ const SONGS = [
     if ($('fnpThumbImg')) $('fnpThumbImg').src = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
     $('wfCur').textContent = '0:00';
     $('wfTot').textContent = fmt(s.duration);
-    updateWaveformProgress(0);
+    updateProgressBar(0);
 
     renderPlaylists();
     updatePlayerState(true);
@@ -1621,7 +1659,7 @@ const SONGS = [
       const c = ytP.getCurrentTime() || 0;
       const d = ytP.getDuration() || 0;
       $('wfCur').textContent = fmt(c);
-      if (d > 0) updateWaveformProgress(c / d);
+      if (d > 0) updateProgressBar(c / d);
     }, 250);
   }
   function stopTimer() { clearInterval(timer); }
