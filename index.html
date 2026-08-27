@@ -41,6 +41,8 @@
       --pill-border:       rgba(255, 255, 255, 0.12);
       --pill-active-bg:     #ffffff;
       --pill-active-text:   #000000;
+      --nav-active-bg:      rgba(255, 255, 255, 0.12);
+      --nav-active-text:    #ffffff;
       --track-bg:          rgba(255, 255, 255, 0.12);
       --track-fill:        #ffffff;
       --play-btn-bg:       #ffffff;
@@ -71,6 +73,8 @@
       --pill-border:       rgba(0, 0, 0, 0.12);
       --pill-active-bg:     #0f172a;
       --pill-active-text:   #ffffff;
+      --nav-active-bg:      rgba(15, 23, 42, 0.08);
+      --nav-active-text:    #0f172a;
       --track-bg:          rgba(0, 0, 0, 0.12);
       --track-fill:        #0f172a;
       --play-btn-bg:       #0f172a;
@@ -137,7 +141,7 @@
       border-radius: 24px;
       padding: 18px 14px;
       display: flex; flex-direction: column; gap: 16px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.15);
       z-index: 20;
       transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), padding 0.35s ease, border-color 0.2s, background 0.2s;
       overflow: visible;
@@ -254,8 +258,8 @@
       color: var(--text-primary); background: var(--pill-bg);
     }
     .nav-item-btn.active {
-      color: var(--text-primary); background: var(--surface-card-hover);
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+      color: var(--nav-active-text); background: var(--nav-active-bg);
+      font-weight: 700;
     }
     .left-nav-sidebar.collapsed .nav-item-btn {
       justify-content: center; padding: 0; width: 40px; height: 40px; margin: 0 auto;
