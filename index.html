@@ -44,6 +44,20 @@
       --radius-full:   9999px;
     }
 
+    /* LIGHT MODE DESIGN SYSTEM TOKENS */
+    [data-theme="light"] {
+      --bg-canvas:     #e4e7ec;
+      --surface-glass: rgba(255, 255, 255, 0.70);
+      --surface-hover: rgba(255, 255, 255, 0.85);
+      --surface-card:  rgba(255, 255, 255, 0.75);
+      --border-glass:  rgba(0, 0, 0, 0.08);
+      --border-hover:  rgba(0, 0, 0, 0.16);
+      --text-primary:  #111827;
+      --text-muted:    #4b5563;
+      --text-dim:      #6b7280;
+      --accent:        #111827;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -1677,9 +1691,34 @@ const SONGS = [
   });
 
   // ABOUT MODAL & KEYBOARD
-  $('aboutBtn').addEventListener('click', () => $('aboutModal').classList.add('open'));
-  $('closeAboutBtn').addEventListener('click', () => $('aboutModal').classList.remove('open'));
-  $('aboutModal').addEventListener('click', e => { if (e.target === $('aboutModal')) $('aboutModal').classList.remove('open'); });
+  $('aboutBtn')?.addEventListener('click', () => $('aboutModal').classList.add('open'));
+  $('closeAboutBtn')?.addEventListener('click', () => $('aboutModal').classList.remove('open'));
+  $('aboutModal')?.addEventListener('click', e => { if (e.target === $('aboutModal')) $('aboutModal').classList.remove('open'); });
+
+  // THEME TOGGLE SYSTEM (DARK / LIGHT MODE MEMORY)
+  let currentTheme = localStorage.getItem('theme') || 'dark';
+  
+  function applyTheme(theme) {
+    currentTheme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    const themeBtn = $('themeBtn');
+    const themeIcon = $('themeIcon');
+    if (themeBtn) {
+      const span = themeBtn.querySelector('span');
+      if (span) span.textContent = theme === 'light' ? 'Dark Mode' : 'Light Mode';
+    }
+    if (themeIcon) {
+      themeIcon.setAttribute('data-lucide', theme === 'light' ? 'moon' : 'sun');
+      if (window.lucide) try { lucide.createIcons(); } catch(e){}
+    }
+  }
+
+  applyTheme(currentTheme);
+
+  $('themeBtn')?.addEventListener('click', () => {
+    applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+  });
 
   // CATEGORY PILLS
   document.querySelectorAll('.cat-pill-item').forEach(pill => {
