@@ -321,6 +321,22 @@
       background: rgba(255, 255, 255, 0.04);
     }
 
+    /* SLEEK OVERFLOW SCROLLBAR (PREVENTS CORNER RADIUS CLIPPING) */
+    .main-stage::-webkit-scrollbar {
+      width: 6px;
+    }
+    .main-stage::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 18px 0;
+    }
+    .main-stage::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+    }
+    .main-stage::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
     /* ─── COLUMN 3: RIGHT VINYL PLAYER CONTAINER BOX (OPTIMAL 360PX) ─── */
     .now-playing-sidebar {
       width: 360px;
@@ -677,189 +693,6 @@
       width: 18px; height: 18px;
       stroke-width: 1.75px;
     }
-
-    /* ─── COLUMN 3: RIGHT VINYL PLAYER CONTAINER BOX (FULL HEIGHT) ─── */
-
-    .turntable-chassis {
-      width: 100%;
-      aspect-ratio: 1.05;
-      background: linear-gradient(145deg, #d2d5da 0%, #a3a8b0 40%, #888d96 100%);
-      border-radius: 24px;
-      border: 2px solid #e5e7eb;
-      box-shadow:
-        inset 0 2px 4px rgba(255,255,255,0.8),
-        inset 0 -2px 6px rgba(0,0,0,0.4),
-        0 24px 60px rgba(0,0,0,0.6);
-      position: relative;
-      overflow: hidden;
-      flex-shrink: 0;
-      cursor: pointer;
-    }
-
-    .screw {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: linear-gradient(135deg, #e5e7eb, #9ca3af);
-      border: 1px solid #6b7280;
-      position: absolute;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
-    }
-    .screw::after {
-      content: ''; position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%,-50%) rotate(45deg);
-      width: 60%; height: 1.5px; background: #4b5563;
-    }
-    .screw.tl { top: 12px; left: 12px; }
-    .screw.tr { top: 12px; right: 12px; }
-    .screw.bl { bottom: 12px; left: 12px; }
-    .screw.br { bottom: 12px; right: 12px; }
-
-    .platter-well {
-      position: absolute;
-      top: 50%; left: 44%;
-      transform: translate(-50%, -50%);
-      width: 74%; aspect-ratio: 1;
-      border-radius: 50%;
-      background: #111;
-      box-shadow:
-        inset 0 4px 12px rgba(0,0,0,0.9),
-        0 2px 8px rgba(255,255,255,0.4);
-      border: 3px solid #6b7280;
-      position: relative;
-      overflow: hidden;
-    }
-    .vinyl-disc {
-      position: absolute; inset: 2.5%;
-      border-radius: 50%;
-      background: #0f0f0f;
-      background-image: repeating-radial-gradient(
-        circle at center,
-        #0f0f0f 0px,
-        #0f0f0f 2px,
-        #1c1c1c 3px,
-        #0f0f0f 4px
-      );
-      box-shadow: 0 4px 16px rgba(0,0,0,0.8);
-      animation: vinyl-spin 4s linear infinite;
-      animation-play-state: paused;
-    }
-    .turntable-chassis.playing .vinyl-disc { animation-play-state: running; }
-    @keyframes vinyl-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-    .vinyl-label-center {
-      position: absolute; inset: 32%;
-      border-radius: 50%;
-      background: #e5e5e0;
-      border: 2px solid #9ca3af;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-      animation: vinyl-spin 4s linear infinite;
-      animation-play-state: paused;
-    }
-    .turntable-chassis.playing .vinyl-label-center { animation-play-state: running; }
-    .vinyl-label-text {
-      font-family: 'JetBrains Mono', monospace; font-size: 7px; font-weight: 700;
-      color: #4b5563; text-transform: uppercase; letter-spacing: 0.05em;
-    }
-    .vinyl-spindle {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: #111; border: 2px solid #d1d5db; margin-top: 2px;
-    }
-
-    .tonearm-assembly {
-      position: absolute;
-      top: 8%; right: 8%;
-      width: 28%; height: 72%;
-      transform-origin: 50% 8%;
-      transform: rotate(-26deg);
-      transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-    }
-    .turntable-chassis.playing .tonearm-assembly { transform: rotate(-10deg); }
-    .arm-base {
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 22px; height: 22px; border-radius: 50%;
-      background: linear-gradient(135deg, #e5e7eb, #9ca3af);
-      border: 2px solid #4b5563; box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-    }
-    .arm-rod {
-      position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
-      width: 5px; height: calc(100% - 18px);
-      background: linear-gradient(to bottom, #d1d5db, #6b7280, #374151);
-      border-radius: 3px; box-shadow: 1px 0 3px rgba(0,0,0,0.3);
-    }
-    .arm-headshell {
-      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotate(25deg);
-      width: 14px; height: 22px;
-      background: linear-gradient(135deg, #d1d5db, #4b5563);
-      border-radius: 3px; border: 1px solid #374151;
-    }
-    .arm-headshell::after {
-      content: ''; position: absolute; bottom: -3px; left: 50%; transform: translateX(-50%);
-      width: 3px; height: 6px; background: #ef4444; border-radius: 1px;
-    }
-
-    .chassis-power {
-      position: absolute; bottom: 16px; left: 16px;
-      width: 16px; height: 16px; border-radius: 50%;
-      background: linear-gradient(135deg, #e5e7eb, #6b7280);
-      border: 1px solid #374151; box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
-    }
-    .chassis-slider {
-      position: absolute; bottom: 16px; right: 20px;
-      width: 4px; height: 36px; background: #4b5563; border-radius: 2px;
-    }
-    .chassis-slider::after {
-      content: ''; position: absolute; top: 40%; left: 50%; transform: translateX(-50%);
-      width: 12px; height: 6px; background: #e5e7eb; border-radius: 2px; border: 1px solid #374151;
-    }
-
-    .deck-info-box {
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
-    }
-    .deck-title-text {
-      font-size: 26px; font-weight: 700; color: #fff;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      line-height: 1.1;
-    }
-    .deck-tag-pill {
-      display: inline-flex; align-items: center;
-      height: 24px; padding: 0 12px; border-radius: var(--radius-full);
-      background: #000000; color: #ffffff; border: 1px solid rgba(255,255,255,0.2);
-      font-size: 11px; font-weight: 700; margin-top: 8px;
-    }
-    .deck-like-counter {
-      display: flex; align-items: center; gap: 6px;
-      height: 32px; padding: 0 12px; border-radius: 8px;
-      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
-      font-family: 'Silkscreen', cursive, sans-serif;
-      font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0;
-    }
-
-    .waveform-box {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      margin-top: 4px;
-    }
-    .wf-timestamp {
-      font-family: 'Silkscreen', cursive, sans-serif;
-      font-size: 13px; font-weight: 700; color: #fff; width: 36px; flex-shrink: 0;
-    }
-    .player-controls-row {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-top: 8px;
-    }
-    .ctrl-icn-btn {
-      color: #ffffff; transition: transform 0.15s, opacity 0.15s;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .ctrl-icn-btn:hover { opacity: 0.8; transform: scale(1.05); }
-    .ctrl-main-play-btn {
-      width: 56px; height: 56px; border-radius: 50%;
-      background: #ffffff; color: #000000;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.15s;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-    }
-    .ctrl-main-play-btn:hover { transform: scale(1.08); }
-    .ctrl-main-play-btn:active { transform: scale(0.95); }
 
     /* ══════════════════════════════════════
        DISCOVERY STAGE & GRID
