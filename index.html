@@ -118,7 +118,10 @@
 
     .nav-brand-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 2px 4px 6px; min-height: 32px;
+      padding: 2px 4px 6px; min-height: 32px; width: 100%;
+    }
+    .left-nav-sidebar.collapsed .nav-brand-header {
+      flex-direction: column; align-items: center; gap: 8px; padding: 2px 0 6px;
     }
     .nav-brand-logo {
       font-family: var(--display-font);
@@ -129,17 +132,21 @@
     .logo-full { display: inline-block; }
     .logo-compact { display: none; }
     .left-nav-sidebar.collapsed .logo-full { display: none; }
-    .left-nav-sidebar.collapsed .logo-compact { display: inline-block; font-size: 20px; }
+    .left-nav-sidebar.collapsed .logo-compact { display: inline-block; font-size: 20px; text-align: center; }
 
     .sidebar-collapse-btn {
-      width: 28px; height: 28px; border-radius: 8px;
+      width: 30px; height: 30px; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
       color: #9ca3af; background: rgba(255,255,255,0.05);
-      border: none; cursor: pointer; transition: all 0.15s;
+      border: 1px solid rgba(255,255,255,0.08); cursor: pointer; transition: all 0.15s;
       flex-shrink: 0;
     }
     .sidebar-collapse-btn:hover {
       color: #ffffff; background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .left-nav-sidebar.collapsed .sidebar-collapse-btn {
+      width: 36px; height: 36px; border-radius: 10px; margin: 0 auto;
     }
 
     .nav-search-box {
@@ -157,7 +164,7 @@
       transition: all 0.2s ease;
     }
     .left-nav-sidebar.collapsed .nav-search-box {
-      display: flex; justify-content: center;
+      display: flex; justify-content: center; width: 100%;
     }
     .left-nav-sidebar.collapsed .nav-search-input {
       display: none;
@@ -201,7 +208,8 @@
     /* TOOLTIP SYSTEM FOR COLLAPSED SIDEBAR */
     .left-nav-sidebar.collapsed .nav-item-btn[data-tooltip]::after,
     .left-nav-sidebar.collapsed .nav-user-card[data-tooltip]::after,
-    .left-nav-sidebar.collapsed .nav-search-box[data-tooltip]::after {
+    .left-nav-sidebar.collapsed .nav-search-box[data-tooltip]::after,
+    .left-nav-sidebar.collapsed .sidebar-collapse-btn[data-tooltip]::after {
       content: attr(data-tooltip);
       position: absolute; left: calc(100% + 14px); top: 50%; transform: translateY(-50%);
       background: #28282b; color: #ffffff; border: 1px solid rgba(255,255,255,0.18);
@@ -213,7 +221,8 @@
     }
     .left-nav-sidebar.collapsed .nav-item-btn:hover::after,
     .left-nav-sidebar.collapsed .nav-user-card:hover::after,
-    .left-nav-sidebar.collapsed .nav-search-box:hover::after {
+    .left-nav-sidebar.collapsed .nav-search-box:hover::after,
+    .left-nav-sidebar.collapsed .sidebar-collapse-btn:hover::after {
       opacity: 1; visibility: visible;
     }
 
@@ -268,11 +277,20 @@
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
-    /* ─── COLUMN 2: CENTER MAIN STAGE CANVAS ─── */
+    /* ─── COLUMN 2: CENTER MAIN STAGE CANVAS (ELEVATED CARD BOX) ─── */
     .main-stage {
       flex: 1; min-width: 0; height: 100%;
-      padding: 16px 20px 32px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 24px 28px 36px;
       overflow-y: auto;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .main-stage:hover {
+      border-color: rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.04);
     }
 
     /* ─── COLUMN 3: RIGHT VINYL PLAYER CONTAINER BOX (OPTIMAL 360PX) ─── */
@@ -1026,7 +1044,7 @@
         <span class="logo-full">{ GRAILS }</span>
         <span class="logo-compact">{ G }</span>
       </div>
-      <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Toggle Sidebar Collapse">
+      <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" data-tooltip="Expand / Collapse Sidebar" title="Toggle Sidebar Collapse">
         <i data-lucide="panel-left-close" id="sidebarToggleIcon"></i>
       </button>
     </div>
