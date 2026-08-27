@@ -380,17 +380,17 @@
     }
 
     /* ══════════════════════════════════════
-       METALLIC SILVER VINYL TURNTABLE CHASSIS
+       METALLIC SILVER VINYL TURNTABLE CHASSIS (BENCHMARK HIGH-FIDELITY DECK)
     ══════════════════════════════════════ */
     .turntable-chassis {
       width: 100%;
       aspect-ratio: 1.05;
-      background: linear-gradient(145deg, #d2d5da 0%, #a3a8b0 40%, #888d96 100%);
+      background: linear-gradient(135deg, #e4e7ec 0%, #b2b7c2 45%, #8f95a2 100%);
       border-radius: 24px;
-      border: 2px solid #e5e7eb;
+      border: 2px solid #e0e4e8;
       box-shadow:
-        inset 0 2px 4px rgba(255,255,255,0.8),
-        inset 0 -2px 6px rgba(0,0,0,0.4),
+        inset 0 2px 4px rgba(255,255,255,0.9),
+        inset 0 -3px 8px rgba(0,0,0,0.5),
         0 24px 60px rgba(0,0,0,0.6);
       position: relative;
       overflow: hidden;
@@ -400,7 +400,7 @@
 
     .screw {
       width: 10px; height: 10px; border-radius: 50%;
-      background: linear-gradient(135deg, #e5e7eb, #9ca3af);
+      background: linear-gradient(135deg, #f3f4f6, #9ca3af);
       border: 1px solid #6b7280;
       position: absolute;
       box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
@@ -408,7 +408,7 @@
     .screw::after {
       content: ''; position: absolute; top: 50%; left: 50%;
       transform: translate(-50%,-50%) rotate(45deg);
-      width: 60%; height: 1.5px; background: #4b5563;
+      width: 60%; height: 1.5px; background: #374151;
     }
     .screw.tl { top: 12px; left: 12px; }
     .screw.tr { top: 12px; right: 12px; }
@@ -419,30 +419,46 @@
       position: absolute;
       top: 50%; left: 44%;
       transform: translate(-50%, -50%);
-      width: 74%; aspect-ratio: 1;
+      width: 76%; aspect-ratio: 1;
       border-radius: 50%;
-      background: #111;
+      background: #18181a;
       box-shadow:
-        inset 0 4px 12px rgba(0,0,0,0.9),
+        inset 0 6px 16px rgba(0,0,0,0.95),
+        0 0 0 2px #4b5563,
         0 2px 8px rgba(255,255,255,0.4);
       border: 3px solid #6b7280;
       position: relative;
       overflow: hidden;
     }
-    .vinyl-disc {
-      position: absolute; inset: 2.5%;
-      border-radius: 50%;
-      background: #0f0f0f;
-      background-image: repeating-radial-gradient(
-        circle at center,
-        #0f0f0f 0px,
-        #0f0f0f 2px,
-        #1c1c1c 3px,
-        #0f0f0f 4px
+
+    .strobe-ring {
+      position: absolute; inset: 0; border-radius: 50%;
+      background-image: repeating-conic-gradient(
+        #e5e7eb 0deg 1.2deg,
+        transparent 1.2deg 4deg,
+        #9ca3af 4deg 5deg,
+        transparent 5deg 8deg
       );
-      box-shadow: 0 4px 16px rgba(0,0,0,0.8);
+      opacity: 0.75; pointer-events: none; z-index: 1;
+    }
+
+    .vinyl-disc {
+      position: absolute; inset: 4.5%;
+      border-radius: 50%;
+      background: #0d0d0f;
+      background-image:
+        linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 40%, rgba(255,255,255,0.08) 60%, transparent 100%),
+        repeating-radial-gradient(
+          circle at center,
+          #0d0d0f 0px,
+          #0d0d0f 2px,
+          #222226 3px,
+          #0d0d0f 4px
+        );
+      box-shadow: 0 4px 16px rgba(0,0,0,0.85);
       animation: vinyl-spin 4s linear infinite;
       animation-play-state: paused;
+      z-index: 2;
     }
     .turntable-chassis.playing .vinyl-disc { animation-play-state: running; }
     @keyframes vinyl-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -450,49 +466,61 @@
     .vinyl-label-center {
       position: absolute; inset: 32%;
       border-radius: 50%;
-      background: #e5e5e0;
-      border: 2px solid #9ca3af;
+      background: linear-gradient(90deg, #eae8e1 0%, #eae8e1 50%, #8e939d 50%, #8e939d 100%);
+      border: 2px solid #6b7280;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
       animation: vinyl-spin 4s linear infinite;
       animation-play-state: paused;
+      z-index: 3;
     }
     .turntable-chassis.playing .vinyl-label-center { animation-play-state: running; }
     .vinyl-label-text {
-      font-family: 'DM Sans', sans-serif; font-size: 8px; font-weight: 700;
-      color: #4b5563; text-transform: uppercase; letter-spacing: 0.05em;
+      font-family: var(--display-font); font-size: 8px; font-weight: 800;
+      color: #1f2937; text-transform: uppercase; letter-spacing: 0.05em;
     }
     .vinyl-spindle {
-      width: 100%; height: 100%; border-radius: 50%;
-      background: #111; border: 2px solid #d1d5db; margin-top: 2px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: radial-gradient(circle, #f3f4f6, #6b7280);
+      border: 1px solid #374151; margin-top: 2px;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.6);
     }
 
     .tonearm-assembly {
       position: absolute;
-      top: 8%; right: 8%;
-      width: 28%; height: 72%;
+      top: 6%; right: 6%;
+      width: 30%; height: 76%;
       transform-origin: 50% 8%;
-      transform: rotate(-26deg);
+      transform: rotate(-28deg);
       transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 10;
     }
     .turntable-chassis.playing .tonearm-assembly { transform: rotate(-10deg); }
+
+    .arm-pivot-ring {
+      position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
+      width: 34px; height: 34px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ffffff 0%, #a1a6b0 60%, #374151 100%);
+      border: 2px solid #374151; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
     .arm-base {
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 22px; height: 22px; border-radius: 50%;
-      background: linear-gradient(135deg, #e5e7eb, #9ca3af);
-      border: 2px solid #4b5563; box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      position: absolute; top: 3px; left: 50%; transform: translateX(-50%);
+      width: 20px; height: 20px; border-radius: 50%;
+      background: linear-gradient(135deg, #e5e7eb, #6b7280);
+      border: 1.5px solid #1f2937; box-shadow: 0 2px 4px rgba(0,0,0,0.4);
     }
     .arm-rod {
-      position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
-      width: 5px; height: calc(100% - 18px);
-      background: linear-gradient(to bottom, #d1d5db, #6b7280, #374151);
-      border-radius: 3px; box-shadow: 1px 0 3px rgba(0,0,0,0.3);
+      position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+      width: 5px; height: calc(100% - 22px);
+      background: linear-gradient(to bottom, #ffffff 0%, #9ca3af 50%, #374151 100%);
+      border-radius: 3px; box-shadow: 1px 0 4px rgba(0,0,0,0.4);
     }
     .arm-headshell {
-      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotate(25deg);
-      width: 14px; height: 22px;
-      background: linear-gradient(135deg, #d1d5db, #4b5563);
-      border-radius: 3px; border: 1px solid #374151;
+      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotate(24deg);
+      width: 14px; height: 24px;
+      background: linear-gradient(135deg, #e5e7eb, #4b5563);
+      border-radius: 3px; border: 1px solid #1f2937;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
     }
     .arm-headshell::after {
       content: ''; position: absolute; bottom: -3px; left: 50%; transform: translateX(-50%);
@@ -501,17 +529,34 @@
 
     .chassis-power {
       position: absolute; bottom: 16px; left: 16px;
-      width: 16px; height: 16px; border-radius: 50%;
-      background: linear-gradient(135deg, #e5e7eb, #6b7280);
-      border: 1px solid #374151; box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
+      width: 18px; height: 18px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ffffff 0%, #9ca3af 60%, #374151 100%);
+      border: 1.5px solid #374151; box-shadow: 0 2px 6px rgba(0,0,0,0.5);
     }
+
+    .speed-buttons {
+      position: absolute; bottom: 16px; left: 44px;
+      display: flex; gap: 4px;
+    }
+    .spd-btn {
+      width: 18px; height: 12px; border-radius: 3px;
+      background: rgba(0,0,0,0.3); border: 1px solid #6b7280;
+      font-size: 7px; font-weight: 800; color: #d1d5db;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .spd-btn.active {
+      background: #ffffff; color: #000000; border-color: #ffffff;
+    }
+
     .chassis-slider {
       position: absolute; bottom: 16px; right: 20px;
-      width: 4px; height: 36px; background: #4b5563; border-radius: 2px;
+      width: 4px; height: 38px; background: #374151; border-radius: 2px;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.6);
     }
     .chassis-slider::after {
       content: ''; position: absolute; top: 40%; left: 50%; transform: translateX(-50%);
-      width: 12px; height: 6px; background: #e5e7eb; border-radius: 2px; border: 1px solid #374151;
+      width: 14px; height: 7px; background: linear-gradient(to bottom, #f3f4f6, #9ca3af);
+      border-radius: 2px; border: 1px solid #374151; box-shadow: 0 2px 4px rgba(0,0,0,0.4);
     }
 
     .deck-info-box {
@@ -1298,6 +1343,7 @@
           <div class="screw br"></div>
 
           <div class="platter-well">
+            <div class="strobe-ring"></div>
             <div class="vinyl-disc"></div>
             <div class="vinyl-label-center" id="vinylLabel">
               <span class="vinyl-label-text">33⅓ RPM</span>
@@ -1306,12 +1352,17 @@
           </div>
 
           <div class="tonearm-assembly" id="tonearm">
+            <div class="arm-pivot-ring"></div>
             <div class="arm-base"></div>
             <div class="arm-rod"></div>
             <div class="arm-headshell"></div>
           </div>
 
           <div class="chassis-power"></div>
+          <div class="speed-buttons">
+            <span class="spd-btn active">33</span>
+            <span class="spd-btn">45</span>
+          </div>
           <div class="chassis-slider"></div>
         </div>
 
