@@ -740,16 +740,67 @@
       border-color: var(--pill-active-bg);
     }
 
-    .deck-report-btn {
-      display: flex; align-items: center; justify-content: center;
-      width: 32px; height: 32px; border-radius: 50%;
-      background: var(--pill-bg); border: 1px solid var(--pill-border);
-      color: var(--text-secondary); cursor: pointer; transition: all 0.15s ease;
-      margin-left: 6px;
+    /* FEATURED VAULT ARTIST CARDS GRID & HERO BANNER */
+    .artist-grid-container {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; margin-top: 10px;
     }
-    .deck-report-btn:hover {
-      color: #ef4444; border-color: rgba(239, 68, 68, 0.4);
-      background: rgba(239, 68, 68, 0.12);
+    .artist-card-item {
+      background: var(--surface-card); border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg); padding: 18px 14px; display: flex; flex-direction: column;
+      align-items: center; text-align: center; gap: 10px; cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); position: relative;
+    }
+    .artist-card-item:hover {
+      background: var(--surface-card-hover); border-color: var(--border-card-hover);
+      transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+    }
+    .artist-card-avatar {
+      width: 64px; height: 64px; border-radius: 50%; background: var(--pill-bg);
+      border: 2px solid var(--pill-border); display: flex; align-items: center; justify-content: center;
+      font-family: var(--display-font); font-size: 18px; font-weight: 800; color: var(--text-primary);
+      transition: all 0.2s ease;
+    }
+    .artist-card-item:hover .artist-card-avatar {
+      border-color: var(--text-primary); transform: scale(1.06); background: var(--pill-active-bg); color: var(--pill-active-text);
+    }
+    .artist-card-name {
+      font-family: var(--display-font); font-size: 14px; font-weight: 700; color: var(--text-primary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;
+    }
+    .artist-card-sub {
+      font-family: var(--body-font); font-size: 11px; font-weight: 600; color: var(--text-secondary);
+    }
+
+    .back-to-home-btn {
+      display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px;
+      border-radius: var(--radius-full); background: var(--pill-bg); border: 1px solid var(--pill-border);
+      font-family: var(--body-font); font-size: 12px; font-weight: 600; color: var(--text-primary);
+      cursor: pointer; transition: all 0.15s ease; margin-bottom: 16px;
+    }
+    .back-to-home-btn:hover {
+      background: var(--surface-card-hover); border-color: var(--border-card-hover);
+    }
+
+    .artist-hero-banner {
+      display: flex; align-items: center; gap: 20px; padding: 22px; border-radius: 20px;
+      background: var(--surface-card); border: 1px solid var(--border-card);
+    }
+    .artist-hero-avatar {
+      width: 76px; height: 76px; border-radius: 50%; background: var(--pill-active-bg);
+      border: 3px solid var(--text-primary); display: flex; align-items: center; justify-content: center;
+      font-family: var(--display-font); font-size: 24px; font-weight: 800; color: var(--pill-active-text);
+      flex-shrink: 0;
+    }
+    .artist-hero-name {
+      font-size: 24px; font-weight: 800; color: var(--text-primary); margin-bottom: 2px;
+    }
+    .artist-hero-sub {
+      font-size: 12px; color: var(--text-secondary); font-weight: 500; margin-bottom: 6px;
+    }
+    .artist-hero-badge {
+      display: inline-block; padding: 3px 10px; border-radius: var(--radius-full);
+      background: var(--pill-bg); border: 1px solid var(--pill-border);
+      font-size: 11px; font-weight: 700; color: var(--text-primary);
     }
 
     .category-pills-row {
@@ -988,146 +1039,108 @@
   <main class="main-stage">
       <section class="discovery-stage">
 
-        <!-- TOP SECTION: ARTIST ROSTER RIBBON & ERA FILTER -->
-        <div class="artist-roster-section">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <h2 class="section-pixel-title pixel-text">Vault Artist Roster</h2>
-            <div class="era-filter-bar" id="eraFilterBar">
-              <button class="era-pill active" data-era="all">All Eras</button>
-              <button class="era-pill" data-era="2016-2018">2016-18</button>
-              <button class="era-pill" data-era="2019-2021">2019-21</button>
-              <button class="era-pill" data-era="2022-2026">2022-26</button>
+        <!-- ══════════════════════════════════════
+             VIEW 1: HOME DISCOVERY CANVAS (ARTIST CARDS GRID & TRENDING)
+        ══════════════════════════════════════ -->
+        <div id="homeSectionView">
+          <!-- TOP SECTION: FEATURED VAULT ARTIST CARDS GRID -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h2 class="section-pixel-title pixel-text">Featured Vault Artists</h2>
+              <span class="view-all-link">12 Artists</span>
+            </div>
+
+            <div class="artist-grid-container" id="artistGridContainer">
+              <!-- Dynamically populated 12 Artist Cards -->
             </div>
           </div>
 
-          <div class="artist-avatar-ribbon" id="artistAvatarRibbon">
-            <button class="artist-avatar-btn active" data-artist="all" title="All Artists">
-              <div class="avatar-ring">ALL</div>
-              <span>All Vault</span>
-            </button>
-            <button class="artist-avatar-btn" data-artist="Charlie Puth" title="Charlie Puth">
-              <div class="avatar-ring">CP</div>
-              <span>Charlie Puth</span>
-            </button>
-            <button class="artist-avatar-btn" data-artist="Kanye West" title="Kanye West / Ye">
-              <div class="avatar-ring">Ye</div>
-              <span>Kanye West</span>
-            </button>
-            <button class="artist-avatar-btn" data-artist="The Weeknd" title="The Weeknd (XO)">
-              <div class="avatar-ring">XO</div>
-              <span>The Weeknd</span>
-            </button>
-            <button class="artist-avatar-btn" data-artist="Drake" title="Drake (OVO)">
-              <div class="avatar-ring">OVO</div>
-              <span>Drake</span>
-            </button>
-            <button class="artist-avatar-btn" data-artist="Juice WRLD" title="Juice WRLD (999)">
-              <div class="avatar-ring">999</div>
-              <span>Juice WRLD</span>
-            </button>
-            <button class="artist-avatar-btn" data-artist="Travis Scott" title="Travis Scott (Cactus Jack)">
-              <div class="avatar-ring">CJ</div>
-              <span>Travis Scott</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- SECOND SECTION: MUSIC CATEGORIES -->
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
-            <h2 class="section-pixel-title pixel-text">Music Categories</h2>
-            <span class="view-all-link">View all</span>
-          </div>
-
-          <div class="category-pills-row">
-            <button class="cat-pill-item active" data-cat="all">All</button>
-            <button class="cat-pill-item" data-cat="classic">Classic</button>
-            <button class="cat-pill-item" data-cat="90s">90s</button>
-            <button class="cat-pill-item" data-cat="new">New</button>
-            <button class="cat-pill-item" data-cat="instrumental">Instrumental</button>
-            <button class="cat-pill-item" data-cat="modern">Modern</button>
-          </div>
-
-          <div class="cards-grid">
-            <div class="card-item-featured" id="cardChaos">
-              <div class="card-cover-wrap">
-                <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=400&auto=format&fit=crop" alt="Sick Mode">
-              </div>
-              <div class="card-footer-row">
-                <div class="card-meta">
-                  <div class="card-title">Sick mode</div>
-                  <div class="card-artist">Travis Scott</div>
-                </div>
-                <div class="card-controls-cluster">
-                  <button class="card-ctrl-btn" title="Previous Track">
-                    <i data-lucide="skip-back" style="width:12px;height:12px;"></i>
-                  </button>
-                  <button class="card-ctrl-btn play" title="Play Track">
-                    <i data-lucide="play" style="width:14px;height:14px;fill:currentColor;margin-left:1px;"></i>
-                  </button>
-                  <button class="card-ctrl-btn" title="Next Track">
-                    <i data-lucide="skip-forward" style="width:12px;height:12px;"></i>
-                  </button>
-                </div>
-              </div>
+          <!-- SECOND SECTION: TRENDING UNRELEASED GRAILS -->
+          <div style="margin-top: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h2 class="section-pixel-title pixel-text">Trending Grails</h2>
+              <span class="view-all-link">Top Unreleased Outtakes</span>
             </div>
 
-            <div class="card-item-featured" id="cardSimple">
-              <div class="card-cover-wrap">
-                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=400&auto=format&fit=crop" alt="Too Late">
-              </div>
-              <div class="card-footer-row">
-                <div class="card-meta">
-                  <div class="card-title">Too late</div>
-                  <div class="card-artist">The Weeknd</div>
+            <div class="cards-grid">
+              <div class="card-item-featured" id="cardChaos">
+                <div class="card-cover-wrap">
+                  <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=400&auto=format&fit=crop" alt="Sick Mode">
                 </div>
-                <div class="card-controls-cluster">
-                  <button class="card-ctrl-btn" title="Previous Track">
-                    <i data-lucide="skip-back" style="width:12px;height:12px;"></i>
-                  </button>
-                  <button class="card-ctrl-btn play" title="Play Track">
-                    <i data-lucide="play" style="width:14px;height:14px;fill:currentColor;margin-left:1px;"></i>
-                  </button>
-                  <button class="card-ctrl-btn" title="Next Track">
-                    <i data-lucide="skip-forward" style="width:12px;height:12px;"></i>
-                  </button>
+                <div class="card-footer-row">
+                  <div class="card-meta">
+                    <div class="card-title">Sick mode</div>
+                    <div class="card-artist">Travis Scott</div>
+                  </div>
+                  <div class="card-controls-cluster">
+                    <button class="card-ctrl-btn play" title="Play Track">
+                      <i data-lucide="play" style="width:14px;height:14px;fill:currentColor;margin-left:1px;"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="card-item-featured" id="cardNotSoGood">
-              <div class="card-cover-wrap">
-                <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=400&auto=format&fit=crop" alt="1984">
-              </div>
-              <div class="card-footer-row">
-                <div class="card-meta">
-                  <div class="card-title">1984</div>
-                  <div class="card-artist">Charlie Puth</div>
+              <div class="card-item-featured" id="cardSimple">
+                <div class="card-cover-wrap">
+                  <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=400&auto=format&fit=crop" alt="Too Late">
                 </div>
-                <div class="card-controls-cluster">
-                  <button class="card-ctrl-btn" title="Previous Track">
-                    <i data-lucide="skip-back" style="width:12px;height:12px;"></i>
-                  </button>
-                  <button class="card-ctrl-btn play" title="Play Track">
-                    <i data-lucide="play" style="width:14px;height:14px;fill:currentColor;margin-left:1px;"></i>
-                  </button>
-                  <button class="card-ctrl-btn" title="Next Track">
-                    <i data-lucide="skip-forward" style="width:12px;height:12px;"></i>
-                  </button>
+                <div class="card-footer-row">
+                  <div class="card-meta">
+                    <div class="card-title">Too late</div>
+                    <div class="card-artist">The Weeknd</div>
+                  </div>
+                  <div class="card-controls-cluster">
+                    <button class="card-ctrl-btn play" title="Play Track">
+                      <i data-lucide="play" style="width:14px;height:14px;fill:currentColor;margin-left:1px;"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-item-featured" id="cardNotSoGood">
+                <div class="card-cover-wrap">
+                  <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=400&auto=format&fit=crop" alt="1984">
+                </div>
+                <div class="card-footer-row">
+                  <div class="card-meta">
+                    <div class="card-title">1984</div>
+                    <div class="card-artist">Charlie Puth</div>
+                  </div>
+                  <div class="card-controls-cluster">
+                    <button class="card-ctrl-btn play" title="Play Track">
+                      <i data-lucide="play" style="width:14px;height:14px;fill:currentColor;margin-left:1px;"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- BOTTOM SECTION: FAVORITE PLAYLISTS -->
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
-            <h2 class="section-pixel-title pixel-text">Favorite Playlists (<span id="playlistCount">99</span>)</h2>
+        <!-- ══════════════════════════════════════
+             VIEW 2: DEDICATED ARTIST PAGE VIEW
+        ══════════════════════════════════════ -->
+        <div id="artistSectionView" style="display: none;">
+          <button class="back-to-home-btn" id="backToHomeBtn">
+            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i>
+            <span>Back to All Artists</span>
+          </button>
+
+          <div class="artist-hero-banner">
+            <div class="artist-hero-avatar" id="artistHeroAvatar">Ye</div>
+            <div class="artist-hero-meta">
+              <h1 class="artist-hero-name pixel-text" id="artistHeroName">Kanye West</h1>
+              <div class="artist-hero-sub" id="artistHeroSub">Unreleased Vault &amp; Studio Outtakes</div>
+              <div class="artist-hero-badge" id="artistHeroBadge">5 Unreleased Grails</div>
+            </div>
           </div>
 
-          <div class="playlists-list" id="playlistsList">
-            <!-- Dynamically populated from 99 Charlie Puth unreleased tracks -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 12px;">
+            <h2 class="section-pixel-title pixel-text">Artist Outtakes (<span id="artistTrackCount">5</span>)</h2>
+          </div>
+
+          <div class="playlists-list" id="artistTrackList">
+            <!-- Populated dynamically when viewing an artist -->
           </div>
         </div>
 
@@ -1848,76 +1861,119 @@ const SONGS = [
     applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
   });
 
-  // ARTIST SELECTION BAR
-  document.querySelectorAll('#artistPillsRow .cat-pill-item').forEach(pill => {
-    pill.addEventListener('click', () => {
-      document.querySelectorAll('#artistPillsRow .cat-pill-item').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      const artist = pill.getAttribute('data-artist');
-      if (!artist || artist === 'all') {
-        displayList = [...songs];
-      } else {
-        displayList = songs.filter(s => s.artist && s.artist.toLowerCase().includes(artist.toLowerCase()));
-        if (!displayList.length) displayList = songs.slice(0, 10);
-      }
-      $('playlistCount').textContent = displayList.length;
-      renderPlaylists();
-    });
-  });
+  const ARTISTS_DATA = [
+    { name: "Kanye West", initials: "Ye", tag: "Yandhi & Donda Vault" },
+    { name: "The Weeknd", initials: "XO", tag: "After Hours & Trilogy Demos" },
+    { name: "Drake", initials: "OVO", tag: "Certified Lover Boy Leaks" },
+    { name: "Juice WRLD", initials: "999", tag: "Unreleased Studio Sessions" },
+    { name: "Travis Scott", initials: "CJ", tag: "Astroworld & Utopia Outtakes" },
+    { name: "Charlie Puth", initials: "CP", tag: "Voicenotes & Studio Cuts" },
+    { name: "Billie Eilish", initials: "BE", tag: "Acoustic Demos & Leaks" },
+    { name: "Post Malone", initials: "PM", tag: "Hollywood's Bleeding Demos" },
+    { name: "Justin Bieber", initials: "JB", tag: "Journals & Studio Outtakes" },
+    { name: "Ariana Grande", initials: "AG", tag: "Sweetener & Position Leaks" },
+    { name: "XXXTentacion", initials: "XXX", tag: "17 & Bad Vibes Demos" },
+    { name: "Lil Uzi Vert", initials: "UZI", tag: "16*29 & Eternal Atake Leaks" }
+  ];
 
-  // CATEGORY PILLS
-  document.querySelectorAll('.category-pills-row .cat-pill-item').forEach(pill => {
-    pill.addEventListener('click', () => {
-      document.querySelectorAll('.category-pills-row .cat-pill-item').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      const cat = pill.textContent.trim().toLowerCase();
-      if (cat === 'all') {
-        displayList = [...songs];
-      } else {
-        displayList = songs.filter(s => (s.category && s.category.toLowerCase().includes(cat)) || (s.title.toLowerCase().includes(cat)));
-        if (!displayList.length) displayList = songs.slice(0, 15);
-      }
-      $('playlistCount').textContent = displayList.length;
-      renderPlaylists();
-    });
-  });
+  function renderArtistCards() {
+    const grid = $('artistGridContainer');
+    if (!grid) return;
+    grid.innerHTML = ARTISTS_DATA.map(a => {
+      const count = songs.filter(s => s.artist && s.artist.toLowerCase().includes(a.name.toLowerCase())).length || 5;
+      return `
+        <div class="artist-card-item" data-artist="${a.name}">
+          <div class="artist-card-avatar">${a.initials}</div>
+          <div style="width:100%;">
+            <div class="artist-card-name">${a.name}</div>
+            <div class="artist-card-sub">${count} Outtakes</div>
+          </div>
+        </div>
+      `;
+    }).join('');
 
-  // ARTIST AVATAR RIBBON LISTENERS
-  document.querySelectorAll('#artistAvatarRibbon .artist-avatar-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('#artistAvatarRibbon .artist-avatar-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const artist = btn.getAttribute('data-artist');
-      if (!artist || artist === 'all') {
-        displayList = [...songs];
-      } else {
-        displayList = songs.filter(s => s.artist && s.artist.toLowerCase().includes(artist.toLowerCase()));
-        if (!displayList.length) displayList = songs.slice(0, 10);
-      }
-      $('playlistCount').textContent = displayList.length;
-      renderPlaylists();
+    grid.querySelectorAll('.artist-card-item').forEach(card => {
+      card.addEventListener('click', () => {
+        const artistName = card.getAttribute('data-artist');
+        showArtistPage(artistName);
+      });
     });
-  });
+  }
 
-  // ERA FILTER BAR LISTENERS
-  document.querySelectorAll('#eraFilterBar .era-pill').forEach(pill => {
-    pill.addEventListener('click', () => {
-      document.querySelectorAll('#eraFilterBar .era-pill').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      const era = pill.getAttribute('data-era');
-      if (era === 'all') {
-        displayList = [...songs];
-      } else if (era === '2016-2018') {
-        displayList = songs.filter((s, i) => s.era === '2016-2018' || (i % 3 === 0));
-      } else if (era === '2019-2021') {
-        displayList = songs.filter((s, i) => s.era === '2019-2021' || (i % 3 === 1));
-      } else {
-        displayList = songs.filter((s, i) => s.era === '2022-2026' || (i % 3 === 2));
-      }
-      $('playlistCount').textContent = displayList.length;
-      renderPlaylists();
+  function showArtistPage(artistName) {
+    const homeView = $('homeSectionView');
+    const artistView = $('artistSectionView');
+    if (!homeView || !artistView) return;
+
+    const artistObj = ARTISTS_DATA.find(a => a.name === artistName) || { name: artistName, initials: artistName.slice(0, 2).toUpperCase(), tag: "Unreleased Outtakes" };
+    const artistSongs = songs.filter(s => s.artist && s.artist.toLowerCase().includes(artistName.toLowerCase()));
+
+    displayList = artistSongs.length ? artistSongs : songs.slice(0, 10);
+
+    $('artistHeroAvatar').textContent = artistObj.initials;
+    $('artistHeroName').textContent = artistObj.name;
+    $('artistHeroSub').textContent = artistObj.tag;
+    $('artistHeroBadge').textContent = `${displayList.length} Unreleased Grails`;
+    $('artistTrackCount').textContent = displayList.length;
+
+    homeView.style.display = 'none';
+    artistView.style.display = 'block';
+
+    renderArtistTrackList();
+  }
+
+  function showHomePage() {
+    const homeView = $('homeSectionView');
+    const artistView = $('artistSectionView');
+    if (!homeView || !artistView) return;
+
+    homeView.style.display = 'block';
+    artistView.style.display = 'none';
+
+    displayList = [...songs];
+  }
+
+  function renderArtistTrackList() {
+    const container = $('artistTrackList');
+    if (!container) return;
+    container.innerHTML = displayList.map((s, vi) => {
+      const isAct = vi === curIdx;
+      const thumb = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
+      const numStr = (vi + 1).toString().padStart(2, '0');
+      return `
+        <div class="playlist-row-item${isAct ? ' active' : ''}" data-vi="${vi}">
+          <span style="font-family:var(--display-font);font-size:12px;font-weight:700;color:var(--text-muted);width:24px;flex-shrink:0;">#${numStr}</span>
+          <div class="row-left-info" style="flex:1;min-width:0;">
+            <div class="row-thumb">
+              <img src="${thumb}" alt="" loading="lazy">
+            </div>
+            <div class="row-details">
+              <div class="row-title">${esc(s.title)}</div>
+              <div class="row-sub">${esc(s.artist || 'Artist')} · ${fmt(s.duration)}</div>
+            </div>
+          </div>
+          <button class="row-play-circle" data-vi="${vi}" title="${isAct && isPlaying ? 'Pause' : 'Play Track'}">
+            ${isAct && isPlaying
+              ? '<i data-lucide="pause" style="width:14px;height:14px;fill:currentColor;"></i>'
+              : '<i data-lucide="play" style="width:14px;height:14px;fill:currentColor;"></i>'
+            }
+          </button>
+        </div>
+      `;
+    }).join('');
+
+    container.querySelectorAll('.playlist-row-item').forEach(row => {
+      row.addEventListener('click', () => {
+        const vi = +row.dataset.vi;
+        if (vi === curIdx) togglePlay(); else playTrack(vi);
+      });
     });
-  });
+
+    if (window.lucide) { try { lucide.createIcons(); } catch(e){} }
+  }
+
+  $('backToHomeBtn')?.addEventListener('click', showHomePage);
+  $('railHome')?.addEventListener('click', showHomePage);
 
   // REPORT BROKEN LINK BUTTON
   $('reportLinkBtn')?.addEventListener('click', () => {
@@ -1972,7 +2028,7 @@ const SONGS = [
     });
   };
 
-  renderPlaylists();
+  renderArtistCards();
   if (window.lucide) { try { lucide.createIcons(); } catch(e){} }
 
 })();
