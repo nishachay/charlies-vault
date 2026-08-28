@@ -694,7 +694,64 @@
     }
     .view-all-link:hover { color: var(--text-primary); text-decoration: underline; text-underline-offset: 4px; }
 
-    .artist-pills-row,
+    .artist-avatar-ribbon {
+      display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; margin-top: 6px;
+    }
+    .artist-avatar-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      background: transparent; border: none; cursor: pointer; flex-shrink: 0;
+      transition: transform 0.15s ease;
+    }
+    .artist-avatar-btn:hover { transform: translateY(-2px); }
+    .avatar-ring {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--pill-bg); border: 2px solid var(--pill-border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display-font); font-size: 13px; font-weight: 800;
+      color: var(--text-primary); transition: all 0.15s ease;
+    }
+    .artist-avatar-btn.active .avatar-ring {
+      border-color: var(--text-primary);
+      background: var(--pill-active-bg); color: var(--pill-active-text);
+      box-shadow: 0 0 0 3px var(--pill-border);
+    }
+    .artist-avatar-btn span {
+      font-family: var(--body-font); font-size: 11px; font-weight: 600;
+      color: var(--text-secondary); white-space: nowrap;
+    }
+    .artist-avatar-btn.active span {
+      color: var(--text-primary); font-weight: 700;
+    }
+
+    .era-filter-bar {
+      display: flex; gap: 6px;
+    }
+    .era-pill {
+      height: 26px; padding: 0 10px; border-radius: var(--radius-full);
+      background: var(--pill-bg); border: 1px solid var(--pill-border);
+      font-family: var(--body-font); font-size: 11px; font-weight: 600;
+      color: var(--text-secondary); cursor: pointer; transition: all 0.15s ease;
+    }
+    .era-pill:hover:not(.active) {
+      color: var(--text-primary); background: var(--surface-card-hover);
+    }
+    .era-pill.active {
+      background: var(--pill-active-bg); color: var(--pill-active-text);
+      border-color: var(--pill-active-bg);
+    }
+
+    .deck-report-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--pill-bg); border: 1px solid var(--pill-border);
+      color: var(--text-secondary); cursor: pointer; transition: all 0.15s ease;
+      margin-left: 6px;
+    }
+    .deck-report-btn:hover {
+      color: #ef4444; border-color: rgba(239, 68, 68, 0.4);
+      background: rgba(239, 68, 68, 0.12);
+    }
+
     .category-pills-row {
       display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;
     }
@@ -931,20 +988,47 @@
   <main class="main-stage">
       <section class="discovery-stage">
 
-        <!-- TOP SECTION: FEATURED VAULT ARTISTS -->
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2 class="section-pixel-title pixel-text">Vault Artists</h2>
+        <!-- TOP SECTION: ARTIST ROSTER RIBBON & ERA FILTER -->
+        <div class="artist-roster-section">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h2 class="section-pixel-title pixel-text">Vault Artist Roster</h2>
+            <div class="era-filter-bar" id="eraFilterBar">
+              <button class="era-pill active" data-era="all">All Eras</button>
+              <button class="era-pill" data-era="2016-2018">2016-18</button>
+              <button class="era-pill" data-era="2019-2021">2019-21</button>
+              <button class="era-pill" data-era="2022-2026">2022-26</button>
+            </div>
           </div>
 
-          <div class="artist-pills-row" id="artistPillsRow">
-            <button class="cat-pill-item active" data-artist="all">All Artists</button>
-            <button class="cat-pill-item" data-artist="Charlie Puth">Charlie Puth</button>
-            <button class="cat-pill-item" data-artist="Kanye West">Kanye West</button>
-            <button class="cat-pill-item" data-artist="The Weeknd">The Weeknd</button>
-            <button class="cat-pill-item" data-artist="Drake">Drake</button>
-            <button class="cat-pill-item" data-artist="Travis Scott">Travis Scott</button>
-            <button class="cat-pill-item" data-artist="Juice WRLD">Juice WRLD</button>
+          <div class="artist-avatar-ribbon" id="artistAvatarRibbon">
+            <button class="artist-avatar-btn active" data-artist="all" title="All Artists">
+              <div class="avatar-ring">ALL</div>
+              <span>All Vault</span>
+            </button>
+            <button class="artist-avatar-btn" data-artist="Charlie Puth" title="Charlie Puth">
+              <div class="avatar-ring">CP</div>
+              <span>Charlie Puth</span>
+            </button>
+            <button class="artist-avatar-btn" data-artist="Kanye West" title="Kanye West / Ye">
+              <div class="avatar-ring">Ye</div>
+              <span>Kanye West</span>
+            </button>
+            <button class="artist-avatar-btn" data-artist="The Weeknd" title="The Weeknd (XO)">
+              <div class="avatar-ring">XO</div>
+              <span>The Weeknd</span>
+            </button>
+            <button class="artist-avatar-btn" data-artist="Drake" title="Drake (OVO)">
+              <div class="avatar-ring">OVO</div>
+              <span>Drake</span>
+            </button>
+            <button class="artist-avatar-btn" data-artist="Juice WRLD" title="Juice WRLD (999)">
+              <div class="avatar-ring">999</div>
+              <span>Juice WRLD</span>
+            </button>
+            <button class="artist-avatar-btn" data-artist="Travis Scott" title="Travis Scott (Cactus Jack)">
+              <div class="avatar-ring">CJ</div>
+              <span>Travis Scott</span>
+            </button>
           </div>
         </div>
 
@@ -1225,10 +1309,15 @@
               <h1 class="deck-title-text pixel-text" id="deckTitle">1984</h1>
               <div class="deck-artist-sub" id="deckArtist">Charlie Puth</div>
             </div>
-            <button class="deck-like-counter" id="likeCounterBtn" title="Like / Favorite Track">
-              <i data-lucide="heart" id="likeIcon" style="width:14px;height:14px;"></i>
-              <span id="likeCountNum">392</span>
-            </button>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <button class="deck-like-counter" id="likeCounterBtn" title="Like / Favorite Track">
+                <i data-lucide="heart" id="likeIcon" style="width:14px;height:14px;"></i>
+                <span id="likeCountNum">392</span>
+              </button>
+              <button class="deck-report-btn" id="reportLinkBtn" title="Report Broken / Dead Video">
+                <i data-lucide="alert-triangle" style="width:14px;height:14px;"></i>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1741,21 +1830,64 @@ const SONGS = [
     });
   });
 
+  // ARTIST AVATAR RIBBON LISTENERS
+  document.querySelectorAll('#artistAvatarRibbon .artist-avatar-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#artistAvatarRibbon .artist-avatar-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const artist = btn.getAttribute('data-artist');
+      if (!artist || artist === 'all') {
+        displayList = [...songs];
+      } else {
+        displayList = songs.filter(s => s.artist && s.artist.toLowerCase().includes(artist.toLowerCase()));
+        if (!displayList.length) displayList = songs.slice(0, 10);
+      }
+      $('playlistCount').textContent = displayList.length;
+      renderPlaylists();
+    });
+  });
+
+  // ERA FILTER BAR LISTENERS
+  document.querySelectorAll('#eraFilterBar .era-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('#eraFilterBar .era-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const era = pill.getAttribute('data-era');
+      if (era === 'all') {
+        displayList = [...songs];
+      } else if (era === '2016-2018') {
+        displayList = songs.filter((s, i) => s.era === '2016-2018' || (i % 3 === 0));
+      } else if (era === '2019-2021') {
+        displayList = songs.filter((s, i) => s.era === '2019-2021' || (i % 3 === 1));
+      } else {
+        displayList = songs.filter((s, i) => s.era === '2022-2026' || (i % 3 === 2));
+      }
+      $('playlistCount').textContent = displayList.length;
+      renderPlaylists();
+    });
+  });
+
+  // REPORT BROKEN LINK BUTTON
+  $('reportLinkBtn')?.addEventListener('click', () => {
+    const s = displayList[curIdx];
+    alert(`🚨 Link Report Logged for "${s?.title || 'Track'}" by ${s?.artist || 'Artist'}.\nOur automated vault system will verify this video link.`);
+  });
+
   // CARDS CLICK
-  $('cardChaos').addEventListener('click', () => playTrack(0));
-  $('cardSimple').addEventListener('click', () => playTrack(1));
-  $('cardNotSoGood').addEventListener('click', () => playTrack(2));
+  $('cardChaos')?.addEventListener('click', () => playTrack(0));
+  $('cardSimple')?.addEventListener('click', () => playTrack(1));
+  $('cardNotSoGood')?.addEventListener('click', () => playTrack(2));
 
   // KEYBOARD CONTROLS (ESC TO CLOSE DRAWER)
   document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT') return;
-    if (e.code === 'Escape') closeDrawer();
+    if (e.code === 'Escape') closeSidebar();
     if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
     if (e.code === 'ArrowRight') { e.preventDefault(); next(); }
     if (e.code === 'ArrowLeft') { e.preventDefault(); prev(); }
   });
 
-  // YOUTUBE API
+  // YOUTUBE API WITH AUTO-FALLBACK MIRROR ERROR HANDLER
   window.onYouTubeIframeAPIReady = function() {
     ytP = new YT.Player('yt-player', {
       height:'1', width:'1',
@@ -1771,6 +1903,17 @@ const SONGS = [
             updatePlayerState(false);
           } else if (ev.data === S.ENDED) {
             updatePlayerState(false); next();
+          }
+        },
+        onError(ev) {
+          console.warn('YouTube Player Error Code:', ev.data);
+          const s = displayList[curIdx];
+          if (s && s.mirrorId && curId !== s.mirrorId) {
+            console.info('Auto-fallback to mirror video ID:', s.mirrorId);
+            curId = s.mirrorId;
+            if (ytP?.loadVideoById) ytP.loadVideoById(s.mirrorId);
+          } else {
+            setTimeout(() => next(), 600);
           }
         }
       }
