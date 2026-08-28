@@ -740,6 +740,60 @@
       border-color: var(--pill-active-bg);
     }
 
+    /* SPOTIFY HERO BANNER & QUICK PICKS GRID */
+    .spotify-hero-banner {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover; background-position: center;
+      border-radius: 20px; padding: 28px 24px; border: 1px solid var(--border-card);
+      position: relative; overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+    }
+    .hero-tag {
+      font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #f43f5e; margin-bottom: 6px;
+    }
+    .hero-title {
+      font-size: 26px; font-weight: 800; color: #ffffff; margin-bottom: 4px; letter-spacing: -0.02em;
+    }
+    .hero-artist {
+      font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.75); margin-bottom: 16px;
+    }
+    .hero-play-btn {
+      display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px;
+      border-radius: var(--radius-full); background: #ffffff; color: #000000;
+      font-family: var(--body-font); font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); border: none;
+    }
+    .hero-play-btn:hover {
+      transform: scale(1.05); box-shadow: 0 8px 24px rgba(255,255,255,0.3);
+    }
+
+    .quick-picks-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; margin-top: 10px;
+    }
+    .quick-pick-card {
+      display: flex; align-items: center; gap: 12px; height: 56px; border-radius: 12px;
+      background: var(--surface-card); border: 1px solid var(--border-card);
+      padding: 0 12px; cursor: pointer; transition: all 0.15s ease;
+    }
+    .quick-pick-card:hover {
+      background: var(--surface-card-hover); border-color: var(--border-card-hover);
+      transform: translateY(-2px);
+    }
+    .quick-pick-thumb {
+      width: 40px; height: 40px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: var(--pill-bg);
+    }
+    .quick-pick-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .quick-pick-title {
+      font-family: var(--display-font); font-size: 12px; font-weight: 700; color: var(--text-primary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .quick-pick-artist {
+      font-family: var(--body-font); font-size: 11px; font-weight: 500; color: var(--text-secondary);
+    }
+
     /* FEATURED VAULT ARTIST CARDS GRID & HERO BANNER */
     .artist-grid-container {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; margin-top: 10px;
@@ -1043,8 +1097,31 @@
              VIEW 1: HOME DISCOVERY CANVAS (ARTIST CARDS GRID & TRENDING)
         ══════════════════════════════════════ -->
         <div id="homeSectionView">
-          <!-- TOP SECTION: FEATURED VAULT ARTIST CARDS GRID -->
-          <div>
+          <!-- SECTION 1: HERO SPOTLIGHT BANNER (SPOTIFY STYLE) -->
+          <div class="spotify-hero-banner" id="spotifyHeroBanner">
+            <div class="hero-content">
+              <div class="hero-tag">FEATURED VAULT OUTTAKE</div>
+              <h1 class="hero-title pixel-text">Alien (feat. Kid Cudi &amp; Young Thug)</h1>
+              <p class="hero-artist">Kanye West · Yandhi Unreleased Studio Session</p>
+              <div class="hero-actions">
+                <button class="hero-play-btn" id="heroPlayBtn">
+                  <i data-lucide="play" style="width:16px;height:16px;fill:currentColor;"></i>
+                  <span>Listen Outtake</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 2: QUICK PICKS GRID (SPOTIFY TOP TILES) -->
+          <div style="margin-top: 24px;">
+            <h2 class="section-pixel-title pixel-text" style="margin-bottom: 12px;">Quick Picks</h2>
+            <div class="quick-picks-grid" id="quickPicksGrid">
+              <!-- Dynamically populated 6 Quick Tile Cards -->
+            </div>
+          </div>
+
+          <!-- SECTION 3: FEATURED VAULT ARTISTS -->
+          <div style="margin-top: 28px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
               <h2 class="section-pixel-title pixel-text">Featured Vault Artists</h2>
               <span class="view-all-link">12 Artists</span>
@@ -1055,7 +1132,7 @@
             </div>
           </div>
 
-          <!-- SECOND SECTION: TRENDING UNRELEASED GRAILS -->
+          <!-- SECTION 4: TRENDING UNRELEASED GRAILS -->
           <div style="margin-top: 28px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
               <h2 class="section-pixel-title pixel-text">Trending Grails</h2>
@@ -1736,13 +1813,24 @@ const SONGS = [
     updatePlayerState(true);
     openSidebar(); // Auto expand Now Playing Sidebar!
 
-    if (s.youtubeId && ytReady && ytP) ytP.loadVideoById(s.youtubeId);
+    if (s.youtubeId && ytReady && ytP) {
+      try {
+        if (ytP.unMute) ytP.unMute();
+        if (ytP.setVolume) ytP.setVolume(100);
+        ytP.loadVideoById(s.youtubeId);
+        ytP.playVideo();
+      } catch(e) { console.warn('Audio play error:', e); }
+    }
   }
 
   function togglePlay() {
     if (curIdx < 0) return playTrack(0);
     if (!ytReady || !ytP) return;
-    isPlaying ? ytP.pauseVideo() : ytP.playVideo();
+    try {
+      if (ytP.unMute) ytP.unMute();
+      if (ytP.setVolume) ytP.setVolume(100);
+      isPlaying ? ytP.pauseVideo() : ytP.playVideo();
+    } catch(e) { console.warn('Audio toggle error:', e); }
   }
 
   function next() {
@@ -2028,7 +2116,34 @@ const SONGS = [
     });
   };
 
+  function renderQuickPicks() {
+    const container = $('quickPicksGrid');
+    if (!container) return;
+    const picks = songs.slice(0, 6);
+    container.innerHTML = picks.map((s, idx) => `
+      <div class="quick-pick-card" data-idx="${idx}">
+        <div class="quick-pick-thumb">
+          <img src="https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg" alt="" loading="lazy">
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div class="quick-pick-title">${esc(s.title)}</div>
+          <div class="quick-pick-artist">${esc(s.artist || 'Artist')}</div>
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll('.quick-pick-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const idx = +card.dataset.idx;
+        playTrack(idx);
+      });
+    });
+  }
+
+  $('heroPlayBtn')?.addEventListener('click', () => playTrack(0));
+
   renderArtistCards();
+  renderQuickPicks();
   if (window.lucide) { try { lucide.createIcons(); } catch(e){} }
 
 })();
