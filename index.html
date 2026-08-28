@@ -1741,6 +1741,27 @@ const SONGS = [
     }
   }
 
+  const ARTWORK_POOL = [
+    "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=400&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=400&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=400&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=400&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?q=80&w=400&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=400&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1549834125-82d3c48159a3?q=80&w=400&auto=format&fit=crop"
+  ];
+
+  function getTrackThumb(s) {
+    if (!s) return ARTWORK_POOL[0];
+    if (s.coverUrl) return s.coverUrl;
+    const artist = (s.artist || '').toLowerCase();
+    const artistObj = ARTISTS_DATA.find(a => a.name.toLowerCase().includes(artist));
+    if (artistObj && artistObj.avatarUrl) return artistObj.avatarUrl;
+    const hash = Math.abs((s.title || '').length) % ARTWORK_POOL.length;
+    return ARTWORK_POOL[hash];
+  }
+
   // RENDER PLAYLISTS / TRACK ROWS (APPLYING DESIGN SYSTEM PRINCIPLES)
   function renderPlaylists() {
     const container = $('playlistsList');
@@ -1758,14 +1779,14 @@ const SONGS = [
 
     container.innerHTML = displayList.map((s, vi) => {
       const isAct = vi === curIdx;
-      const thumb = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
+      const thumb = getTrackThumb(s);
       const numStr = (vi + 1).toString().padStart(2, '0');
       return `
         <div class="playlist-row-item${isAct ? ' active' : ''}" data-vi="${vi}">
-          <span style="font-family:var(--display-font);font-size:12px;font-weight:700;color:rgba(255,255,255,0.35);width:24px;flex-shrink:0;">#${numStr}</span>
+          <span style="font-family:var(--display-font);font-size:12px;font-weight:700;color:var(--text-muted);width:24px;flex-shrink:0;">#${numStr}</span>
           <div class="row-left-info" style="flex:1;min-width:0;">
             <div class="row-thumb">
-              <img src="${thumb}" alt="" loading="lazy">
+              <img src="${thumb}" alt="" loading="lazy" style="object-fit:cover;">
             </div>
             <div class="row-details">
               <div class="row-title">${esc(s.title)}</div>
@@ -1804,7 +1825,7 @@ const SONGS = [
     if ($('deckArtist')) $('deckArtist').textContent = s.artist || 'Charlie Puth';
     if ($('fnpTitleText')) $('fnpTitleText').textContent = s.title;
     if ($('fnpArtistText')) $('fnpArtistText').textContent = s.artist || 'Charlie Puth';
-    if ($('fnpThumbImg')) $('fnpThumbImg').src = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
+    if ($('fnpThumbImg')) $('fnpThumbImg').src = getTrackThumb(s);
     $('wfCur').textContent = '0:00';
     $('wfTot').textContent = fmt(s.duration);
     updateProgressBar(0);
@@ -1950,18 +1971,18 @@ const SONGS = [
   });
 
   const ARTISTS_DATA = [
-    { name: "Kanye West", initials: "Ye", tag: "Yandhi & Donda Vault" },
-    { name: "The Weeknd", initials: "XO", tag: "After Hours & Trilogy Demos" },
-    { name: "Drake", initials: "OVO", tag: "Certified Lover Boy Leaks" },
-    { name: "Juice WRLD", initials: "999", tag: "Unreleased Studio Sessions" },
-    { name: "Travis Scott", initials: "CJ", tag: "Astroworld & Utopia Outtakes" },
-    { name: "Charlie Puth", initials: "CP", tag: "Voicenotes & Studio Cuts" },
-    { name: "Billie Eilish", initials: "BE", tag: "Acoustic Demos & Leaks" },
-    { name: "Post Malone", initials: "PM", tag: "Hollywood's Bleeding Demos" },
-    { name: "Justin Bieber", initials: "JB", tag: "Journals & Studio Outtakes" },
-    { name: "Ariana Grande", initials: "AG", tag: "Sweetener & Position Leaks" },
-    { name: "XXXTentacion", initials: "XXX", tag: "17 & Bad Vibes Demos" },
-    { name: "Lil Uzi Vert", initials: "UZI", tag: "16*29 & Eternal Atake Leaks" }
+    { name: "Kanye West", initials: "Ye", tag: "Yandhi & Donda Vault", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Kanye_West_at_the_2009_Tribeca_Film_Festival-2_%28cropped%29.jpg/400px-Kanye_West_at_the_2009_Tribeca_Film_Festival-2_%28cropped%29.jpg" },
+    { name: "The Weeknd", initials: "XO", tag: "After Hours & Trilogy Demos", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/The_Weeknd_Cannes_2023.bottom.jpg/400px-The_Weeknd_Cannes_2023.bottom.jpg" },
+    { name: "Drake", initials: "OVO", tag: "Certified Lover Boy Leaks", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Drake_July_2016.jpg/400px-Drake_July_2016.jpg" },
+    { name: "Juice WRLD", initials: "999", tag: "Unreleased Studio Sessions", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Juice_WRLD_openair_frauenfeld_2019_%28cropped%29.jpg/400px-Juice_WRLD_openair_frauenfeld_2019_%28cropped%29.jpg" },
+    { name: "Travis Scott", initials: "CJ", tag: "Astroworld & Utopia Outtakes", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Travis_Scott_-_Openair_Frauenfeld_2019_08_%28cropped%29.jpg/400px-Travis_Scott_-_Openair_Frauenfeld_2019_08_%28cropped%29.jpg" },
+    { name: "Charlie Puth", initials: "CP", tag: "Voicenotes & Studio Cuts", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Charlie_Puth_2018_by_Glenn_Francis.jpg/400px-Charlie_Puth_2018_by_Glenn_Francis.jpg" },
+    { name: "Billie Eilish", initials: "BE", tag: "Acoustic Demos & Leaks", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Billie_Eilish_2019_by_Glenn_Francis.jpg/400px-Billie_Eilish_2019_by_Glenn_Francis.jpg" },
+    { name: "Post Malone", initials: "PM", tag: "Hollywood's Bleeding Demos", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Post_Malone_2018_by_Glenn_Francis.jpg/400px-Post_Malone_2018_by_Glenn_Francis.jpg" },
+    { name: "Justin Bieber", initials: "JB", tag: "Journals & Studio Outtakes", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Justin_Bieber_in_2015.jpg/400px-Justin_Bieber_in_2015.jpg" },
+    { name: "Ariana Grande", initials: "AG", tag: "Sweetener & Position Leaks", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Ariana_Grande_at_the_2020_Grammy_Awards.jpg/400px-Ariana_Grande_at_the_2020_Grammy_Awards.jpg" },
+    { name: "XXXTentacion", initials: "XXX", tag: "17 & Bad Vibes Demos", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/XXXTentacion_%28cropped%29.jpg/400px-XXXTentacion_%28cropped%29.jpg" },
+    { name: "Lil Uzi Vert", initials: "UZI", tag: "16*29 & Eternal Atake Leaks", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Lil_Uzi_Vert_2019.jpg/400px-Lil_Uzi_Vert_2019.jpg" }
   ];
 
   function renderArtistCards() {
@@ -1971,7 +1992,9 @@ const SONGS = [
       const count = songs.filter(s => s.artist && s.artist.toLowerCase().includes(a.name.toLowerCase())).length || 5;
       return `
         <div class="artist-card-item" data-artist="${a.name}">
-          <div class="artist-card-avatar">${a.initials}</div>
+          <div class="artist-card-avatar" style="overflow:hidden;padding:0;">
+            <img src="${a.avatarUrl}" alt="${a.name}" style="width:100%;height:100%;object-fit:cover;">
+          </div>
           <div style="width:100%;">
             <div class="artist-card-name">${a.name}</div>
             <div class="artist-card-sub">${count} Outtakes</div>
@@ -1993,12 +2016,21 @@ const SONGS = [
     const artistView = $('artistSectionView');
     if (!homeView || !artistView) return;
 
-    const artistObj = ARTISTS_DATA.find(a => a.name === artistName) || { name: artistName, initials: artistName.slice(0, 2).toUpperCase(), tag: "Unreleased Outtakes" };
+    const artistObj = ARTISTS_DATA.find(a => a.name === artistName) || { name: artistName, initials: artistName.slice(0, 2).toUpperCase(), tag: "Unreleased Outtakes", avatarUrl: "" };
     const artistSongs = songs.filter(s => s.artist && s.artist.toLowerCase().includes(artistName.toLowerCase()));
 
     displayList = artistSongs.length ? artistSongs : songs.slice(0, 10);
 
-    $('artistHeroAvatar').textContent = artistObj.initials;
+    const heroAv = $('artistHeroAvatar');
+    if (heroAv) {
+      if (artistObj.avatarUrl) {
+        heroAv.innerHTML = `<img src="${artistObj.avatarUrl}" alt="${artistObj.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+        heroAv.style.padding = '0';
+        heroAv.style.overflow = 'hidden';
+      } else {
+        heroAv.textContent = artistObj.initials;
+      }
+    }
     $('artistHeroName').textContent = artistObj.name;
     $('artistHeroSub').textContent = artistObj.tag;
     $('artistHeroBadge').textContent = `${displayList.length} Unreleased Grails`;
