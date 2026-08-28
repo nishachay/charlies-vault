@@ -694,8 +694,9 @@
     }
     .view-all-link:hover { color: var(--text-primary); text-decoration: underline; text-underline-offset: 4px; }
 
+    .artist-pills-row,
     .category-pills-row {
-      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;
     }
     .cat-pill-item {
       height: 32px; padding: 0 16px;
@@ -930,19 +931,37 @@
   <main class="main-stage">
       <section class="discovery-stage">
 
-        <!-- TOP SECTION: MUSIC CATEGORIES -->
+        <!-- TOP SECTION: FEATURED VAULT ARTISTS -->
         <div>
           <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="section-pixel-title pixel-text">Vault Artists</h2>
+          </div>
+
+          <div class="artist-pills-row" id="artistPillsRow">
+            <button class="cat-pill-item active" data-artist="all">All Artists</button>
+            <button class="cat-pill-item" data-artist="Charlie Puth">Charlie Puth</button>
+            <button class="cat-pill-item" data-artist="Kanye West">Kanye West</button>
+            <button class="cat-pill-item" data-artist="The Weeknd">The Weeknd</button>
+            <button class="cat-pill-item" data-artist="Drake">Drake</button>
+            <button class="cat-pill-item" data-artist="Travis Scott">Travis Scott</button>
+            <button class="cat-pill-item" data-artist="Juice WRLD">Juice WRLD</button>
+          </div>
+        </div>
+
+        <!-- SECOND SECTION: MUSIC CATEGORIES -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
             <h2 class="section-pixel-title pixel-text">Music Categories</h2>
             <span class="view-all-link">View all</span>
           </div>
 
           <div class="category-pills-row">
-            <button class="cat-pill-item active" data-cat="classic">Classic</button>
+            <button class="cat-pill-item active" data-cat="all">All</button>
+            <button class="cat-pill-item" data-cat="classic">Classic</button>
             <button class="cat-pill-item" data-cat="90s">90s</button>
             <button class="cat-pill-item" data-cat="new">New</button>
             <button class="cat-pill-item" data-cat="instrumental">Instrumental</button>
-            <button class="cat-pill-item" data-cat="modern">Modern play...</button>
+            <button class="cat-pill-item" data-cat="modern">Modern</button>
           </div>
 
           <div class="cards-grid">
@@ -1688,10 +1707,27 @@ const SONGS = [
     applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
   });
 
-  // CATEGORY PILLS
-  document.querySelectorAll('.cat-pill-item').forEach(pill => {
+  // ARTIST SELECTION BAR
+  document.querySelectorAll('#artistPillsRow .cat-pill-item').forEach(pill => {
     pill.addEventListener('click', () => {
-      document.querySelectorAll('.cat-pill-item').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('#artistPillsRow .cat-pill-item').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const artist = pill.getAttribute('data-artist');
+      if (!artist || artist === 'all') {
+        displayList = [...songs];
+      } else {
+        displayList = songs.filter(s => s.artist && s.artist.toLowerCase().includes(artist.toLowerCase()));
+        if (!displayList.length) displayList = songs.slice(0, 10);
+      }
+      $('playlistCount').textContent = displayList.length;
+      renderPlaylists();
+    });
+  });
+
+  // CATEGORY PILLS
+  document.querySelectorAll('.category-pills-row .cat-pill-item').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.category-pills-row .cat-pill-item').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
       const cat = pill.textContent.trim().toLowerCase();
       if (cat === 'all') {
