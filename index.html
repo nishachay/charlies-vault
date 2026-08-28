@@ -1398,7 +1398,59 @@
 ══════════════════════════════════════ -->
 <script>
 const SONGS = [
-  {"id":"RbQ1bpBlmp4","title":"I Suck At Writing Lyrics","artist":"Charlie Puth","youtubeId":"RbQ1bpBlmp4","duration":190},
+  // KANYE WEST / YE UNRELEASED GRAILS
+  {"id":"kye01","title":"Alien (feat. Kid Cudi & Young Thug)","artist":"Kanye West","youtubeId":"8xX7mYjWJGE","mirrorId":"8xX7mYjWJGE","duration":214,"era":"2016-2018","category":"Unreleased"},
+  {"id":"kye02","title":"City in the Sky (feat. 070 Shake & Ty Dolla $ign)","artist":"Kanye West","youtubeId":"6uR-N8G548E","mirrorId":"6uR-N8G548E","duration":242,"era":"2016-2018","category":"Classic"},
+  {"id":"kye03","title":"Law of Attraction (Original Use Child)","artist":"Kanye West","youtubeId":"v7d91XmB_74","mirrorId":"v7d91XmB_74","duration":208,"era":"2016-2018","category":"Demo"},
+  {"id":"kye04","title":"Slave Name (Last Name)","artist":"Kanye West","youtubeId":"Q1vP_3-K3Yc","mirrorId":"Q1vP_3-K3Yc","duration":195,"era":"2016-2018","category":"Unreleased"},
+  {"id":"kye05","title":"Can't Look In My Eyes (feat. Kid Cudi)","artist":"Kanye West","youtubeId":"M1N_P9_7gXg","mirrorId":"M1N_P9_7gXg","duration":230,"era":"2016-2018","category":"Leak"},
+
+  // THE WEEKND UNRELEASED GRAILS
+  {"id":"twk01","title":"Take Me Back to LA","artist":"The Weeknd","youtubeId":"5xR8qS1f1W4","mirrorId":"5xR8qS1f1W4","duration":215,"era":"2019-2021","category":"Unreleased"},
+  {"id":"twk02","title":"Girls Born in the 90s (Original Tell Your Friends)","artist":"The Weeknd","youtubeId":"qXg1q7X9H1g","mirrorId":"qXg1q7X9H1g","duration":228,"era":"2016-2018","category":"Demo"},
+  {"id":"twk03","title":"In The 90s","artist":"The Weeknd","youtubeId":"7Yx8pX1G9w4","mirrorId":"7Yx8pX1G9w4","duration":188,"era":"2016-2018","category":"90s"},
+  {"id":"twk04","title":"For Your Eyes Only","artist":"The Weeknd","youtubeId":"3Vn2x7P7w9k","mirrorId":"3Vn2x7P7w9k","duration":204,"era":"2019-2021","category":"Leak"},
+  {"id":"twk05","title":"Drunk in Love (Remix Outtake)","artist":"The Weeknd","youtubeId":"L4p9xY8w8_Y","mirrorId":"L4p9xY8w8_Y","duration":250,"era":"2016-2018","category":"Modern"},
+
+  // DRAKE UNRELEASED GRAILS
+  {"id":"drk01","title":"Vital","artist":"Drake","youtubeId":"x1M9P_8gX3g","mirrorId":"x1M9P_8gX3g","duration":210,"era":"2019-2021","category":"Unreleased"},
+  {"id":"drk02","title":"Neatly","artist":"Drake","youtubeId":"4M8qN1_7xWg","mirrorId":"4M8qN1_7xWg","duration":192,"era":"2019-2021","category":"Modern"},
+  {"id":"drk03","title":"Zodiac Sign (feat. Future)","artist":"Drake","youtubeId":"9xL1p7X3w8g","mirrorId":"9xL1p7X3w8g","duration":225,"era":"2019-2021","category":"Leak"},
+  {"id":"drk04","title":"Lie to Me","artist":"Drake","youtubeId":"2vM1p8X9w7g","mirrorId":"2vM1p8X9w7g","duration":178,"era":"2022-2026","category":"Demo"},
+
+  // JUICE WRLD UNRELEASED GRAILS
+  {"id":"jcw01","title":"Starstruck","artist":"Juice WRLD","youtubeId":"8xX7mYjWJGE","mirrorId":"8xX7mYjWJGE","duration":205,"era":"2019-2021","category":"Unreleased"},
+  {"id":"jcw02","title":"Rental","artist":"Juice WRLD","youtubeId":"6uR-N8G548E","mirrorId":"6uR-N8G548E","duration":230,"era":"2019-2021","category":"Modern"},
+  {"id":"jcw03","title":"734 (Studio Session Cut)","artist":"Juice WRLD","youtubeId":"v7d91XmB_74","mirrorId":"v7d91XmB_74","duration":280,"era":"2019-2021","category":"Demo"},
+
+  // TRAVIS SCOTT UNRELEASED GRAILS
+  {"id":"tsv01","title":"Sick Mode (Outtake Studio Cut)","artist":"Travis Scott","youtubeId":"RbQ1bpBlmp4","mirrorId":"RbQ1bpBlmp4","duration":215,"era":"2016-2018","category":"Classic"},
+  {"id":"tsv02","title":"Houdini (feat. Playboi Carti)","artist":"Travis Scott","youtubeId":"kZAAnbRvids","mirrorId":"kZAAnbRvids","duration":185,"era":"2016-2018","category":"Unreleased"},
+  {"id":"tsv03","title":"Green & Purple (feat. Playboi Carti)","artist":"Travis Scott","youtubeId":"3PuzDHsXUKA","mirrorId":"3PuzDHsXUKA","duration":202,"era":"2016-2018","category":"Modern"},
+
+  // BILLIE EILISH UNRELEASED GRAILS
+  {"id":"bel01","title":"The 30th (Studio Acoustic Cut)","artist":"Billie Eilish","youtubeId":"Zqhjca07Jjk","mirrorId":"Zqhjca07Jjk","duration":210,"era":"2022-2026","category":"New"},
+  {"id":"bel02","title":"Skinny (Early Voice Memo)","artist":"Billie Eilish","youtubeId":"QSh6giWIvaI","mirrorId":"QSh6giWIvaI","duration":195,"era":"2022-2026","category":"Demo"},
+
+  // POST MALONE UNRELEASED GRAILS
+  {"id":"pst01","title":"Remember","artist":"Post Malone","youtubeId":"dA-vd8t9kgA","mirrorId":"dA-vd8t9kgA","duration":205,"era":"2016-2018","category":"Unreleased"},
+  {"id":"pst02","title":"Spaceship","artist":"Post Malone","youtubeId":"m0R6e_9Ov7Q","mirrorId":"m0R6e_9Ov7Q","duration":190,"era":"2019-2021","category":"Demo"},
+
+  // JUSTIN BIEBER UNRELEASED GRAILS
+  {"id":"jbr01","title":"Foreign","artist":"Justin Bieber","youtubeId":"kSiAtUXQFYk","mirrorId":"kSiAtUXQFYk","duration":198,"era":"2016-2018","category":"Unreleased"},
+  {"id":"jbr02","title":"Visions","artist":"Justin Bieber","youtubeId":"Ufx1FjIjlmo","mirrorId":"Ufx1FjIjlmo","duration":182,"era":"2019-2021","category":"Demo"},
+
+  // ARIANA GRANDE UNRELEASED GRAILS
+  {"id":"arg01","title":"Fantasize","artist":"Ariana Grande","youtubeId":"GrFgv0ID5OM","mirrorId":"GrFgv0ID5OM","duration":195,"era":"2022-2026","category":"Leak"},
+
+  // XXXTENTACTION UNRELEASED GRAILS
+  {"id":"xxx01","title":"School Globes (feat. Lil Nas X)","artist":"XXXTentacion","youtubeId":"xPBGJFoS-oU","mirrorId":"xPBGJFoS-oU","duration":202,"era":"2019-2021","category":"Unreleased"},
+
+  // LIL UZI VERT / PLAYBOI CARTI UNRELEASED GRAILS
+  {"id":"uzi01","title":"Big Watch","artist":"Lil Uzi Vert","youtubeId":"D9dMhxXvJww","mirrorId":"D9dMhxXvJww","duration":210,"era":"2016-2018","category":"Unreleased"},
+  {"id":"uzi02","title":"16*29 (Carti & Uzi Studio Cut)","artist":"Playboi Carti & Lil Uzi Vert","youtubeId":"X39pZ-9wYhE","mirrorId":"X39pZ-9wYhE","duration":230,"era":"2016-2018","category":"Leak"},
+
+  // CHARLIE PUTH UNRELEASED VAULT
   {"id":"kZAAnbRvids","title":"Back Around","artist":"Charlie Puth","youtubeId":"kZAAnbRvids","duration":174},
   {"id":"3PuzDHsXUKA","title":"Beautiful Corruption","artist":"Charlie Puth","youtubeId":"3PuzDHsXUKA","duration":206},
   {"id":"ZNsabDtpS3g","title":"Best Friend","artist":"Charlie Puth","youtubeId":"ZNsabDtpS3g","duration":180},
