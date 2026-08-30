@@ -35,9 +35,30 @@ CREATE TABLE IF NOT EXISTS songs (
 CREATE INDEX IF NOT EXISTS idx_songs_artist ON songs(artist_id);
 CREATE INDEX IF NOT EXISTS idx_songs_status ON songs(status);
 
+-- Alternate versions / variants of a song (e.g. "V2 · demo cut", "radio rip").
+-- The canonical best/default source lives on `songs.youtube_id`; everything
+-- else lives here. Each version has its own status + report count so one bad
+-- mirror never sinks the whole track.
+CREATE TABLE IF NOT EXISTS song_versions (
+  id           TEXT PRIMARY KEY,
+  song_id      TEXT NOT NULL REFERENCES songs(id) ON DELETE CASCADE,
+  label        TEXT NOT NULL,
+  youtube_id   TEXT NOT NULL,
+  notes        TEXT,
+  sort_order   INTEGER NOT NULL DEFAULT 0,
+  status       TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'dead', 'private')),
+  report_count INTEGER NOT NULL DEFAULT 0,
+  last_checked TEXT,
+  created_at   TEXT NOT NULL,
+  updated_at   TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_versions_song ON song_versions(song_id);
+
 CREATE TABLE IF NOT EXISTS song_reports (
   id         INTEGER PRIMARY KEY,
   song_id    TEXT NOT NULL REFERENCES songs(id) ON DELETE CASCADE,
+  version_id TEXT REFERENCES song_versions(id) ON DELETE CASCADE,
   reason     TEXT,
   created_at TEXT NOT NULL
 );

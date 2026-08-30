@@ -17,7 +17,7 @@ const { json, readBody, parseUrl, isAdmin } = require('./_lib');
 const M = require('../src/models');
 const { runRefresh } = require('../lib/checkYouTube');
 
-const REPORT_THRESHOLD = 3; // reports before a song auto-flags as dead
+const REPORT_THRESHOLD = 3; // reports before a song/version auto-flags as dead
 
 async function healthHandler(req, res, ctx) {
   const s = await M.stats(ctx.db);
@@ -46,9 +46,10 @@ async function songsHandler(req, res, ctx) {
 }
 
 async function songByIdHandler(req, res, ctx) {
-  const { pathname } = parseUrl(req);
+  const { pathname, query } = parseUrl(req);
   const id = pathname.split('/').pop();
-  const song = await M.getSong(ctx.db, id);
+  const includeAll = query.get('all') === '1' || query.get('all') === 'true';
+  const song = await M.getSong(ctx.db, id, { includeAll });
   if (!song) return json(res, 404, { error: 'song not found' });
   json(res, 200, { song });
 }
@@ -57,14 +58,32 @@ async function reportHandler(req, res, ctx) {
   if (req.method !== 'POST') return json(res, 405, { error: 'POST required' });
   const body = await readBody(req);
   const songId = String(body.songId || '').trim();
+  const versionId = String(body.versionId || '').trim();
   if (!songId) return json(res, 400, { error: 'songId is required' });
 
   const song = await M.getSong(ctx.db, songId);
   if (!song) return json(res, 404, { error: 'song not found' });
-
   const reason = String(body.reason || '').slice(0, 500) || null;
-  const row = await M.addReport(ctx.db, songId, reason);
 
+  // Report targets a specific alternate version when one is named.
+  if (versionId) {
+    if (!song.versions.some(v => v.id === versionId)) {
+      return json(res, 404, { error: 'version not found on this song' });
+    }
+    let row = await M.addVersionReport(ctx.db, versionId, reason);
+    if (!row) return json(res, 404, { error: 'version not found' });
+    let status = row.status;
+    if (status === 'active' && row.reportCount >= REPORT_THRESHOLD) {
+      await M.setSongVersionStatus(ctx.db, versionId, 'dead');
+      status = 'dead';
+    }
+    return json(res, 200, {
+      ok: true, songId, versionId, label: song.versions.find(v => v.id === versionId).label,
+      reportCount: row.reportCount, status,
+    });
+  }
+
+  const row = await M.addReport(ctx.db, songId, reason);
   let status = row.status;
   if (status === 'active' && row.reportCount >= REPORT_THRESHOLD) {
     await M.setSongStatus(ctx.db, songId, 'dead');
@@ -121,6 +140,17 @@ async function saveHandler(req, res, ctx) {
     const slug = artistSlugs.get(s.artist);
     if (!slug) { skipped++; continue; }
     M.upsertSong(ctx.db, { ...s, artistSlug: slug });
+    (s.versions || []).forEach((v, i) => {
+      if (v.youtubeId === s.youtubeId) return; // same source as canonical — skip
+      M.upsertSongVersion(ctx.db, {
+        id: M.versionIdOf(s.id, i),
+        songId: s.id,
+        label: v.label || `version ${i + 1}`,
+        youtubeId: v.youtubeId,
+        notes: v.notes || null,
+        sortOrder: i,
+      });
+    });
     songCount++;
   }
 

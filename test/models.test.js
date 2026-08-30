@@ -11,6 +11,7 @@ const catalog = require('../scripts/catalog.json');
 const catalogSongs = catalog.songs;
 const songId = catalogSongs[0].id;
 const secondSongId = catalogSongs[1].id;
+const vid = M.versionIdOf(songId, 0);
 
 let db;
 
@@ -96,6 +97,66 @@ describe('status transitions', () => {
     await M.setSongStatus(db, secondSongId, 'active');
     const active = await M.listSongs(db);
     assert.ok(active.some(s => s.id === secondSongId));
+  });
+});
+
+describe('song versions', () => {
+  it('upserts versions and attaches them to songs', async () => {
+    await M.upsertSongVersion(db, { id: vid, songId, label: 'V2 · demo cut', youtubeId: 'dummyVid2', notes: null, sortOrder: 0 });
+    const song = await M.getSong(db, songId);
+    assert.equal(song.versions.length, 1);
+    assert.equal(song.versions[0].id, vid);
+    assert.equal(song.versions[0].label, 'V2 · demo cut');
+    assert.equal(song.versions[0].youtubeId, 'dummyVid2');
+    assert.equal(song.versions[0].status, 'active');
+    const list = await M.listSongs(db);
+    assert.equal(list.find(x => x.id === songId).versions.length, 1);
+  });
+
+  it('hides dead versions by default, shows them with includeAll', async () => {
+    await M.setSongVersionStatus(db, vid, 'dead');
+    const song = await M.getSong(db, songId);
+    assert.deepEqual(song.versions, []);
+    const all = await M.listSongs(db, { includeAll: true });
+    const row = all.find(x => x.id === songId);
+    assert.equal(row.versions.length, 1);
+    assert.equal(row.versions[0].status, 'dead');
+    await M.setSongVersionStatus(db, vid, 'active');
+  });
+
+  it('tracks per-version reports separately from song reports', async () => {
+    const before = await M.reportCount(db, songId);
+    const row = await M.addVersionReport(db, vid, 'test');
+    assert.equal(row.songId, songId);
+    assert.equal(row.reportCount, 1);
+    assert.equal(await M.versionReportCount(db, vid), 1);
+    assert.equal(await M.reportCount(db, songId), before, 'song report count excludes version reports');
+  });
+
+  it('keeps a song surfacable while any version plays', async () => {
+    await M.setSongVersionStatus(db, vid, 'active');
+    await M.setSongStatus(db, songId, 'dead');
+    const active = await M.listSongs(db);
+    assert.ok(active.some(s => s.id === songId), 'live version keeps the song listed');
+
+    await M.setSongVersionStatus(db, vid, 'dead');
+    const again = await M.listSongs(db);
+    assert.ok(!again.some(s => s.id === songId), 'all-dead removes the song from players');
+    assert.equal((await M.getSong(db, songId)).status, 'dead', 'song status stays the canonical verdict');
+
+    await M.setSongVersionStatus(db, vid, 'active');
+    await M.setSongStatus(db, songId, 'active');
+  });
+
+  it('selects stale versions for refresh selection', async () => {
+    await db.adapter.run('UPDATE song_versions SET last_checked = NULL WHERE id = ?', [vid]);
+    const stale = await M.staleVersions(db, { maxAgeMs: 0 });
+    assert.ok(stale.some(v => v.id === vid), 'unchecked version is selected');
+    await M.touchVersionChecked(db, vid);
+    const fresh = await M.staleVersions(db, { maxAgeMs: 24 * 60 * 60 * 1000 });
+    assert.ok(!fresh.some(v => v.id === vid), 'freshly checked version is skipped');
+    const force = await M.staleVersions(db, { force: true });
+    assert.ok(force.some(v => v.id === vid), 'force re-probes versions');
   });
 });
 

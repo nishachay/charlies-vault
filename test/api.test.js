@@ -125,6 +125,55 @@ describe('report flow', () => {
     })).status, 404);
     assert.equal((await fetch(`${base}/api/report`)).status, 405);
   });
+
+  it('reports alternate versions independently and can live alongside a healthy canonical', async t => {
+    const { base } = await withApp(t);
+    const s = catalog.songs[0];
+    const versionId = `${s.id}__v1`;
+
+    const saveRes = await fetch(`${base}/api/save`, {
+      method: 'POST', headers: { 'Authorization': 'Bearer test-key', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ songs: [{ ...s, versions: [{ label: 'V2 · demo cut', youtubeId: 'altVideo1' }] }] }),
+    });
+    assert.equal(saveRes.status, 200);
+
+    const listed = await (await fetch(`${base}/api/songs/${s.id}`)).json();
+    assert.equal(listed.song.versions.length, 1);
+    assert.equal(listed.song.versions[0].id, versionId);
+
+    // Reporting a version that doesn't belong to the song -> 404.
+    const bad = await (await fetch(`${base}/api/report`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ songId: catalog.songs[1].id, versionId }),
+    })).json();
+    assert.equal(bad.status, undefined); // shape check below
+    // (handlers return 404 HTTP, not a body field — re-assert via status)
+    assert.equal((await fetch(`${base}/api/report`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ songId: catalog.songs[1].id, versionId }),
+    })).status, 404, 'version must belong to the named song');
+
+    for (let i = 0; i < 2; i++) {
+      const r = await (await fetch(`${base}/api/report`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ songId: s.id, versionId }),
+      })).json();
+      assert.equal(r.status, 'active');
+    }
+    const third = await (await fetch(`${base}/api/report`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ songId: s.id, versionId }),
+    })).json();
+    assert.equal(third.status, 'dead');
+    assert.equal(third.reportCount, 3);
+    assert.equal(third.label, 'V2 · demo cut');
+
+    // The song itself stays playable thanks to its canonical source.
+    const live = await (await fetch(`${base}/api/songs`)).json();
+    assert.ok(live.songs.some(x => x.id === s.id), 'song survives a dead alternate version');
+    const full = await (await fetch(`${base}/api/songs/${s.id}?all=1`)).json();
+    assert.equal(full.song.versions[0].status, 'dead');
+  });
 });
 
 describe('admin refresh', () => {

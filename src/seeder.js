@@ -4,7 +4,7 @@
 // and the dev server bootstrap (seeds an empty database so `node server.js`
 // "just works").
 
-const { upsertArtist, upsertSong, listArtists, listSongs } = require('./models');
+const { upsertArtist, upsertSong, upsertSongVersion, versionIdOf, listArtists, listSongs } = require('./models');
 
 const slugOf = name => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
@@ -36,6 +36,17 @@ async function upsertCatalog(db, catalog) {
     const slug = artistSlugs.get(s.artist);
     if (!slug) { console.warn(`[seed] skip "${s.title}" — unknown artist "${s.artist}"`); skipped++; continue; }
     upsertSong(db, { ...s, artistSlug: slug });
+    (s.versions || []).forEach((v, i) => {
+      if (v.youtubeId === s.youtubeId) return;
+      upsertSongVersion(db, {
+        id: versionIdOf(s.id, i),
+        songId: s.id,
+        label: v.label || `version ${i + 1}`,
+        youtubeId: v.youtubeId,
+        notes: v.notes || null,
+        sortOrder: i,
+      });
+    });
   }
   return skipped;
 }
