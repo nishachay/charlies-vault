@@ -1,77 +1,80 @@
-# Charlie's Vault
+# { OUTTAKE }
 
-A listening archive of 99 unreleased Charlie Puth tracks. Includes acoustic takes, early demos, and unreleased cuts.
+Multi-artist unreleased music vault with a 3D vinyl / turntable player. ~128 unreleased & demo tracks across 13 artists, streamed live through YouTube's official IFrame API (no audio files hosted).
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Deploy: Vercel](https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white)](https://charlies-vault.vercel.app)
-[![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?logo=javascript&logoColor=black)](index.html)
-[![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](index.html)
-[![Playback: YouTube API](https://img.shields.io/badge/Playback-YouTube%20API-FF0000?logo=youtube&logoColor=white)](https://developers.google.com/youtube/iframe_api_reference)
+**Stack:** single-file static frontend (`index.html`, vanilla HTML/CSS/JS) + a tiny DB-backed Node API. Runs anywhere you can run Node — locally on SQLite, in production on Vercel serverless + Postgres (Neon / Supabase).
 
-Live App: [charlies-vault.vercel.app](https://charlies-vault.vercel.app)
-
----
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="charlies-vault.png">
-  <source media="(prefers-color-scheme: light)" srcset="charlies-vault-light.png">
-  <img alt="Charlie's Vault App Preview" src="charlies-vault.png">
-</picture>
-
----
-
-## Features
-
-- **99 Unreleased Tracks:** Streamed live via YouTube's official IFrame API. No audio files stored on any server.
-- **Turntable UI:** Vinyl deck with tonearm motion and real-time scrubber.
-- **Mobile Mini-Player:** Docked player drawer at the bottom of the viewport for smaller screens.
-- **Favorites:** Like tracks and keep them saved in localStorage.
-- **Search & Filters:** Fast track filtering, A-Z or duration sorting, and Liked-only view.
-- **Dark & Light Mode:** Theme toggle persisted across sessions.
-- **Zero Dependencies:** Single HTML file with vanilla CSS and JavaScript.
-
----
-
-## Local Setup
-
-Clone the repo and start the local development server:
+## Local setup
 
 ```bash
-git clone https://github.com/nishachay/charlies-vault.git
-cd charlies-vault
 node server.js
+# → http://localhost:8080
 ```
 
-Open http://localhost:8080 in your browser.
+First boot creates `data/vault.db` (SQLite) and seeds it from `scripts/catalog.json`. No `npm install` needed for local dev — SQLite uses Node's built-in `node:sqlite` (Node ≥ 22.5).
 
-Note: Node.js is only for local dev. The deployed app on Vercel is static index.html.
+```bash
+npm install   # only needed to deploy (installs `pg` for Postgres)
+npm test      # node:test suite — models, API, video probe
+```
+
+## The database
+
+One portable schema (`src/schema.sql`) for both backends:
+
+- **Local dev / tests** — SQLite via `node:sqlite`, zero config.
+- **Production** — Postgres: set `DATABASE_URL` (Neon / Supabase, both have free tiers) and the same code runs; `?` placeholders are rewritten to Postgres `$n` automatically.
+
+Tables: `artists` (slug, name, avatar…), `songs` (title, youtube_id, mirror_id, duration, era, category, **status**, report_count, last_checked), `song_reports`.
+
+`songs.status` is `active` | `dead` | `private`. `/api/songs` and the player surface `active` tracks only.
+
+## API
+
+Public:
+
+| Endpoint | Description |
+| --- | --- |
+| `GET /api/health` | service status, db backend, counts |
+| `GET /api/artists` | all artists with song counts |
+| `GET /api/songs` | active songs (`?artist=<slug>` filters, `?all=1` includes dead/private) |
+| `GET /api/songs/:id` | single song |
+| `POST /api/report` | `{ songId, reason? }` — listeners flag broken links |
+
+Admin (`Authorization: Bearer $ADMIN_KEY`):
+
+| Endpoint | Description |
+| --- | --- |
+| `POST /api/refresh` | probe stale videos, update status (`{ force?, maxAgeMs? }`) |
+| `POST /api/save` | upsert catalog `{ artists?, songs? }` (curation) |
+
+A song auto-flags `dead` after **3** reports; the daily refresh resurrects it if the video plays again.
+
+## Keeping data fresh
+
+- `POST /api/refresh` checks videos with the **YouTube Data API v3** when `YOUTUBE_API_KEY` is set, otherwise the **keyless** `youtube.com/oembed` probe. Either way failures degrade safely — never crash the cycle.
+- `.github/workflows/refresh.yml` runs it daily (cron) via GitHub Actions using `PROD_URL` + `ADMIN_KEY` secrets.
+- CLI one-shot: `node scripts/refresh_songs.js [--force]`
+
+## Extending the catalog
+
+1. Edit `scripts/catalog.json` (or edit `SONGS`/`ARTISTS_DATA` in `index.html` and run `npm run db:export`), then
+2. `npm run db:seed` — idempotent upsert, artists auto-created from song credits if missing.
+
+## Deploy (Vercel)
+
+Static `index.html` + serverless API under `/api/*`. Set these project env vars (see `.env.example`):
+
+| Variable | Notes |
+| --- | --- |
+| `DATABASE_URL` | **Required** — Postgres connection string (SQLite won't persist on Vercel) |
+| `ADMIN_KEY` | Required for `/api/refresh` & `/api/save` |
+| `YOUTUBE_API_KEY` | Optional; enables authoritative YouTube API checks |
+
+## License
+
+Source code: MIT. All audio streams from publicly available YouTube videos and belongs to the respective rights holders.
 
 ---
 
-## Repository Files
-
-```
-charlies-vault/
-├── index.html               # Entire app (HTML, CSS, JS, track list)
-├── server.js                # Local dev server
-├── charlies-vault.png       # Dark mode preview screenshot
-├── charlies-vault-light.png # Light mode preview screenshot
-├── LICENSE                  # MIT license
-├── SECURITY.md              # Security policy & takedown contact
-└── CONTRIBUTING.md          # Contribution guide
-```
-
----
-
-## Licensing & Rights
-
-This repository has two clear legal boundaries:
-
-- **Source Code (MIT License):** The HTML structure, CSS styling, and JavaScript logic are free to copy, modify, or fork.
-- **Audio Content:** Belongs to Charlie Puth and respective rights holders. All playback streams through publicly accessible YouTube videos using the official YouTube IFrame API.
-
-Rights holders can submit takedown inquiries via [GitHub Private Advisory](https://github.com/nishachay/charlies-vault/security/advisories/new) or by opening an issue. Takedowns get processed within 24 hours.
-
----
-
-[CONTRIBUTING.md](CONTRIBUTING.md) | [SECURITY.md](SECURITY.md) | MIT (c) 2026 Nishachay
+Derived from the original **Charlie's Vault** (99 unreleased Charlie Puth tracks).

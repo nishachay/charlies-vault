@@ -1654,7 +1654,7 @@ const SONGS = [
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
   const cleanTitle = t => t.replace(/^charlie puth\s*[-—]\s*/i,'').trim();
-  const songs = SONGS.map((s,i) => ({...s, _i:i, title: cleanTitle(s.title)}));
+  let songs = SONGS.map((s,i) => ({...s, _i:i, title: cleanTitle(s.title)}));
   let displayList = [...songs];
 
   const LIKES_KEY = 'm2d_likes_v1';
@@ -1970,7 +1970,7 @@ const SONGS = [
     applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
   });
 
-  const ARTISTS_DATA = [
+  let ARTISTS_DATA = [
     { name: "Kanye West", initials: "Ye", tag: "Yandhi & Donda Vault", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Kanye_West_at_the_2009_Tribeca_Film_Festival-2_%28cropped%29.jpg/400px-Kanye_West_at_the_2009_Tribeca_Film_Festival-2_%28cropped%29.jpg" },
     { name: "The Weeknd", initials: "XO", tag: "After Hours & Trilogy Demos", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/The_Weeknd_Cannes_2023.bottom.jpg/400px-The_Weeknd_Cannes_2023.bottom.jpg" },
     { name: "Drake", initials: "OVO", tag: "Certified Lover Boy Leaks", avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Drake_July_2016.jpg/400px-Drake_July_2016.jpg" },
@@ -2096,9 +2096,25 @@ const SONGS = [
   $('railHome')?.addEventListener('click', showHomePage);
 
   // REPORT BROKEN LINK BUTTON
-  $('reportLinkBtn')?.addEventListener('click', () => {
+  $('reportLinkBtn')?.addEventListener('click', async () => {
     const s = displayList[curIdx];
-    alert(`🚨 Link Report Logged for "${s?.title || 'Track'}" by ${s?.artist || 'Artist'}.\nOur automated vault system will verify this video link.`);
+    if (!s) return;
+    const label = `"${s.title}" by ${s.artist}`;
+    try {
+      const res = await fetch('/api/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ songId: s.id, reason: 'reported by listener' }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok) {
+        alert(`🚨 Link Report Logged for ${label}.\nReport #${data.reportCount}. Our automated vault system will verify this video link.`);
+      } else {
+        alert(`🚨 Could not log the report for ${label}. Please try again.`);
+      }
+    } catch {
+      alert(`🚨 Could not log the report for ${label} (offline) — noted locally.`);
+    }
   });
 
   // CARDS CLICK
@@ -2174,10 +2190,48 @@ const SONGS = [
 
   $('heroPlayBtn')?.addEventListener('click', () => playTrack(0));
 
-  renderArtistCards();
-  renderQuickPicks();
-  if (window.lucide) { try { lucide.createIcons(); } catch(e){} }
+  // ── DB-BACKED CATALOG LOAD ─────────────────────────────────────────────
+  // Prefer the live catalog from the backend API; fall back to the bundled
+  // SONGS / ARTISTS_DATA so the static build still functions offline (e.g. a
+  // plain Vercel static deploy before the database is attached).
+  async function fetchCatalog() {
+    const timeout = ms => new Promise((_, rej) => setTimeout(() => rej(new Error('api timeout')), ms));
+    const grab = async url => {
+      const res = await Promise.race([fetch(url, { headers: { Accept: 'application/json' } }), timeout(3000)]);
+      if (!res.ok) throw new Error(`${url} -> ${res.status}`);
+      return res.json();
+    };
+    const [songsRes, artistsRes] = await Promise.all([grab('/api/songs'), grab('/api/artists')]);
+    const list = songsRes.songs && songsRes.songs.length ? songsRes.songs : null;
+    const arts = artistsRes.artists && artistsRes.artists.length ? artistsRes.artists : null;
+    if (!list) throw new Error('empty catalog from API');
+    return { songs: list, artists: arts };
+  }
 
+  async function boot() {
+    try {
+      const api = await fetchCatalog();
+      if (api.songs) {
+        songs = api.songs.map((s, i) => ({ ...s, _i: i, title: cleanTitle(s.title) }));
+        displayList = [...songs];
+      }
+      if (api.artists) {
+        ARTISTS_DATA = api.artists.map(a => ({
+          name: a.name,
+          initials: a.initials || a.name.slice(0, 2).toUpperCase(),
+          tag: a.tag || 'Vault Outtakes',
+          avatarUrl: a.avatarUrl || '',
+        }));
+      }
+    } catch (err) {
+      console.warn('API catalog unavailable — using bundled data:', err.message);
+    }
+    renderArtistCards();
+    renderQuickPicks();
+    if (window.lucide) { try { lucide.createIcons(); } catch (e) {} }
+  }
+
+  boot();
 })();
 </script>
 <script src="https://www.youtube.com/iframe_api" async defer></script>

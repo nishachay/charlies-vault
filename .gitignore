@@ -5,14 +5,17 @@
 local_uploads/
 
 # Old dev dashboard files (replaced by index.html, not needed in repo)
-player.js
-style.css
-final_songs.js
-songs.js
+/player.js
+/style.css
+/final_songs.js
+/songs.js
 
 
 # Node
 node_modules/
+
+# Local database (dev SQLite)
+data/
 
 # Logs
 *.log
@@ -22,6 +25,7 @@ node_modules/
 Thumbs.db
 .env
 .env.*
+!.env.example
 
 # Scratch/utility scripts (used during dev, not needed in repo)
 parse_playlist.js
