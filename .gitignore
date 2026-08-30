@@ -51,6 +51,7 @@ scripts/candidates.json
 # Verified-video probe results (derived data; regenerate with npm run db:verify)
 scripts/verified.json
 scripts/verified_legacy.json
+scripts/verified_legacy_artists.json
 
 # Internal tooling lock file
 skills-lock.json
