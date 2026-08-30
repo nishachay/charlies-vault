@@ -6,7 +6,7 @@
     { "slug": "drake", "name": "Drake", "initials": "DR", "tag": "Reference Tracks & Leaks" },
     { "slug": "justin-bieber", "name": "Justin Bieber", "initials": "JB", "tag": "Era Demos & Unreleased" },
     { "slug": "post-malone", "name": "Post Malone", "initials": "PM", "tag": "Unreleased & Vault Demos" },
-    { "slug": "xxx-tentacion", "name": "XXXTentacion", "initials": "XX", "tag": "Voice Memos & Demos" },
+    { "slug": "xxxtentacion", "name": "XXXTentacion", "initials": "XX", "tag": "Voice Memos & Demos" },
     { "slug": "lil-uzi-vert", "name": "Lil Uzi Vert", "initials": "UV", "tag": "Unreleased" },
     { "slug": "ariana-grande", "name": "Ariana Grande", "initials": "AG", "tag": "Era Demos" },
     { "slug": "juice-wrld", "name": "Juice WRLD", "initials": "JW", "tag": "Unreleased" },

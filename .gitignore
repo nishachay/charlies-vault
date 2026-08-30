@@ -58,3 +58,7 @@ scripts/verified_legacy_artists.json
 
 # Internal tooling lock file
 skills-lock.json
+
+# Curated-artist bucketing + report (working artifacts, reproducible from playlists.json + harvested.json)
+scripts/artists_curate.json
+scripts/curate_report.txt

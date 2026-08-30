@@ -45,7 +45,7 @@
       "tag": "Unreleased & Vault Demos"
     },
     {
-      "slug": "xxx-tentacion",
+      "slug": "xxxtentacion",
       "name": "XXXTentacion",
       "initials": "XX",
       "tag": "Voice Memos & Demos"
@@ -81,7 +81,7 @@
       "title": "$tay (with OG Chess)",
       "artist": "Travis Scott",
       "youtubeId": "jFXk0kk59g4",
-      "duration": null
+      "duration": 256
     },
     {
       "id": "NZIfr0DaLA8",
@@ -130,7 +130,7 @@
       "title": "All My Friends (Original, ft. Ty Dolla $ign)",
       "artist": "Post Malone",
       "youtubeId": "9HTHlQlX9kY",
-      "duration": null
+      "duration": 196
     },
     {
       "id": "5-cdeDkcips",
@@ -151,7 +151,7 @@
       "title": "Alone (Fearless era)",
       "artist": "Justin Bieber",
       "youtubeId": "bkAwqHy-s4I",
-      "duration": null
+      "duration": 143
     },
     {
       "id": "bjchSct38ck",
@@ -172,7 +172,7 @@
       "title": "Another Cup (ft. FKi & Sauce Lord Rich)",
       "artist": "Post Malone",
       "youtubeId": "d3zGWscoP_U",
-      "duration": null
+      "duration": 243
     },
     {
       "id": "FfEpWZBh2pU",
@@ -200,14 +200,14 @@
       "title": "AstroThunder (OG Version)",
       "artist": "Travis Scott",
       "youtubeId": "_5sdQzyVgCc",
-      "duration": null
+      "duration": 155
     },
     {
       "id": "o0JpUBo7qtA",
       "title": "Baby Loves (Final Demo)",
       "artist": "Ariana Grande",
       "youtubeId": "o0JpUBo7qtA",
-      "duration": null
+      "duration": 174
     },
     {
       "id": "kZAAnbRvids",
@@ -221,21 +221,21 @@
       "title": "Back of My Benz (Unreleased)",
       "artist": "Travis Scott",
       "youtubeId": "K1kOo-FtpNY",
-      "duration": null
+      "duration": 185
     },
     {
       "id": "82A3k7S4rNM",
       "title": "Back On It (Unreleased, with Offset)",
       "artist": "Travis Scott",
       "youtubeId": "82A3k7S4rNM",
-      "duration": null
+      "duration": 189
     },
     {
       "id": "rdUX6k_DccY",
       "title": "BAG! (ft. PnB Rock & NAV)",
       "artist": "XXXTentacion",
       "youtubeId": "rdUX6k_DccY",
-      "duration": null
+      "duration": 171
     },
     {
       "id": "ihJW2sSD4fs",
@@ -284,7 +284,7 @@
       "title": "Call Me Right Back",
       "artist": "Lil Uzi Vert",
       "youtubeId": "pG3tdh4HA4c",
-      "duration": null
+      "duration": 197
     },
     {
       "id": "8vWJBNc5Q4E",
@@ -305,7 +305,7 @@
       "title": "Can't Move Me",
       "artist": "Lil Uzi Vert",
       "youtubeId": "Z2TW-ijjimk",
-      "duration": null
+      "duration": 155
     },
     {
       "id": "QSh6giWIvaI",
@@ -319,7 +319,7 @@
       "title": "Can't Tell Me Nothing (Demo)",
       "artist": "XXXTentacion",
       "youtubeId": "-6VdZRLL924",
-      "duration": null
+      "duration": 60
     },
     {
       "id": "W8w_vs1IbD8",
@@ -347,7 +347,7 @@
       "title": "Clap (ft. Don Toliver) [OG Version]",
       "artist": "Travis Scott",
       "youtubeId": "WBa44Y3nkmA",
-      "duration": null
+      "duration": 145
     },
     {
       "id": "N7U50sKgdp4",
@@ -382,7 +382,7 @@
       "title": "Comfortable (2016)",
       "artist": "Justin Bieber",
       "youtubeId": "t7nGme1npEg",
-      "duration": null
+      "duration": 222
     },
     {
       "id": "ClAUUZi1C0c",
@@ -452,7 +452,7 @@
       "title": "Dej Loaf",
       "artist": "Lil Uzi Vert",
       "youtubeId": "60Tkbix36nc",
-      "duration": null
+      "duration": 239
     },
     {
       "id": "SaCFuWdBgZM",
@@ -466,7 +466,7 @@
       "title": "Devil In A White Dress (ft. Louis B & King Louis)",
       "artist": "Travis Scott",
       "youtubeId": "vqqvh3s5F7A",
-      "duration": null
+      "duration": 245
     },
     {
       "id": "YiRDohwOM3Y",
@@ -501,14 +501,14 @@
       "title": "Don't Make Me",
       "artist": "Post Malone",
       "youtubeId": "6L5Hj6feVK8",
-      "duration": null
+      "duration": 189
     },
     {
       "id": "2KbXmE_MUGw",
       "title": "Dr. Bieber (Color Me Stoked era)",
       "artist": "Justin Bieber",
       "youtubeId": "2KbXmE_MUGw",
-      "duration": null
+      "duration": 185
     },
     {
       "id": "NxLfrhMKqrg",
@@ -529,7 +529,7 @@
       "title": "Easier",
       "artist": "Post Malone",
       "youtubeId": "sOciERjF7TM",
-      "duration": null
+      "duration": 198
     },
     {
       "id": "LdJuopXstCA",
@@ -557,7 +557,7 @@
       "title": "Falling Down (Demo)",
       "artist": "XXXTentacion",
       "youtubeId": "RDPynWxlif8",
-      "duration": null
+      "duration": 165
     },
     {
       "id": "j0URHNPiY4M",
@@ -571,7 +571,7 @@
       "title": "Figure It Out (Cable Car) [Demo]",
       "artist": "XXXTentacion",
       "youtubeId": "WE-t2trthG0",
-      "duration": null
+      "duration": 140
     },
     {
       "id": "sqUihaHhZYw",
@@ -592,7 +592,7 @@
       "title": "FML (Demo)",
       "artist": "Travis Scott",
       "youtubeId": "xoPqFdUZ52o",
-      "duration": null
+      "duration": 190
     },
     {
       "id": "XxfR3QhXJnA",
@@ -613,21 +613,21 @@
       "title": "Foreign (w/ Jazz Lazer)",
       "artist": "Post Malone",
       "youtubeId": "3-wg57_h81k",
-      "duration": null
+      "duration": 232
     },
     {
       "id": "XRyDk7TsgZI",
       "title": "Forget (Demo)",
       "artist": "XXXTentacion",
       "youtubeId": "XRyDk7TsgZI",
-      "duration": null
+      "duration": 270
     },
     {
       "id": "a_ztV7GLw3o",
       "title": "Forgive Me (Unreleased)",
       "artist": "Travis Scott",
       "youtubeId": "a_ztV7GLw3o",
-      "duration": null
+      "duration": 150
     },
     {
       "id": "iCs3xkZMkJY",
@@ -641,28 +641,28 @@
       "title": "Fortnite (Unreleased)",
       "artist": "XXXTentacion",
       "youtubeId": "xCT_jfJ5t4w",
-      "duration": null
+      "duration": 85
     },
     {
       "id": "kbNjTcEWJ88",
       "title": "Friends With Money (ft. Drake) [Unreleased]",
       "artist": "Travis Scott",
       "youtubeId": "kbNjTcEWJ88",
-      "duration": null
+      "duration": 200
     },
     {
       "id": "MgL90koRtBw",
       "title": "From The Waist (2016)",
       "artist": "Justin Bieber",
       "youtubeId": "MgL90koRtBw",
-      "duration": null
+      "duration": 201
     },
     {
       "id": "dKbbLDly4HM",
       "title": "FTP (Demo)",
       "artist": "XXXTentacion",
       "youtubeId": "dKbbLDly4HM",
-      "duration": null
+      "duration": 75
     },
     {
       "id": "VwtZi12bEdA",
@@ -676,7 +676,7 @@
       "title": "Future (Emotion era)",
       "artist": "Justin Bieber",
       "youtubeId": "uJ4EI5BdOJ0",
-      "duration": null
+      "duration": 137
     },
     {
       "id": "uLkbNvDUi7E",
@@ -725,14 +725,14 @@
       "title": "Guacamole Carpet",
       "artist": "Post Malone",
       "youtubeId": "udV3ufnAvO4",
-      "duration": null
+      "duration": 218
     },
     {
       "id": "iypu7uhJbuo",
       "title": "Happy New Year (Emotion era)",
       "artist": "Justin Bieber",
       "youtubeId": "iypu7uhJbuo",
-      "duration": null
+      "duration": 230
     },
     {
       "id": "Vs1nAdgAbNE",
@@ -746,7 +746,7 @@
       "title": "Hard 2 Face Reality (w/ Poo Bear, Fearless era)",
       "artist": "Justin Bieber",
       "youtubeId": "koDCZZnd2Qc",
-      "duration": null
+      "duration": 132
     },
     {
       "id": "Z5tmmNcqZeM",
@@ -788,7 +788,7 @@
       "title": "Hey Girl (Color Me Stoked era)",
       "artist": "Justin Bieber",
       "youtubeId": "y6PdGlSOmL0",
-      "duration": null
+      "duration": 99
     },
     {
       "id": "4yijhp-x4WU",
@@ -823,14 +823,14 @@
       "title": "Holyfield",
       "artist": "Post Malone",
       "youtubeId": "45UZJDmBgJ4",
-      "duration": null
+      "duration": 260
     },
     {
       "id": "V50YZaaeiAA",
       "title": "Honest",
       "artist": "Post Malone",
       "youtubeId": "V50YZaaeiAA",
-      "duration": null
+      "duration": 172
     },
     {
       "id": "Yyt8tl-mj9w",
@@ -844,7 +844,7 @@
       "title": "Hotline Bling Remix (Color Me Stoked era)",
       "artist": "Justin Bieber",
       "youtubeId": "lckZHUsFUK8",
-      "duration": null
+      "duration": 149
     },
     {
       "id": "binVIluvqp8",
@@ -949,7 +949,7 @@
       "title": "If U Want You",
       "artist": "Justin Bieber",
       "youtubeId": "PIbb1M4XmGk",
-      "duration": null
+      "duration": 147
     },
     {
       "id": "4lSUzQ-2g6o",
@@ -996,7 +996,7 @@
       "title": "Introvert",
       "artist": "Lil Uzi Vert",
       "youtubeId": "G2O7pVfOvbM",
-      "duration": null
+      "duration": 247
     },
     {
       "id": "aqye0eI5Fb8",
@@ -1010,7 +1010,7 @@
       "title": "Japanese",
       "artist": "Post Malone",
       "youtubeId": "d10bEDioinY",
-      "duration": null
+      "duration": 230
     },
     {
       "id": "yi3eqmTOvWo",
@@ -1073,14 +1073,14 @@
       "title": "Ladies Love Me (Color Me Stoked era)",
       "artist": "Justin Bieber",
       "youtubeId": "R6RAIuoKNHY",
-      "duration": null
+      "duration": 160
     },
     {
       "id": "hign6E-fgos",
       "title": "License [Leak]",
       "artist": "Travis Scott",
       "youtubeId": "hign6E-fgos",
-      "duration": null
+      "duration": 150
     },
     {
       "id": "htqp4O8orfs",
@@ -1150,7 +1150,7 @@
       "title": "Lose (OG) [Demo]",
       "artist": "Travis Scott",
       "youtubeId": "QtdY4Vbu4s8",
-      "duration": null
+      "duration": 189
     },
     {
       "id": "mhFTTIbSm9E",
@@ -1171,7 +1171,7 @@
       "title": "Low (ft. OG Chess, 2011)",
       "artist": "Travis Scott",
       "youtubeId": "4o-apt41do8",
-      "duration": null
+      "duration": 148
     },
     {
       "id": "e8qB2ArqOY4",
@@ -1185,21 +1185,21 @@
       "title": "MAD! (Unreleased)",
       "artist": "XXXTentacion",
       "youtubeId": "9HiDMBZ8qnE",
-      "duration": null
+      "duration": 112
     },
     {
       "id": "8wXivt1vkWg",
       "title": "Made It",
       "artist": "Lil Uzi Vert",
       "youtubeId": "8wXivt1vkWg",
-      "duration": null
+      "duration": 182
     },
     {
       "id": "aUCGSW6SaWs",
       "title": "Maintain",
       "artist": "Post Malone",
       "youtubeId": "aUCGSW6SaWs",
-      "duration": null
+      "duration": 235
     },
     {
       "id": "O1d6GH0f_DE",
@@ -1220,14 +1220,14 @@
       "title": "Malibu (ft. 24hrs)",
       "artist": "Post Malone",
       "youtubeId": "BI5gtVwsbcc",
-      "duration": null
+      "duration": 252
     },
     {
       "id": "LsSv_fZe54g",
       "title": "Mama",
       "artist": "Justin Bieber",
       "youtubeId": "LsSv_fZe54g",
-      "duration": null
+      "duration": 268
     },
     {
       "id": "KFaOJ6Yhe-o",
@@ -1276,21 +1276,21 @@
       "title": "Mission To The Loot",
       "artist": "Lil Uzi Vert",
       "youtubeId": "7m86m0Dgif8",
-      "duration": null
+      "duration": 185
     },
     {
       "id": "pvUgkTyu2rE",
       "title": "Mistake (ft. NAV)",
       "artist": "Lil Uzi Vert",
       "youtubeId": "pvUgkTyu2rE",
-      "duration": null
+      "duration": 177
     },
     {
       "id": "SSfGD5TzhyM",
       "title": "My Friend Artist",
       "artist": "Lil Uzi Vert",
       "youtubeId": "SSfGD5TzhyM",
-      "duration": null
+      "duration": 118
     },
     {
       "id": "x_SDJghzAkI",
@@ -1304,21 +1304,21 @@
       "title": "My Mission",
       "artist": "Justin Bieber",
       "youtubeId": "ATClkZy-reI",
-      "duration": null
+      "duration": 79
     },
     {
       "id": "abW4wWwsIJY",
       "title": "Myron (OG)",
       "artist": "Lil Uzi Vert",
       "youtubeId": "abW4wWwsIJY",
-      "duration": null
+      "duration": 209
     },
     {
       "id": "0TOWFW8MvaQ",
       "title": "Never Change",
       "artist": "Post Malone",
       "youtubeId": "0TOWFW8MvaQ",
-      "duration": null
+      "duration": 214
     },
     {
       "id": "ePqZ9BPNsv8",
@@ -1332,7 +1332,7 @@
       "title": "New York",
       "artist": "Post Malone",
       "youtubeId": "dXHh3NerP2U",
-      "duration": null
+      "duration": 225
     },
     {
       "id": "kpEydKdPKZk",
@@ -1346,7 +1346,7 @@
       "title": "Nicki Minaj",
       "artist": "Lil Uzi Vert",
       "youtubeId": "Vmju79QRnos",
-      "duration": null
+      "duration": 230
     },
     {
       "id": "mliIn2wkuwA",
@@ -1360,7 +1360,7 @@
       "title": "No Good (Unreleased)",
       "artist": "Juice WRLD",
       "youtubeId": "WOA6ZWYWg6c",
-      "duration": null
+      "duration": 267
     },
     {
       "id": "UNzi8S3sUn4",
@@ -1430,7 +1430,7 @@
       "title": "Out of Reach (Snippet)",
       "artist": "Billie Eilish",
       "youtubeId": "MjaZ_zMOwFc",
-      "duration": null
+      "duration": 18
     },
     {
       "id": "UMidD0wTgx4",
@@ -1444,7 +1444,7 @@
       "title": "Overtones",
       "artist": "Post Malone",
       "youtubeId": "Vzum4n9yxyo",
-      "duration": null
+      "duration": 230
     },
     {
       "id": "2G_g9IGyy-8",
@@ -1458,7 +1458,7 @@
       "title": "Palm Trees (Unreleased)",
       "artist": "Travis Scott",
       "youtubeId": "rJ3ajRV_auU",
-      "duration": null,
+      "duration": 159,
       "versions": [
         {
           "label": "Palm Trees (re-upload)",
@@ -1472,14 +1472,14 @@
       "title": "Paradise [V3]",
       "artist": "Travis Scott",
       "youtubeId": "iN9kzjL3tvE",
-      "duration": null
+      "duration": 231
     },
     {
       "id": "v2Z9SPHyZDU",
       "title": "Part Time (Unreleased)",
       "artist": "Travis Scott",
       "youtubeId": "v2Z9SPHyZDU",
-      "duration": null,
+      "duration": 100,
       "versions": [
         {
           "label": "Part Time Interlude",
@@ -1514,7 +1514,7 @@
       "title": "Playtime (Emotion era)",
       "artist": "Justin Bieber",
       "youtubeId": "ljB39HOPD-o",
-      "duration": null
+      "duration": 158
     },
     {
       "id": "IKAIX6G_IGE",
@@ -1556,7 +1556,7 @@
       "title": "Pull Up (Unreleased)",
       "artist": "Travis Scott",
       "youtubeId": "HGCMmIRtUfA",
-      "duration": null
+      "duration": 150
     },
     {
       "id": "6WKmqO2I2AU",
@@ -1577,28 +1577,28 @@
       "title": "Quit (w/ Sia) [Demo]",
       "artist": "Ariana Grande",
       "youtubeId": "1KrtYPtbiqk",
-      "duration": null
+      "duration": 258
     },
     {
       "id": "OGLljEgBTYA",
       "title": "Racist (ft. A Boogie Wit Da Hoodie)",
       "artist": "Lil Uzi Vert",
       "youtubeId": "OGLljEgBTYA",
-      "duration": null
+      "duration": 206
     },
     {
       "id": "wc5rGdI9wSE",
       "title": "Ready For War",
       "artist": "Lil Uzi Vert",
       "youtubeId": "wc5rGdI9wSE",
-      "duration": null
+      "duration": 199
     },
     {
       "id": "VahExuSul3c",
       "title": "Red Wine & White Sheets",
       "artist": "Post Malone",
       "youtubeId": "VahExuSul3c",
-      "duration": null
+      "duration": 280
     },
     {
       "id": "u3PcU442zNE",
@@ -1619,7 +1619,7 @@
       "title": "Remember",
       "artist": "Post Malone",
       "youtubeId": "g-APFS9Xugk",
-      "duration": null
+      "duration": 195
     },
     {
       "id": "hLhcTJxZ8_E",
@@ -1668,7 +1668,7 @@
       "title": "Selfish (OG 2017 Demo)",
       "artist": "XXXTentacion",
       "youtubeId": "lxbw3BxbKb8",
-      "duration": null,
+      "duration": 240,
       "versions": [
         {
           "label": "Selfish (OG Version)",
@@ -1710,7 +1710,7 @@
       "title": "She Knows",
       "artist": "Justin Bieber",
       "youtubeId": "lxIoHVY17DA",
-      "duration": null
+      "duration": 295
     },
     {
       "id": "G6oVJqzKvPU",
@@ -1759,7 +1759,7 @@
       "title": "Socialite (w/ Swae Lee)",
       "artist": "Post Malone",
       "youtubeId": "1hnxcqU7yPg",
-      "duration": null
+      "duration": 168
     },
     {
       "id": "gBzkYK78KMI",
@@ -1773,7 +1773,7 @@
       "title": "Spaceships On Sunsets (ft. Trae Tha Truth)",
       "artist": "Post Malone",
       "youtubeId": "t_lPkU1Cjiw",
-      "duration": null
+      "duration": 271
     },
     {
       "id": "yknWNSPfKCM",
@@ -1808,7 +1808,7 @@
       "title": "Stay (Full Voice Memo)",
       "artist": "XXXTentacion",
       "youtubeId": "bYfJMPIymEc",
-      "duration": null
+      "duration": 86
     },
     {
       "id": "NUVsRXKqJfw",
@@ -1829,28 +1829,28 @@
       "title": "Strange (Snippet)",
       "artist": "Billie Eilish",
       "youtubeId": "GPLbgDFD7FQ",
-      "duration": null
+      "duration": 7
     },
     {
       "id": "mWwTB3sxWME",
       "title": "Stuntin'",
       "artist": "Post Malone",
       "youtubeId": "mWwTB3sxWME",
-      "duration": null
+      "duration": 117
     },
     {
       "id": "VffpEyfMax0",
       "title": "Suicidal Thoughts (Unreleased)",
       "artist": "XXXTentacion",
       "youtubeId": "VffpEyfMax0",
-      "duration": null
+      "duration": 78
     },
     {
       "id": "JU8XEYVy-SE",
       "title": "Sunkissed (Unreleased 2024)",
       "artist": "Justin Bieber",
       "youtubeId": "JU8XEYVy-SE",
-      "duration": null
+      "duration": 115
     },
     {
       "id": "pAB8abV8BmY",
@@ -1878,7 +1878,7 @@
       "title": "Takeoff [Leak]",
       "artist": "Travis Scott",
       "youtubeId": "bUgk5hGcfv0",
-      "duration": null
+      "duration": 128
     },
     {
       "id": "eLCgyLhIKi8",
@@ -1906,7 +1906,7 @@
       "title": "Thailand",
       "artist": "Lil Uzi Vert",
       "youtubeId": "LTIC7djLtKs",
-      "duration": null
+      "duration": 168
     },
     {
       "id": "VfcnPbmnXu0",
@@ -1920,7 +1920,7 @@
       "title": "That's It",
       "artist": "Post Malone",
       "youtubeId": "N8iktlPJq8s",
-      "duration": null
+      "duration": 195
     },
     {
       "id": "hLb12qsS1qk",
@@ -1941,7 +1941,7 @@
       "title": "The Curse (Untagged & Unreleased)",
       "artist": "Travis Scott",
       "youtubeId": "kk9PqykSOEw",
-      "duration": null
+      "duration": 229
     },
     {
       "id": "d8cUpZYRouY",
@@ -1969,14 +1969,14 @@
       "title": "The Interlude That Never Ends (OG 2017 Demo)",
       "artist": "XXXTentacion",
       "youtubeId": "0S_StYIkSTQ",
-      "duration": null
+      "duration": 215
     },
     {
       "id": "mjxdsAAeF8U",
       "title": "The Intro (Color Me Stoked era)",
       "artist": "Justin Bieber",
       "youtubeId": "mjxdsAAeF8U",
-      "duration": null
+      "duration": 104
     },
     {
       "id": "kOm1JzTWFYo",
@@ -1997,14 +1997,14 @@
       "title": "The One",
       "artist": "Post Malone",
       "youtubeId": "4uh4qo0VHnA",
-      "duration": null
+      "duration": 252
     },
     {
       "id": "qX9PcKcwYGc",
       "title": "The One",
       "artist": "Lil Uzi Vert",
       "youtubeId": "qX9PcKcwYGc",
-      "duration": null
+      "duration": 216
     },
     {
       "id": "5h5q-BnM7yA",
@@ -2025,7 +2025,7 @@
       "title": "Thick Or Thin (w/ Poo Bear)",
       "artist": "Justin Bieber",
       "youtubeId": "zm7REHmOXlo",
-      "duration": null
+      "duration": 96
     },
     {
       "id": "tGyDu6Hzi0s",
@@ -2053,7 +2053,7 @@
       "title": "Too Much",
       "artist": "Post Malone",
       "youtubeId": "hUkqcx7OUcM",
-      "duration": null
+      "duration": 245
     },
     {
       "id": "_LcP_NHW0zM",
@@ -2067,28 +2067,28 @@
       "title": "Trembling",
       "artist": "Post Malone",
       "youtubeId": "McwEQsm5OcM",
-      "duration": null
+      "duration": 165
     },
     {
       "id": "HLD7QvleTdI",
       "title": "Trill Mode [FULL VERSION] [LEAK]",
       "artist": "Travis Scott",
       "youtubeId": "HLD7QvleTdI",
-      "duration": null
+      "duration": 110
     },
     {
       "id": "58wRDWlHZMI",
       "title": "Tug Of War (Full Voice Memo)",
       "artist": "XXXTentacion",
       "youtubeId": "58wRDWlHZMI",
-      "duration": null
+      "duration": 98
     },
     {
       "id": "dSrdfluQfq0",
       "title": "Twerk (Color Me Stoked era)",
       "artist": "Justin Bieber",
       "youtubeId": "dSrdfluQfq0",
-      "duration": null
+      "duration": 156
     },
     {
       "id": "HhSuX7MYiRE",
@@ -2102,21 +2102,21 @@
       "title": "Valentino (Gunna ft. Uzi)",
       "artist": "Lil Uzi Vert",
       "youtubeId": "P74i8YyMG5c",
-      "duration": null
+      "duration": 166
     },
     {
       "id": "KPwFcYH-Phc",
       "title": "Vision (Leaked/Unreleased)",
       "artist": "Travis Scott",
       "youtubeId": "KPwFcYH-Phc",
-      "duration": null
+      "duration": 145
     },
     {
       "id": "my_yIBVTNic",
       "title": "Wake Me Up",
       "artist": "Post Malone",
       "youtubeId": "my_yIBVTNic",
-      "duration": null
+      "duration": 211
     },
     {
       "id": "gAZMbK4Yozo",
@@ -2158,14 +2158,14 @@
       "title": "Words I Lost",
       "artist": "Justin Bieber",
       "youtubeId": "Fkk3dOss3ac",
-      "duration": null
+      "duration": 212
     },
     {
       "id": "H7ha4Y8PT10",
       "title": "Would You (ft. Future)",
       "artist": "Lil Uzi Vert",
       "youtubeId": "H7ha4Y8PT10",
-      "duration": null
+      "duration": 222
     },
     {
       "id": "9cNItnEbDa0",
@@ -2200,7 +2200,7 @@
       "title": "Zombieman",
       "artist": "Lil Uzi Vert",
       "youtubeId": "F9CuYrnCyVo",
-      "duration": null
+      "duration": 198
     }
   ]
 }
