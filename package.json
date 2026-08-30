@@ -16,7 +16,7 @@
     "db:seed": "node scripts/import_catalog.js",
     "db:export": "node scripts/export_catalog.js",
     "db:verify": "node scripts/verify_legacy.js",
-    "db:build": "node scripts/build_charlie_catalog.js",
+    "db:build": "node scripts/build_catalog.js",
     "db:discover": "node scripts/discover_youtube.js",
     "db:sync": "node scripts/sync_bundled.js"
   },

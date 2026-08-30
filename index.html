@@ -1503,8 +1503,8 @@
         <div class="deck-info-box">
           <div class="deck-header-row">
             <div class="deck-title-block">
-              <h1 class="deck-title-text pixel-text" id="deckTitle">1984</h1>
-              <div class="deck-artist-sub" id="deckArtist">Charlie Puth</div>
+              <h1 class="deck-title-text pixel-text" id="deckTitle"></h1>
+              <div class="deck-artist-sub" id="deckArtist"></div>
             </div>
             <div style="display:flex; align-items:center; gap:6px;">
               <button class="deck-like-counter" id="likeCounterBtn" title="Like / Favorite Track">
@@ -1568,8 +1568,8 @@
     <div class="v-cover v-cover--mini" id="fnpThumbArt" role="img" aria-label="Now Playing Artwork"></div>
   </div>
   <div class="fnp-info">
-    <span class="fnp-title" id="fnpTitleText">1984</span>
-    <span class="fnp-artist" id="fnpArtistText">Charlie Puth</span>
+    <span class="fnp-title" id="fnpTitleText"></span>
+    <span class="fnp-artist" id="fnpArtistText"></span>
   </div>
   <div class="fnp-controls">
     <button class="fnp-btn play" id="fnpPlayBtn" title="Play/Pause">
@@ -1606,8 +1606,10 @@ const SONGS = [
   {"id":"Oc_TPbvFX1k","title":"After All (solo version)","artist":"Charlie Puth","youtubeId":"Oc_TPbvFX1k","duration":180},
   {"id":"5-cdeDkcips","title":"All Night","artist":"Charlie Puth","youtubeId":"5-cdeDkcips","duration":194},
   {"id":"ooKYtvSRNZ4","title":"All Of Me (cover)","artist":"Charlie Puth","youtubeId":"ooKYtvSRNZ4","duration":180},
+  {"id":"bjchSct38ck","title":"Alone Again (Demo)","artist":"The Weeknd","youtubeId":"bjchSct38ck","duration":230},
   {"id":"2D7iKTIlREw","title":"Anna","artist":"Charlie Puth","youtubeId":"2D7iKTIlREw","duration":136},
   {"id":"kZAAnbRvids","title":"Back Around","artist":"Charlie Puth","youtubeId":"kZAAnbRvids","duration":174},
+  {"id":"ihJW2sSD4fs","title":"Be Myself (Take Me Back To L.A. Demo)","artist":"The Weeknd","youtubeId":"ihJW2sSD4fs","duration":194},
   {"id":"3PuzDHsXUKA","title":"Beautiful Corruption","artist":"Charlie Puth","youtubeId":"3PuzDHsXUKA","duration":206},
   {"id":"ZNsabDtpS3g","title":"Best Friend","artist":"Charlie Puth","youtubeId":"ZNsabDtpS3g","duration":180},
   {"id":"EQDMxbCeJTs","title":"Butterflies","artist":"Charlie Puth","youtubeId":"EQDMxbCeJTs","duration":136},
@@ -1620,17 +1622,21 @@ const SONGS = [
   {"id":"ClAUUZi1C0c","title":"Coming Over (Ft. ZAYN & Timbaland)","artist":"Charlie Puth","youtubeId":"ClAUUZi1C0c","duration":168},
   {"id":"qu_TytwYoeI","title":"Could Do Better","artist":"Charlie Puth","youtubeId":"qu_TytwYoeI","duration":186},
   {"id":"74CaFfkRQL8","title":"Dancing With My Ex","artist":"Charlie Puth","youtubeId":"74CaFfkRQL8","duration":140},
+  {"id":"cmNTfyzfrJY","title":"Deeper (Noble)","artist":"The Weeknd","youtubeId":"cmNTfyzfrJY","duration":248},
   {"id":"SaCFuWdBgZM","title":"Delusional","artist":"Charlie Puth","youtubeId":"SaCFuWdBgZM","duration":122},
+  {"id":"11yHvabfMqw","title":"Die For It (OG Version, with Belly)","artist":"The Weeknd","youtubeId":"11yHvabfMqw","duration":150},
   {"id":"NxLfrhMKqrg","title":"Dream","artist":"Charlie Puth","youtubeId":"NxLfrhMKqrg","duration":177},
   {"id":"LdJuopXstCA","title":"Enemy","artist":"Charlie Puth","youtubeId":"LdJuopXstCA","duration":206},
   {"id":"XDtVDlSuq7w","title":"Ex To See","artist":"Charlie Puth","youtubeId":"XDtVDlSuq7w","duration":135},
   {"id":"YdqP9xRJ9LE","title":"Eyes on You (with Camila Cabello)","artist":"Charlie Puth","youtubeId":"YdqP9xRJ9LE","duration":180},
+  {"id":"sqUihaHhZYw","title":"Final Lullaby (Instagram Live)","artist":"The Weeknd","youtubeId":"sqUihaHhZYw","duration":178},
   {"id":"iCs3xkZMkJY","title":"Forgot How to Miss You","artist":"Charlie Puth","youtubeId":"iCs3xkZMkJY","duration":159},
   {"id":"VwtZi12bEdA","title":"Full Of It","artist":"Charlie Puth","youtubeId":"VwtZi12bEdA","duration":201},
   {"id":"piumUYPj-QY","title":"Go Round","artist":"Charlie Puth","youtubeId":"piumUYPj-QY","duration":217},
   {"id":"Vs1nAdgAbNE","title":"Hard","artist":"Charlie Puth","youtubeId":"Vs1nAdgAbNE","duration":205},
   {"id":"WL7b30qB7mk","title":"Heart Go Crazy","artist":"Charlie Puth","youtubeId":"WL7b30qB7mk","duration":212},
   {"id":"cK8LuF3SsZM","title":"Heart Is Bleeding","artist":"Charlie Puth","youtubeId":"cK8LuF3SsZM","duration":186},
+  {"id":"4yijhp-x4WU","title":"Hold Your Heart (The Abyss) [Original]","artist":"The Weeknd","youtubeId":"4yijhp-x4WU","duration":233,"versions":[{"label":"The Abyss [V2]","youtubeId":"aWAbzYVRH3U","notes":"Alternate After Hours-era take"}]},
   {"id":"Sj9NcZxjNec","title":"Holding Me Back","artist":"Charlie Puth","youtubeId":"Sj9NcZxjNec","duration":180},
   {"id":"wI3xCcLW2-Y","title":"Holding On For Dear Life","artist":"Charlie Puth","youtubeId":"wI3xCcLW2-Y","duration":197},
   {"id":"Yyt8tl-mj9w","title":"Hopes Up","artist":"Charlie Puth","youtubeId":"Yyt8tl-mj9w","duration":127},
@@ -1642,6 +1648,7 @@ const SONGS = [
   {"id":"4hLBHvEbbKc","title":"I'm Coming Over (ft. Timbaland)","artist":"Charlie Puth","youtubeId":"4hLBHvEbbKc","duration":179},
   {"id":"UdNBenHS2us","title":"In My Eyes","artist":"Charlie Puth","youtubeId":"UdNBenHS2us","duration":133},
   {"id":"7XhZyxx21AA","title":"In The Dark","artist":"Charlie Puth","youtubeId":"7XhZyxx21AA","duration":201},
+  {"id":"UWdm5RLDRrA","title":"In Your Eyes (Demo)","artist":"The Weeknd","youtubeId":"UWdm5RLDRrA","duration":220,"versions":[{"label":"Demo V2","youtubeId":"E-ceqs_qehc","notes":"Alternate mix"},{"label":"New Leak Version","youtubeId":"p-Qj7tsn-G0","notes":"Extended leak take"}]},
   {"id":"mx51V0WjxJ8","title":"Just Give Me a Reason","artist":"Charlie Puth","youtubeId":"mx51V0WjxJ8","duration":233},
   {"id":"Vk_GXjYU6QE","title":"Keep It Together","artist":"Charlie Puth","youtubeId":"Vk_GXjYU6QE","duration":206},
   {"id":"Xf9nNKulmrg","title":"Keeper","artist":"Charlie Puth","youtubeId":"Xf9nNKulmrg","duration":138},
@@ -1662,9 +1669,11 @@ const SONGS = [
   {"id":"O1d6GH0f_DE","title":"Make Something Up","artist":"Charlie Puth","youtubeId":"O1d6GH0f_DE","duration":201},
   {"id":"eC0cNpiEZ9s","title":"Make You Say (with Zedd)","artist":"Charlie Puth","youtubeId":"eC0cNpiEZ9s","duration":180},
   {"id":"S6JMArlhviE","title":"Me and You","artist":"Charlie Puth","youtubeId":"S6JMArlhviE","duration":132},
+  {"id":"raSXyFN2h-o","title":"Missed You (Instagram Live)","artist":"The Weeknd","youtubeId":"raSXyFN2h-o","duration":127},
   {"id":"kpEydKdPKZk","title":"Next To You","artist":"Charlie Puth","youtubeId":"kpEydKdPKZk","duration":180},
   {"id":"mliIn2wkuwA","title":"No Good","artist":"Charlie Puth","youtubeId":"mliIn2wkuwA","duration":147},
   {"id":"UNzi8S3sUn4","title":"No Judgement","artist":"Charlie Puth","youtubeId":"UNzi8S3sUn4","duration":212},
+  {"id":"kgTnxCT7Yqk","title":"Nothing Compares (Instagram Live)","artist":"The Weeknd","youtubeId":"kgTnxCT7Yqk","duration":151},
   {"id":"EvJOaKJrVm8","title":"Nothing Good","artist":"Charlie Puth","youtubeId":"EvJOaKJrVm8","duration":127},
   {"id":"zAt4sGyhmoM","title":"Off The Fence (feat. salem ilese)","artist":"Charlie Puth","youtubeId":"zAt4sGyhmoM","duration":127},
   {"id":"XFSC8Q39bvs","title":"Operator","artist":"Charlie Puth","youtubeId":"XFSC8Q39bvs","duration":182},
@@ -1674,6 +1683,7 @@ const SONGS = [
   {"id":"6WKmqO2I2AU","title":"Put Me Back Together","artist":"Charlie Puth","youtubeId":"6WKmqO2I2AU","duration":203},
   {"id":"5z536_Uil3I","title":"Quarantine Song","artist":"Charlie Puth","youtubeId":"5z536_Uil3I","duration":161},
   {"id":"hLhcTJxZ8_E","title":"Ride To Melrose (ft. Mike Ballz)","artist":"Charlie Puth","youtubeId":"hLhcTJxZ8_E","duration":325},
+  {"id":"NscMa8aLrLs","title":"Save Your Tears (Demo)","artist":"The Weeknd","youtubeId":"NscMa8aLrLs","duration":224},
   {"id":"-ITERYJfDO8","title":"Saved By The Bell","artist":"Charlie Puth","youtubeId":"-ITERYJfDO8","duration":217},
   {"id":"CRkv8vGvFto","title":"Seventeen","artist":"Charlie Puth","youtubeId":"CRkv8vGvFto","duration":180},
   {"id":"HXCKbj4uU4U","title":"Shadow Days","artist":"Charlie Puth","youtubeId":"HXCKbj4uU4U","duration":200},
@@ -1682,6 +1692,7 @@ const SONGS = [
   {"id":"ZMWOtyHRjJo","title":"Slow Motion","artist":"Charlie Puth","youtubeId":"ZMWOtyHRjJo","duration":211},
   {"id":"rBpVtdB1a6w","title":"Sober (Solo Version)","artist":"Charlie Puth","youtubeId":"rBpVtdB1a6w","duration":198},
   {"id":"gBzkYK78KMI","title":"Somebody's Watching Me","artist":"Charlie Puth","youtubeId":"gBzkYK78KMI","duration":117},
+  {"id":"dDNWpfsV2Gg","title":"Spite (Over Now Original)","artist":"The Weeknd","youtubeId":"dDNWpfsV2Gg","duration":230,"versions":[{"label":"Over Now (Demo V2)","youtubeId":"qS5outNseGQ","notes":"Closer-to-release rework of the Spite leak"}]},
   {"id":"NUVsRXKqJfw","title":"Stay Away (Extended)","artist":"Charlie Puth","youtubeId":"NUVsRXKqJfw","duration":130},
   {"id":"c4HbNc8-mF8","title":"Stop","artist":"Charlie Puth","youtubeId":"c4HbNc8-mF8","duration":172},
   {"id":"pAB8abV8BmY","title":"Suprise Me","artist":"Charlie Puth","youtubeId":"pAB8abV8BmY","duration":180},
@@ -1692,6 +1703,8 @@ const SONGS = [
   {"id":"koNSQPedKyg","title":"The Moment","artist":"Charlie Puth","youtubeId":"koNSQPedKyg","duration":180},
   {"id":"5NCcbx03rXA","title":"The Way","artist":"Charlie Puth","youtubeId":"5NCcbx03rXA","duration":180},
   {"id":"tGyDu6Hzi0s","title":"Time Passes By","artist":"Charlie Puth","youtubeId":"tGyDu6Hzi0s","duration":180},
+  {"id":"82jpYIdC0ks","title":"Timeless (Demo V4)","artist":"The Weeknd","youtubeId":"82jpYIdC0ks","duration":265},
+  {"id":"xWjix8V3P3w","title":"Too Late (Demo)","artist":"The Weeknd","youtubeId":"xWjix8V3P3w","duration":245},
   {"id":"_LcP_NHW0zM","title":"Trampoline Gasoline (with B.o.B)","artist":"Charlie Puth","youtubeId":"_LcP_NHW0zM","duration":214},
   {"id":"HhSuX7MYiRE","title":"Used All My Love","artist":"Charlie Puth","youtubeId":"HhSuX7MYiRE","duration":180},
   {"id":"gAZMbK4Yozo","title":"We're going home","artist":"Charlie Puth","youtubeId":"gAZMbK4Yozo","duration":211},
@@ -1712,8 +1725,10 @@ const SONGS = [
   const fmt = s => (!s || !isFinite(s) || s <= 0) ? '0:00' : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-  const cleanTitle = t => t.replace(/^charlie puth\s*[-—]\s*/i,'').trim();
-  let songs = SONGS.map((s,i) => ({...s, _i:i, title: cleanTitle(s.title)}));
+  // Defensively strip a leading "<Artist> - " prefix from a title (artist-aware
+  // so it works for every vault artist, not just the original one).
+  const cleanTitle = (t, artist) => String(t || '').replace(new RegExp(`^${(artist || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*[-—]\\s*`, 'i'), '').trim();
+  let songs = SONGS.map((s, i) => ({ ...s, _i: i, title: cleanTitle(s.title, s.artist) }));
   let displayList = [...songs];
 
   const LIKES_KEY = 'm2d_likes_v1';
@@ -2013,9 +2028,9 @@ const SONGS = [
     isPlaying = true;
 
     $('deckTitle').textContent = s.title;
-    if ($('deckArtist')) $('deckArtist').textContent = s.artist || 'Charlie Puth';
+    if ($('deckArtist')) $('deckArtist').textContent = s.artist || (ARTISTS_DATA[0] && ARTISTS_DATA[0].name) || '';
     if ($('fnpTitleText')) $('fnpTitleText').textContent = s.title;
-    if ($('fnpArtistText')) $('fnpArtistText').textContent = s.artist || 'Charlie Puth';
+    if ($('fnpArtistText')) $('fnpArtistText').textContent = s.artist || (ARTISTS_DATA[0] && ARTISTS_DATA[0].name) || '';
     applyCover($('fnpThumbArt'), s, 'mini');
     applyVinyl(s);
     $('wfCur').textContent = '0:00';
@@ -2157,6 +2172,7 @@ const SONGS = [
 
   let ARTISTS_DATA = [
   {"name":"Charlie Puth","initials":"CP","tag":"Voicenotes & Studio Cuts","avatarUrl":"/assets/artists/charlie-puth.jpg"},
+  {"name":"The Weeknd","initials":"TW","tag":"After Hours Sessions & Vault Leaks","avatarUrl":"/assets/artists/the-weeknd.jpg"},
 ];
 
   function renderArtistCards() {

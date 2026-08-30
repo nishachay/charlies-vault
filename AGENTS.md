@@ -1,14 +1,14 @@
 # AGENTS.md
 
-`{ OUTTAKE }` — "unreleased music vault" with a 3D vinyl/turntable player. Ships only **machine-verified, playable** tracks (currently 97 Charlie Puth outtakes recovered from the original 99-track Charlie's Vault, plus collab-candid other-artist support). Frontend is a single static file (`index.html`); the backend is a small DB-backed Node API that can run locally (SQLite) or on Vercel serverless (Postgres) with no framework.
+`{ OUTTAKE }` — "unreleased music vault" with a 3D vinyl/turntable player. Ships only **machine-verified, playable** tracks (currently 110 tracks across 2 verified artists: 97 Charlie Puth outtakes recovered from the original 99-track Charlie's Vault, plus 13 The Weeknd After-Hours-vault demos/leaks — the curated roster lives in `scripts/build_catalog.js`). Frontend is a single static file (`index.html`); the backend is a small DB-backed Node API that can run locally (SQLite) or on Vercel serverless (Postgres) with no framework.
 
 ## Run & verify
 
 - Dev server: `node server.js` → http://localhost:8080. First boot auto-creates `data/vault.db` (SQLite, gitignored) and seeds it from `scripts/catalog.json`.
 - Tests: `npm test` (`node --test "test/*.test.js"`). No lint/typecheck — verify frontend by manual browser testing (desktop + mobile, dark + light).
 - Data scripts (try to keep catalog.json/index.html/DB in sync, always **verify before shipping**):
-  - `npm run db:verify` — probe every candidate in `scripts/charlie_legacy_tracks.json` (+ alternate versions) → `scripts/verified_legacy.json` (gitignored). This is the recovered Charlie's Vault source; other artists get their own source file + verify step the same way.
-  - `npm run db:build` — rebuild curated `scripts/catalog.json` from `verified_legacy.json` via `scripts/build_charlie_catalog.js` (active-only, deduped by id, alternate takes collapse into `versions`).
+  - `npm run db:verify` — probe every candidate in `scripts/charlie_legacy_tracks.json` (+ alternate versions) → `scripts/verified_legacy.json` (gitignored). This is the recovered Charlie's Vault source. Other artists each get their own source + probe step the same way; The Weeknd flow: `node scripts/discover_weeknd.js` (keyless oEmbed truth-check, incl. the video's real title/author) → `scripts/weeknd_candidates.json` (gitignored), then the human-curated roster inside `build_catalog.js` is cross-checked against it.
+  - `npm run db:build` — rebuild curated `scripts/catalog.json` via `scripts/build_catalog.js` from the per-artist verified sources (active-only, alternate takes collapse into `versions`).
   - `npm run db:sync` — regenerate the bundled `SONGS`/`ARTISTS_DATA` fallback inside `index.html` to match `catalog.json`.
   - `npm run db:export` (extract catalog from index.html → `scripts/catalog.json`), `npm run db:seed` (upsert catalog.json → DB), `node scripts/refresh_songs.js [--force]` (CLI video health check).
 - `pg` is the only npm dependency (production Postgres). `node:sqlite` (built into Node ≥22.5) powers local dev/tests, so `npm install` is optional unless you deploy.

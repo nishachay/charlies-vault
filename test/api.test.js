@@ -9,6 +9,7 @@ const { createApp } = require('../server');
 
 const catalog = require('../scripts/catalog.json');
 const firstArtist = catalog.artists[0];
+const firstArtistSongs = catalog.songs.filter(s => s.artist === firstArtist.name);
 const firstSong = catalog.songs[0];
 
 // Probe stub: resolves like a fetch() Response. Configurable per-app instance.
@@ -38,17 +39,17 @@ describe('public API', () => {
     assert.equal(body.ok, true);
     assert.equal(body.backend, 'sqlite');
     assert.equal(body.songs, catalog.songs.length);
-    assert.equal(body.artists, 1);
+    assert.equal(body.artists, catalog.artists.length);
     assert.equal(body.byStatus.active, catalog.songs.length);
   });
 
   it('serves /api/artists', async t => {
     const { base } = await withApp(t);
     const { artists, count } = await (await fetch(`${base}/api/artists`)).json();
-    assert.equal(count, 1);
-    assert.equal(artists.length, 1);
+    assert.equal(count, catalog.artists.length);
+    assert.equal(artists.length, catalog.artists.length);
     assert.equal(artists[0].name, firstArtist.name);
-    assert.equal(artists[0].songCount, catalog.songs.length);
+    assert.equal(artists[0].songCount, firstArtistSongs.length);
   });
 
   it('serves /api/songs and respects the artist filter', async t => {
@@ -58,7 +59,7 @@ describe('public API', () => {
     assert.ok(all.songs.every(s => s.status === 'active'));
 
     const filtered = await (await fetch(`${base}/api/songs?artist=${firstArtist.slug}`)).json();
-    assert.equal(filtered.count, catalog.songs.length);
+    assert.equal(filtered.count, firstArtistSongs.length);
     assert.ok(filtered.songs.every(s => s.artist === firstArtist.name));
   });
 
