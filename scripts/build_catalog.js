@@ -5,6 +5,10 @@
 //   The Weeknd   -> the hard-curated WEEKND_TRACKS roster below, cross-checked
 //                   against the oEmbed probe results in scripts/weeknd_candidates.json
 //                   (gitignored; regenerate with scripts/discover_weeknd.js)
+//   Everyone else -> scripts/vault_roster.json (human-curated), every id
+//                   validated against the oEmbed probe evidence in
+//                   scripts/harvested.json (gitignored; regenerate with
+//                   scripts/harvest_playlists.js)
 //
 //   node scripts/build_catalog.js
 //
@@ -13,6 +17,9 @@
 
 const fs = require('fs');
 const path = require('path');
+
+const ROSTER_PATH = path.join(__dirname, 'vault_roster.json');
+const HARVEST_PATH = path.join(__dirname, 'harvested.json');
 
 const CHARLIE = {
   slug: 'charlie-puth',
@@ -128,7 +135,59 @@ function byTitle(a, b) {
   const versionCount = weekndSongs.reduce((n, s) => n + (s.versions || []).length, 0);
   console.log(`[build] weeknd: ${weekndSongs.length} verified songs (+${versionCount} alt versions)`);
 
-  const catalog = { artists: [CHARLIE, WEEKND], songs: [...charlieSongs, ...weekndSongs].sort(byTitle) };
+  const roster = (function buildRoster() {
+    if (!fs.existsSync(ROSTER_PATH)) {
+      console.error('[build] scripts/vault_roster.json is missing.');
+      process.exit(1);
+    }
+    if (!fs.existsSync(HARVEST_PATH)) {
+      console.error('[build] scripts/harvested.json is missing — run `node scripts/harvest_playlists.js` first.');
+      process.exit(1);
+    }
+    const curated = require(ROSTER_PATH);
+    const probes = new Map(require(HARVEST_PATH).probes.map(p => [p.id, p]));
+    const songs = curated.tracks.map(t => {
+      const c = probes.get(t.id);
+      if (!c || c.status !== 'active') {
+        console.error(`[build] roster track ${t.id} ("${t.title}") is not actively playable — drop it from vault_roster.json or re-run scripts/harvest_playlists.js`);
+        process.exit(1);
+      }
+      const versions = [];
+      for (const tv of t.versions || []) {
+        if (tv.youtubeId === t.id) continue;
+        const v = probes.get(tv.youtubeId);
+        if (v && v.status === 'active') versions.push({ label: tv.label, youtubeId: tv.youtubeId, notes: tv.notes || null });
+      }
+      return {
+        id: t.id,
+        title: t.title,
+        artist: t.artist,
+        youtubeId: t.id,
+        duration: isFinite(c.duration) ? c.duration : null,
+        ...(versions.length ? { versions } : {}),
+      };
+    });
+    const artists = curated.artists.map(a => ({ slug: a.slug, name: a.name, initials: a.initials, tag: a.tag }));
+    return { artists, songs };
+  })();
+  const rosterVersionCount = roster.songs.reduce((n, s) => n + (s.versions || []).length, 0);
+  console.log(`[build] roster: ${roster.songs.length} verified songs (+${rosterVersionCount} alt versions) across ${roster.artists.length} artists`);
+
+  // Merge artists, keeping first-seen order; a roster entry reusing an existing
+  // artist (e.g. The Weeknd) inherits its avatarUrl while picking up the
+  // roster's fresher initials/tag.
+  const artistsByName = new Map();
+  for (const a of [CHARLIE, WEEKND, ...roster.artists]) {
+    const existing = artistsByName.get(a.name);
+    artistsByName.set(a.name, existing
+      ? { ...existing, ...a, avatarUrl: existing.avatarUrl || a.avatarUrl }
+      : a);
+  }
+
+  const catalog = {
+    artists: [...artistsByName.values()],
+    songs: [...charlieSongs, ...weekndSongs, ...roster.songs].sort(byTitle),
+  };
   fs.writeFileSync(path.join(__dirname, 'catalog.json'), JSON.stringify(catalog, null, 2) + '\n');
   console.log(`[build] catalog.json: ${catalog.artists.length} artist(s), ${catalog.songs.length} songs`);
 })().catch(err => { console.error('[build] failed:', err.message); process.exit(1); });

@@ -48,6 +48,8 @@ yt_data.json
 # Discovery shortlist (harvested candidates awaiting human curation)
 scripts/candidates.json
 scripts/weeknd_candidates.json
+scripts/harvested.json
+scripts/.probe_cache.json
 
 # Verified-video probe results (derived data; regenerate with npm run db:verify)
 scripts/verified.json
