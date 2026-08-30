@@ -15,6 +15,11 @@ const catalog = require('./catalog.json');
 const renderSong = s => JSON.stringify({
   id: s.id, title: s.title, artist: s.artist, youtubeId: s.youtubeId,
   duration: s.duration ?? null,
+  ...(s.era ? { era: s.era } : {}),
+  ...(s.category ? { category: s.category } : {}),
+  ...((s.versions && s.versions.length) ? {
+    versions: s.versions.map(v => ({ label: v.label, youtubeId: v.youtubeId, notes: v.notes ?? null })),
+  } : {}),
 });
 const renderArtist = a => JSON.stringify({
   name: a.name, initials: a.initials || '', tag: a.tag || '', avatarUrl: a.avatarUrl || '',

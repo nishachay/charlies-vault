@@ -11,7 +11,7 @@
     style-src 'unsafe-inline' https://fonts.googleapis.com;
     font-src https://fonts.gstatic.com;
     frame-src https://www.youtube.com https://www.youtube-nocookie.com;
-    img-src 'self' https://img.youtube.com https://i.ytimg.com https://images.unsplash.com data:;
+    img-src 'self' https://img.youtube.com https://i.ytimg.com https://images.unsplash.com https://*.mzstatic.com data:;
     connect-src 'self';
     object-src 'none';
   ">
@@ -523,6 +523,31 @@
       color: #f87171;
     }
 
+    /* ALTERNATE VERSIONS PICKER (V1 / V2 / ... per track) */
+    .deck-versions-row {
+      display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 10px; flex-wrap: wrap;
+    }
+    .deck-versions-label {
+      font-family: var(--body-font); font-size: 10px; font-weight: 800; letter-spacing: 0.14em;
+      color: var(--text-muted); text-transform: uppercase; flex-shrink: 0;
+    }
+    .version-chip {
+      display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 12px;
+      border-radius: var(--radius-full); background: var(--pill-bg); border: 1px solid var(--pill-border);
+      font-family: var(--body-font); font-size: 11px; font-weight: 700; color: var(--text-secondary);
+      cursor: pointer; transition: all 0.15s ease; white-space: nowrap;
+    }
+    .version-chip:hover {
+      background: var(--surface-card-hover); border-color: var(--border-card-hover);
+      transform: scale(1.04);
+    }
+    .version-chip.active {
+      background: rgba(239, 68, 68, 0.16); border-color: rgba(239, 68, 68, 0.45); color: #f87171;
+    }
+    .version-chip .vc-num {
+      font-size: 9px; font-weight: 900; letter-spacing: 0.08em; opacity: 0.8; font-variant-numeric: tabular-nums;
+    }
+
     /* ══════════════════════════════════════
        SLEEK AUDIO PROGRESS BAR (PRO AUDIO SCRUBBER)
     ══════════════════════════════════════ */
@@ -814,6 +839,9 @@
       font-family: var(--display-font); font-size: 18px; font-weight: 800; color: var(--text-primary);
       transition: all 0.2s ease;
     }
+    .artist-card-avatar .av-avatar-fb {
+      font-family: var(--display-font); font-size: 20px; font-weight: 800; color: var(--text-primary);
+    }
     .artist-card-item:hover .artist-card-avatar {
       border-color: var(--text-primary); transform: scale(1.06); background: var(--pill-active-bg); color: var(--pill-active-text);
     }
@@ -900,11 +928,10 @@
       border-radius: 14px; overflow: hidden; background: var(--pill-bg);
       position: relative;
     }
-    .card-cover-wrap img {
-      width: 100%; height: 100%; object-fit: cover;
+    .card-cover-wrap .v-cover {
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .card-item-featured:hover .card-cover-wrap img {
+    .card-item-featured:hover .card-cover-wrap .v-cover {
       transform: scale(1.04);
     }
 
@@ -977,6 +1004,90 @@
       background: var(--pill-bg); overflow: hidden; flex-shrink: 0;
     }
     .row-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── OWNED VAULT-LABEL COVER ART (no scraped YouTube thumbnails) ──
+       Every track renders a deterministic "archival pressing" — a near-black
+       vinyl surface with a single restrained per-song accent. Textured, not
+       gradient-coloured: wordmark + catalog no. + groove rings + side/rpm.
+       Covers are their own surface, so they read the same in both themes.
+       Parent supplies radius via overflow:hidden + border-radius. */
+    .v-cover {
+      position: relative; overflow: hidden;
+      width: 100%; height: 100%;
+      container-type: inline-size;
+      background:
+        repeating-radial-gradient(circle at 50% 42%, rgba(255,255,255,0.022) 0 1px, transparent 1px 2.6px),
+        radial-gradient(130% 140% at 50% 6%, #16191d 0%, #0d0f12 58%, #07080a 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .v-cover::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(120% 90% at 24% 0%, rgba(255,255,255,0.06), rgba(255,255,255,0) 46%);
+    }
+    .v-cover::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), inset 0 0 0 1px rgba(14,16,20,0.9);
+    }
+    .vc-accentbar {
+      position: absolute; top: 0; left: 0; right: 0; z-index: 2;
+      height: max(2px, 0.7cqw); background: var(--coverAccent);
+    }
+    .vc-ring {
+      position: absolute; border: 1px solid rgba(255,255,255,0.08); border-radius: 50%;
+      pointer-events: none;
+    }
+    .vc-initial {
+      font-family: var(--display-font); font-weight: 800; color: rgba(255,255,255,0.94);
+      letter-spacing: -0.04em; position: relative; z-index: 1; user-select: none; line-height: 1;
+    }
+
+    /* Mini cover (track-list thumbs / quick picks): accent bar + glyph + one ring. */
+    .v-cover--mini { }
+    .v-cover--mini .vc-initial { font-size: 40cqw; }
+    .v-cover--mini .vc-ring { width: 74%; aspect-ratio: 1; left: 13%; top: 13%; }
+
+    /* Full "pressing label" cover (featured / trend tiles): real label anatomy. */
+    .v-cover--label {
+      padding: 9px 11px; align-items: stretch; justify-content: space-between;
+      flex-direction: column; text-align: left;
+    }
+    .v-cover--label .vc-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      position: relative; z-index: 1;
+    }
+    .vc-mark {
+      font-family: var(--display-font); font-weight: 800; font-size: 4.4cqw;
+      letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.6);
+    }
+    .vc-catno {
+      font-family: var(--body-font); font-weight: 700; font-size: 3cqw;
+      letter-spacing: 0.06em; color: var(--coverAccent);
+    }
+    .v-cover--label .vc-disc { position: absolute; inset: 0; z-index: 0; }
+    .v-cover--label .vc-r1 { width: 84%; aspect-ratio: 1; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+    .v-cover--label .vc-r2 { width: 58%; aspect-ratio: 1; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+    .v-cover--label .vc-mid {
+      position: relative; z-index: 1; flex: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 5px; text-align: center; min-height: 0;
+    }
+    .v-cover--label .vc-title {
+      font-family: var(--display-font); font-weight: 800; font-size: 12.5cqw;
+      line-height: 1.05; letter-spacing: -0.015em; color: #fff;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.45); max-width: 96%;
+    }
+    .v-cover--label .vc-artist {
+      font-family: var(--body-font); font-weight: 700; font-size: 3.6cqw;
+      letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.6);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 94%;
+    }
+    .v-cover--label .vc-meta {
+      position: relative; z-index: 1;
+      display: flex; justify-content: space-between;
+      font-family: var(--body-font); font-weight: 600; font-size: 2.9cqw;
+      letter-spacing: 0.08em; color: rgba(255,255,255,0.4);
+    }
     .row-details { min-width: 0; }
     .row-title {
       font-family: var(--body-font);
@@ -1142,7 +1253,7 @@
             <div class="cards-grid">
               <div class="card-item-featured" id="cardChaos">
                 <div class="card-cover-wrap">
-                  <img src="https://img.youtube.com/vi/mqdefault.jpg" alt="" id="trendCover0">
+                  <div class="v-cover v-cover--mini" id="trendCover0"></div>
                 </div>
                 <div class="card-footer-row">
                   <div class="card-meta">
@@ -1159,7 +1270,7 @@
 
               <div class="card-item-featured" id="cardSimple">
                 <div class="card-cover-wrap">
-                  <img src="https://img.youtube.com/vi/mqdefault.jpg" alt="" id="trendCover1">
+                  <div class="v-cover v-cover--mini" id="trendCover1"></div>
                 </div>
                 <div class="card-footer-row">
                   <div class="card-meta">
@@ -1176,7 +1287,7 @@
 
               <div class="card-item-featured" id="cardNotSoGood">
                 <div class="card-cover-wrap">
-                  <img src="https://img.youtube.com/vi/mqdefault.jpg" alt="" id="trendCover2">
+                  <div class="v-cover v-cover--mini" id="trendCover2"></div>
                 </div>
                 <div class="card-footer-row">
                   <div class="card-meta">
@@ -1287,13 +1398,6 @@
                 <stop offset="100%" stop-color="#ffffff" stop-opacity="0.0"/>
               </linearGradient>
 
-              <linearGradient id="splitLabel" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#f4f2ea"/>
-                <stop offset="50%" stop-color="#f4f2ea"/>
-                <stop offset="50%" stop-color="#808590"/>
-                <stop offset="100%" stop-color="#808590"/>
-              </linearGradient>
-
               <linearGradient id="chromeArm" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#ffffff"/>
                 <stop offset="40%" stop-color="#d1d5db"/>
@@ -1344,12 +1448,15 @@
               <g id="svgVinylDisc" class="vinyl-group">
                 <circle cx="0" cy="0" r="136" fill="url(#vinylGrooves)" filter="url(#dropShadow)"/>
                 <circle cx="0" cy="0" r="136" fill="url(#vinylSheen)"/>
-                
-                <circle cx="0" cy="0" r="44" fill="url(#splitLabel)" stroke="#374151" stroke-width="1.5"/>
+
+                <!-- Center label: recolored per-song by applyVinyl() so the
+                     spinning record wears the cover of the current track. -->
+                <circle id="vinylLabel" cx="0" cy="0" r="44" fill="#1e2a4a" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
+                <circle id="vinylLabelCore" cx="0" cy="0" r="24" fill="#10181c" stroke="rgba(255,255,255,0.40)" stroke-width="1"/>
                 <circle cx="0" cy="0" r="43" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1"/>
-                
-                <text x="0" y="-8" font-family="'Space Grotesk', sans-serif" font-size="8.5" font-weight="800" fill="#1f2937" text-anchor="middle" letter-spacing="0.5">33⅓ RPM</text>
-                
+
+                <text id="vinylRpm" x="0" y="-8" font-family="'Space Grotesk', sans-serif" font-size="8.5" font-weight="800" fill="#f4f2ea" text-anchor="middle" letter-spacing="0.5">33⅓ RPM</text>
+
                 <!-- Center Spindle Pin (Dead Center 0 0) -->
                 <circle cx="0" cy="0" r="5" fill="url(#screwGrad)" stroke="#111827" stroke-width="1"/>
                 <circle cx="0" cy="0" r="2" fill="#111827"/>
@@ -1411,6 +1518,12 @@
           </div>
         </div>
 
+        <!-- Middle Box 1.5: Alternate Versions Picker -->
+        <div class="deck-versions-row" id="deckVersionsRow" style="display:none;" aria-label="Choose a version">
+          <span class="deck-versions-label">Versions</span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;flex:1;min-width:0;" id="deckVersionsChips"></div>
+        </div>
+
         <!-- Middle Box 2: Sleek Audio Progress Bar -->
         <div class="progress-bar-box">
           <span class="progress-timestamp" id="wfCur">1:54</span>
@@ -1452,7 +1565,7 @@
 <!-- FLOATING NOW PLAYING CAPSULE (PROMINENT DESIGN SYSTEM MATCH) -->
 <div class="floating-now-playing drawer-open" id="floatingNowPlaying" title="Click to expand Now Playing panel">
   <div class="fnp-thumb">
-    <img src="https://img.youtube.com/vi/9i6k9PYZbCk/mqdefault.jpg" id="fnpThumbImg" alt="Now Playing">
+    <div class="v-cover v-cover--mini" id="fnpThumbArt" role="img" aria-label="Now Playing Artwork"></div>
   </div>
   <div class="fnp-info">
     <span class="fnp-title" id="fnpTitleText">1984</span>
@@ -1488,22 +1601,102 @@
 ══════════════════════════════════════ -->
 <script>
 const SONGS = [
+  {"id":"Q-t0214lY5Y","title":"1984","artist":"Charlie Puth","youtubeId":"Q-t0214lY5Y","duration":239},
+  {"id":"r03IolEGnXw","title":"2021","artist":"Charlie Puth","youtubeId":"r03IolEGnXw","duration":180},
+  {"id":"Oc_TPbvFX1k","title":"After All (solo version)","artist":"Charlie Puth","youtubeId":"Oc_TPbvFX1k","duration":180},
+  {"id":"5-cdeDkcips","title":"All Night","artist":"Charlie Puth","youtubeId":"5-cdeDkcips","duration":194},
+  {"id":"ooKYtvSRNZ4","title":"All Of Me (cover)","artist":"Charlie Puth","youtubeId":"ooKYtvSRNZ4","duration":180},
+  {"id":"2D7iKTIlREw","title":"Anna","artist":"Charlie Puth","youtubeId":"2D7iKTIlREw","duration":136},
   {"id":"kZAAnbRvids","title":"Back Around","artist":"Charlie Puth","youtubeId":"kZAAnbRvids","duration":174},
   {"id":"3PuzDHsXUKA","title":"Beautiful Corruption","artist":"Charlie Puth","youtubeId":"3PuzDHsXUKA","duration":206},
   {"id":"ZNsabDtpS3g","title":"Best Friend","artist":"Charlie Puth","youtubeId":"ZNsabDtpS3g","duration":180},
   {"id":"EQDMxbCeJTs","title":"Butterflies","artist":"Charlie Puth","youtubeId":"EQDMxbCeJTs","duration":136},
   {"id":"Zqhjca07Jjk","title":"By Default","artist":"Charlie Puth","youtubeId":"Zqhjca07Jjk","duration":157},
-  {"id":"QSh6giWIvaI","title":"I Can't Stay Away From Your Baby","artist":"Charlie Puth","youtubeId":"QSh6giWIvaI","duration":202},
+  {"id":"QSh6giWIvaI","title":"Can't Stay Away From Your Baby","artist":"Charlie Puth","youtubeId":"QSh6giWIvaI","duration":202},
+  {"id":"QI76xnJefNs","title":"Chop Like This","artist":"Charlie Puth","youtubeId":"QI76xnJefNs","duration":196},
+  {"id":"N7U50sKgdp4","title":"Clarity","artist":"Charlie Puth","youtubeId":"N7U50sKgdp4","duration":180},
+  {"id":"wd3cYyNs4N0","title":"Close To You","artist":"Charlie Puth","youtubeId":"wd3cYyNs4N0","duration":130},
+  {"id":"x80f5TrfWsA","title":"Collide","artist":"Charlie Puth","youtubeId":"x80f5TrfWsA","duration":235},
+  {"id":"ClAUUZi1C0c","title":"Coming Over (Ft. ZAYN & Timbaland)","artist":"Charlie Puth","youtubeId":"ClAUUZi1C0c","duration":168},
+  {"id":"qu_TytwYoeI","title":"Could Do Better","artist":"Charlie Puth","youtubeId":"qu_TytwYoeI","duration":186},
+  {"id":"74CaFfkRQL8","title":"Dancing With My Ex","artist":"Charlie Puth","youtubeId":"74CaFfkRQL8","duration":140},
+  {"id":"SaCFuWdBgZM","title":"Delusional","artist":"Charlie Puth","youtubeId":"SaCFuWdBgZM","duration":122},
+  {"id":"NxLfrhMKqrg","title":"Dream","artist":"Charlie Puth","youtubeId":"NxLfrhMKqrg","duration":177},
+  {"id":"LdJuopXstCA","title":"Enemy","artist":"Charlie Puth","youtubeId":"LdJuopXstCA","duration":206},
+  {"id":"XDtVDlSuq7w","title":"Ex To See","artist":"Charlie Puth","youtubeId":"XDtVDlSuq7w","duration":135},
+  {"id":"YdqP9xRJ9LE","title":"Eyes on You (with Camila Cabello)","artist":"Charlie Puth","youtubeId":"YdqP9xRJ9LE","duration":180},
+  {"id":"iCs3xkZMkJY","title":"Forgot How to Miss You","artist":"Charlie Puth","youtubeId":"iCs3xkZMkJY","duration":159},
+  {"id":"VwtZi12bEdA","title":"Full Of It","artist":"Charlie Puth","youtubeId":"VwtZi12bEdA","duration":201},
+  {"id":"piumUYPj-QY","title":"Go Round","artist":"Charlie Puth","youtubeId":"piumUYPj-QY","duration":217},
+  {"id":"Vs1nAdgAbNE","title":"Hard","artist":"Charlie Puth","youtubeId":"Vs1nAdgAbNE","duration":205},
+  {"id":"WL7b30qB7mk","title":"Heart Go Crazy","artist":"Charlie Puth","youtubeId":"WL7b30qB7mk","duration":212},
+  {"id":"cK8LuF3SsZM","title":"Heart Is Bleeding","artist":"Charlie Puth","youtubeId":"cK8LuF3SsZM","duration":186},
+  {"id":"Sj9NcZxjNec","title":"Holding Me Back","artist":"Charlie Puth","youtubeId":"Sj9NcZxjNec","duration":180},
+  {"id":"wI3xCcLW2-Y","title":"Holding On For Dear Life","artist":"Charlie Puth","youtubeId":"wI3xCcLW2-Y","duration":197},
+  {"id":"Yyt8tl-mj9w","title":"Hopes Up","artist":"Charlie Puth","youtubeId":"Yyt8tl-mj9w","duration":127},
+  {"id":"binVIluvqp8","title":"How Do You Sleep At Night?","artist":"Charlie Puth","youtubeId":"binVIluvqp8","duration":180},
+  {"id":"URcdq08KYDU","title":"Hypnotized","artist":"Charlie Puth","youtubeId":"URcdq08KYDU","duration":177},
+  {"id":"4h8W07DRKNs","title":"I Don’t Wanna Hurt You Baby","artist":"Charlie Puth","youtubeId":"4h8W07DRKNs","duration":180,"versions":[{"label":"Acoustic","youtubeId":"N4VZ-vQvJ_8","notes":"Stripped-down take from The Otto Tunes sessions"}]},
   {"id":"RbQ1bpBlmp4","title":"I Suck At Writing Lyrics","artist":"Charlie Puth","youtubeId":"RbQ1bpBlmp4","duration":215},
+  {"id":"mkNDfa8fRs8","title":"I'll Be There","artist":"Charlie Puth","youtubeId":"mkNDfa8fRs8","duration":168},
+  {"id":"4hLBHvEbbKc","title":"I'm Coming Over (ft. Timbaland)","artist":"Charlie Puth","youtubeId":"4hLBHvEbbKc","duration":179},
+  {"id":"UdNBenHS2us","title":"In My Eyes","artist":"Charlie Puth","youtubeId":"UdNBenHS2us","duration":133},
+  {"id":"7XhZyxx21AA","title":"In The Dark","artist":"Charlie Puth","youtubeId":"7XhZyxx21AA","duration":201},
   {"id":"mx51V0WjxJ8","title":"Just Give Me a Reason","artist":"Charlie Puth","youtubeId":"mx51V0WjxJ8","duration":233},
+  {"id":"Vk_GXjYU6QE","title":"Keep It Together","artist":"Charlie Puth","youtubeId":"Vk_GXjYU6QE","duration":206},
+  {"id":"Xf9nNKulmrg","title":"Keeper","artist":"Charlie Puth","youtubeId":"Xf9nNKulmrg","duration":138},
+  {"id":"qEyvIFLo_uI","title":"King of Optimism (Extended)","artist":"Charlie Puth","youtubeId":"qEyvIFLo_uI","duration":229},
+  {"id":"SbhmPmlZA2k","title":"Kiss Me","artist":"Charlie Puth","youtubeId":"SbhmPmlZA2k","duration":227},
+  {"id":"nUk3Mm3DG-U","title":"Know You By Heart","artist":"Charlie Puth","youtubeId":"nUk3Mm3DG-U","duration":226},
+  {"id":"uf-woik7sjw","title":"L U V","artist":"Charlie Puth","youtubeId":"uf-woik7sjw","duration":261},
+  {"id":"5nGtx9KA8cs","title":"Lights Go Out","artist":"Charlie Puth","youtubeId":"5nGtx9KA8cs","duration":180},
+  {"id":"r7nhAe7ViWA","title":"Like That (demo for BABYMONSTER)","artist":"Charlie Puth","youtubeId":"r7nhAe7ViWA","duration":166},
+  {"id":"pny5KkZFlD0","title":"Lips on You (demo for Maroon 5)","artist":"Charlie Puth","youtubeId":"pny5KkZFlD0","duration":217},
+  {"id":"aqox12aqrFw","title":"Look Around","artist":"Charlie Puth","youtubeId":"aqox12aqrFw","duration":180},
+  {"id":"dbuv5vG56AU","title":"Look At Me Now","artist":"Charlie Puth","youtubeId":"dbuv5vG56AU","duration":199},
+  {"id":"eQPTRTR-ooc","title":"Look At My Phone","artist":"Charlie Puth","youtubeId":"eQPTRTR-ooc","duration":190},
+  {"id":"329PZ0aMOrE","title":"Look What You Made Me Do","artist":"Charlie Puth","youtubeId":"329PZ0aMOrE","duration":139},
+  {"id":"l4pkRF2M3uM","title":"Looking At Me","artist":"Charlie Puth","youtubeId":"l4pkRF2M3uM","duration":180},
+  {"id":"mhFTTIbSm9E","title":"Love You In The Day","artist":"Charlie Puth","youtubeId":"mhFTTIbSm9E","duration":141},
   {"id":"e8qB2ArqOY4","title":"Mad At Me","artist":"Charlie Puth","youtubeId":"e8qB2ArqOY4","duration":172},
   {"id":"O1d6GH0f_DE","title":"Make Something Up","artist":"Charlie Puth","youtubeId":"O1d6GH0f_DE","duration":201},
-  {"id":"eC0cNpiEZ9s","title":"Make You Say","artist":"Charlie Puth","youtubeId":"eC0cNpiEZ9s","duration":180},
+  {"id":"eC0cNpiEZ9s","title":"Make You Say (with Zedd)","artist":"Charlie Puth","youtubeId":"eC0cNpiEZ9s","duration":180},
   {"id":"S6JMArlhviE","title":"Me and You","artist":"Charlie Puth","youtubeId":"S6JMArlhviE","duration":132},
   {"id":"kpEydKdPKZk","title":"Next To You","artist":"Charlie Puth","youtubeId":"kpEydKdPKZk","duration":180},
   {"id":"mliIn2wkuwA","title":"No Good","artist":"Charlie Puth","youtubeId":"mliIn2wkuwA","duration":147},
   {"id":"UNzi8S3sUn4","title":"No Judgement","artist":"Charlie Puth","youtubeId":"UNzi8S3sUn4","duration":212},
   {"id":"EvJOaKJrVm8","title":"Nothing Good","artist":"Charlie Puth","youtubeId":"EvJOaKJrVm8","duration":127},
+  {"id":"zAt4sGyhmoM","title":"Off The Fence (feat. salem ilese)","artist":"Charlie Puth","youtubeId":"zAt4sGyhmoM","duration":127},
+  {"id":"XFSC8Q39bvs","title":"Operator","artist":"Charlie Puth","youtubeId":"XFSC8Q39bvs","duration":182},
+  {"id":"UMidD0wTgx4","title":"Over And Over","artist":"Charlie Puth","youtubeId":"UMidD0wTgx4","duration":215},
+  {"id":"gZAypvYlhZQ","title":"Picture Perfect","artist":"Charlie Puth","youtubeId":"gZAypvYlhZQ","duration":199},
+  {"id":"IKAIX6G_IGE","title":"Power","artist":"Charlie Puth","youtubeId":"IKAIX6G_IGE","duration":87},
+  {"id":"6WKmqO2I2AU","title":"Put Me Back Together","artist":"Charlie Puth","youtubeId":"6WKmqO2I2AU","duration":203},
+  {"id":"5z536_Uil3I","title":"Quarantine Song","artist":"Charlie Puth","youtubeId":"5z536_Uil3I","duration":161},
+  {"id":"hLhcTJxZ8_E","title":"Ride To Melrose (ft. Mike Ballz)","artist":"Charlie Puth","youtubeId":"hLhcTJxZ8_E","duration":325},
+  {"id":"-ITERYJfDO8","title":"Saved By The Bell","artist":"Charlie Puth","youtubeId":"-ITERYJfDO8","duration":217},
+  {"id":"CRkv8vGvFto","title":"Seventeen","artist":"Charlie Puth","youtubeId":"CRkv8vGvFto","duration":180},
+  {"id":"HXCKbj4uU4U","title":"Shadow Days","artist":"Charlie Puth","youtubeId":"HXCKbj4uU4U","duration":200},
+  {"id":"G6oVJqzKvPU","title":"Shouldn't I Be In Love","artist":"Charlie Puth","youtubeId":"G6oVJqzKvPU","duration":214},
+  {"id":"yS_j1z63Jrc","title":"Sick","artist":"Charlie Puth","youtubeId":"yS_j1z63Jrc","duration":187},
+  {"id":"ZMWOtyHRjJo","title":"Slow Motion","artist":"Charlie Puth","youtubeId":"ZMWOtyHRjJo","duration":211},
+  {"id":"rBpVtdB1a6w","title":"Sober (Solo Version)","artist":"Charlie Puth","youtubeId":"rBpVtdB1a6w","duration":198},
+  {"id":"gBzkYK78KMI","title":"Somebody's Watching Me","artist":"Charlie Puth","youtubeId":"gBzkYK78KMI","duration":117},
+  {"id":"NUVsRXKqJfw","title":"Stay Away (Extended)","artist":"Charlie Puth","youtubeId":"NUVsRXKqJfw","duration":130},
+  {"id":"c4HbNc8-mF8","title":"Stop","artist":"Charlie Puth","youtubeId":"c4HbNc8-mF8","duration":172},
+  {"id":"pAB8abV8BmY","title":"Suprise Me","artist":"Charlie Puth","youtubeId":"pAB8abV8BmY","duration":180},
+  {"id":"eCUOV4pvRrE","title":"Take It All In","artist":"Charlie Puth","youtubeId":"eCUOV4pvRrE","duration":133},
+  {"id":"eLCgyLhIKi8","title":"Tangerine Dreams","artist":"Charlie Puth","youtubeId":"eLCgyLhIKi8","duration":231},
+  {"id":"8nAqrW5mRqc","title":"Tears on my shoulder","artist":"Charlie Puth","youtubeId":"8nAqrW5mRqc","duration":176},
+  {"id":"VfcnPbmnXu0","title":"That Was Embarrassing (Extended)","artist":"Charlie Puth","youtubeId":"VfcnPbmnXu0","duration":148},
+  {"id":"koNSQPedKyg","title":"The Moment","artist":"Charlie Puth","youtubeId":"koNSQPedKyg","duration":180},
+  {"id":"5NCcbx03rXA","title":"The Way","artist":"Charlie Puth","youtubeId":"5NCcbx03rXA","duration":180},
+  {"id":"tGyDu6Hzi0s","title":"Time Passes By","artist":"Charlie Puth","youtubeId":"tGyDu6Hzi0s","duration":180},
+  {"id":"_LcP_NHW0zM","title":"Trampoline Gasoline (with B.o.B)","artist":"Charlie Puth","youtubeId":"_LcP_NHW0zM","duration":214},
+  {"id":"HhSuX7MYiRE","title":"Used All My Love","artist":"Charlie Puth","youtubeId":"HhSuX7MYiRE","duration":180},
+  {"id":"gAZMbK4Yozo","title":"We're going home","artist":"Charlie Puth","youtubeId":"gAZMbK4Yozo","duration":211},
+  {"id":"teVWsgI0_yc","title":"What Makes You Beautiful","artist":"Charlie Puth","youtubeId":"teVWsgI0_yc","duration":180},
+  {"id":"9cNItnEbDa0","title":"Yellow Hearts  (Demo for Ant Saunders)","artist":"Charlie Puth","youtubeId":"9cNItnEbDa0","duration":180},
   {"id":"ZorWVKNcTQc","title":"Your Name","artist":"Charlie Puth","youtubeId":"ZorWVKNcTQc","duration":188},
 ];
 </script>
@@ -1528,9 +1721,78 @@ const SONGS = [
   let likeCount = 392;
   try { JSON.parse(localStorage.getItem(LIKES_KEY)||'[]').forEach(id => likes.add(id)); } catch(e){}
 
-  let curIdx = 0, curId = songs[0]?.youtubeId, isPlaying = false, shuffleOn = false;
+  // Per-song version preference ("best version" memory).
+  const VERSION_KEY = 'm2d_version_pref_v1';
+  let versionPrefs = {};
+  try { versionPrefs = JSON.parse(localStorage.getItem(VERSION_KEY) || '{}') || {}; } catch(e) { versionPrefs = {}; }
+
+  let curIdx = 0, curId = songs[0]?.youtubeId, curSrcKey = 'canonical', isPlaying = false, shuffleOn = false;
   let ytP = null, ytReady = false, timer = null, isScrubbing = false;
   const BAR_COUNT = 28;
+
+  // Ordered playable sources for a song: the canonical best copy (V1) first,
+  // then alternate versions then the mirror. Used by the picker + auto-fallback.
+  function activeVersionList(s) {
+    const out = [];
+    if (s.youtubeId) out.push({ key: 'canonical', num: 'V1', name: 'Original', vid: s.youtubeId, status: s.status });
+    (s.versions || [])
+      .filter(v => v.status == null || v.status === 'active')
+      .forEach((v, i) => {
+        if (!v.youtubeId || v.youtubeId === s.youtubeId) return;
+        out.push({ key: v.id || `${s.id}__v${i + 1}`, num: `V${i + 2}`, name: v.label || 'Alt', vid: v.youtubeId, status: v.status });
+      });
+    if (s.mirrorId && s.mirrorId !== s.youtubeId && !out.some(x => x.vid === s.mirrorId)) {
+      out.push({ key: 'mirror', num: 'Mir', name: 'Mirror', vid: s.mirrorId, status: null });
+    }
+    return out;
+  }
+
+  function preferredKey(s) {
+    const srcs = activeVersionList(s);
+    if (!srcs.length) return 'canonical';
+    const saved = versionPrefs[s.id];
+    if (saved && srcs.some(x => x.key === saved)) return saved;
+    const playable = srcs.find(x => x.status == null || x.status === 'active');
+    return (playable || srcs[0]).key;
+  }
+
+  function renderVersionPicker(s) {
+    const row = $('deckVersionsRow'), chips = $('deckVersionsChips');
+    if (!row || !chips) return;
+    const srcs = activeVersionList(s);
+    if (srcs.length <= 1) { row.style.display = 'none'; chips.innerHTML = ''; return; }
+    row.style.display = '';
+    chips.innerHTML = srcs.map(sc => `
+      <button class="version-chip${sc.key === curSrcKey ? ' active' : ''}" data-key="${esc(sc.key)}" title="Play ${esc(sc.name)}">
+        <span class="vc-num">${sc.num}</span>
+        <span>${esc(sc.name)}</span>
+      </button>`).join('');
+    chips.querySelectorAll('.version-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        curSrcKey = btn.dataset.key;
+        versionPrefs[s.id] = curSrcKey;
+        localStorage.setItem(VERSION_KEY, JSON.stringify(versionPrefs));
+        playSource(s);
+      });
+    });
+  }
+
+  // Load the currently-selected source into the YouTube player.
+  function playSource(s) {
+    const srcs = activeVersionList(s);
+    const src = srcs.find(x => x.key === curSrcKey) || srcs[0] || null;
+    curSrcKey = src ? src.key : 'canonical';
+    curId = src ? src.vid : s.youtubeId;
+    renderVersionPicker(s);
+    if (curId && ytReady && ytP) {
+      try {
+        if (ytP.unMute) ytP.unMute();
+        if (ytP.setVolume) ytP.setVolume(100);
+        ytP.loadVideoById(curId);
+        ytP.playVideo();
+      } catch(e) { console.warn('Audio play error:', e); }
+    }
+  }
 
   // RESPONSIVE IN-FLOW NOW PLAYING SIDEBAR & FLOATING CAPSULE CONTROLS
   const sidebar = $('nowPlayingSidebar');
@@ -1607,25 +1869,88 @@ const SONGS = [
     }
   }
 
-  const ARTWORK_POOL = [
-    "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?q=80&w=400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1549834125-82d3c48159a3?q=80&w=400&auto=format&fit=crop"
+  // ── OWNED VAULT-LABEL COVER ART ─────────────────────────────────────────
+  // Deterministic per-song cover: seeded ink+accent gradient + typography.
+  // No scraped YouTube thumbnails — every cover is designed, repeatable, and
+  // works offline. Same glyph for both themes (covers are their own surface).
+  const VAULT_PALETTES = [
+    ["#16181f", "#1e2a4a", "#2e5b8a"],   // ink slate → steel blue
+    ["#10181c", "#12323a", "#14606b"],   // ink petrol
+    ["#131b17", "#123226", "#176b46"],   // ink emerald
+    ["#19131f", "#2a1c40", "#4a2f7a"],   // ink amethyst (muted)
+    ["#1b1318", "#3a1d27", "#8a2f43"],   // ink rose
+    ["#171411", "#2e2417", "#8a6430"],   // ink bronze
+    ["#10151d", "#1a2636", "#294e75"],   // ink night navy
+    ["#0f1a1d", "#153a40", "#1f6a6b"],   // ink deep teal
+    ["#19131c", "#33203f", "#6a3060"],   // ink plum
+    ["#1a1410", "#3a2015", "#7a3a16"],   // ink ember
   ];
 
-  function getTrackThumb(s) {
-    if (!s) return ARTWORK_POOL[0];
-    if (s.coverUrl) return s.coverUrl;
-    const artist = (s.artist || '').toLowerCase();
-    const artistObj = ARTISTS_DATA.find(a => a.name.toLowerCase().includes(artist));
-    if (artistObj && artistObj.avatarUrl) return artistObj.avatarUrl;
-    const hash = Math.abs((s.title || '').length) % ARTWORK_POOL.length;
-    return ARTWORK_POOL[hash];
+  function coverHash(s) {
+    const str = (s && (s.id || s.youtubeId)) || (s && s.title) || '';
+    let h = 2166136261;
+    for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
+  function coverPalette(s) { return VAULT_PALETTES[coverHash(s) % VAULT_PALETTES.length]; }
+  function coverStyle(s) {
+    const p = coverPalette(s);
+    return `--coverAccent:${p[2]};--coverInk:${p[0]}`;
+  }
+  function coverInitial(s) {
+    const t = ((s && s.title) || '?').trim();
+    return esc(t.charAt(0).toUpperCase());
+  }
+  function coverInner(s, variant) {
+    const h = coverHash(s);
+    const side = h % 2 ? 'A' : 'B';
+    const catno = `OUT·${1000 + (h % 9000)}`;
+    const init = coverInitial(s);
+    if (variant === 'label') {
+      return `<span class="vc-accentbar"></span>
+        <div class="vc-head"><span class="vc-mark">Outtake Archive</span><span class="vc-catno">${catno}</span></div>
+        <div class="vc-disc"><span class="vc-ring vc-r1"></span><span class="vc-ring vc-r2"></span></div>
+        <div class="vc-mid">
+          <div class="vc-title">${esc((s && s.title) || '')}</div>
+          <div class="vc-artist">${esc((s && s.artist) || 'Unreleased')}</div>
+        </div>
+        <div class="vc-meta"><span>Side ${side}</span><span>33⅓ RPM</span><span>${fmt((s && s.duration))}</span></div>`;
+    }
+    return `<span class="vc-accentbar"></span><span class="vc-ring"></span><span class="vc-initial">${init}</span>`;
+  }
+  function coverEl(s, variant) {
+    const st = coverStyle(s);
+    return `<div class="v-cover ${variant === 'label' ? 'v-cover--label' : 'v-cover--mini'}" style="${st}">${coverInner(s, variant)}</div>`;
+  }
+  // Refill a static cover container (featured tiles / now-playing thumb) for a song.
+  function applyCover(el, s, variant) {
+    if (!el) return;
+    el.className = 'v-cover ' + (variant === 'label' ? 'v-cover--label' : 'v-cover--mini');
+    el.style.cssText = coverStyle(s);
+    el.innerHTML = coverInner(s, variant);
+  }
+  // Dye the spinning record's center label with the current track's cover
+  // palette: near-black ink base + accent core, like the vault-label covers.
+  function applyVinyl(s) {
+    const p = coverPalette(s);
+    const base = $('vinylLabel'), core = $('vinylLabelCore'), rpm = $('vinylRpm');
+    if (base) base.setAttribute('fill', '#101318');
+    if (core) core.setAttribute('fill', p[2]);
+    if (rpm) rpm.setAttribute('fill', '#f4f2ea');
+  }
+  // Avatar resilience: any broken image degrades to the artist's initials.
+  function mountAvatars(scope) {
+    if (!scope) return;
+    scope.querySelectorAll('img.av-avatar').forEach(img => {
+      const fallback = () => {
+        const fb = document.createElement('span');
+        fb.className = 'av-avatar-fb';
+        fb.textContent = img.dataset.fallback || '?';
+        img.replaceWith(fb);
+      };
+      img.addEventListener('error', fallback);
+      if (img.complete && img.naturalWidth === 0) fallback();
+    });
   }
 
   // RENDER PLAYLISTS / TRACK ROWS (APPLYING DESIGN SYSTEM PRINCIPLES)
@@ -1645,14 +1970,13 @@ const SONGS = [
 
     container.innerHTML = displayList.map((s, vi) => {
       const isAct = vi === curIdx;
-      const thumb = getTrackThumb(s);
       const numStr = (vi + 1).toString().padStart(2, '0');
       return `
         <div class="playlist-row-item${isAct ? ' active' : ''}" data-vi="${vi}">
           <span style="font-family:var(--display-font);font-size:12px;font-weight:700;color:var(--text-muted);width:24px;flex-shrink:0;">#${numStr}</span>
           <div class="row-left-info" style="flex:1;min-width:0;">
             <div class="row-thumb">
-              <img src="${thumb}" alt="" loading="lazy" style="object-fit:cover;">
+              ${coverEl(s, 'mini')}
             </div>
             <div class="row-details">
               <div class="row-title">${esc(s.title)}</div>
@@ -1684,6 +2008,7 @@ const SONGS = [
     if (vi < 0 || vi >= displayList.length) return;
     curIdx = vi;
     const s = displayList[vi];
+    curSrcKey = preferredKey(s);
     curId = s.youtubeId;
     isPlaying = true;
 
@@ -1691,7 +2016,8 @@ const SONGS = [
     if ($('deckArtist')) $('deckArtist').textContent = s.artist || 'Charlie Puth';
     if ($('fnpTitleText')) $('fnpTitleText').textContent = s.title;
     if ($('fnpArtistText')) $('fnpArtistText').textContent = s.artist || 'Charlie Puth';
-    if ($('fnpThumbImg')) $('fnpThumbImg').src = getTrackThumb(s);
+    applyCover($('fnpThumbArt'), s, 'mini');
+    applyVinyl(s);
     $('wfCur').textContent = '0:00';
     $('wfTot').textContent = fmt(s.duration);
     updateProgressBar(0);
@@ -1700,14 +2026,7 @@ const SONGS = [
     updatePlayerState(true);
     openSidebar(); // Auto expand Now Playing Sidebar!
 
-    if (s.youtubeId && ytReady && ytP) {
-      try {
-        if (ytP.unMute) ytP.unMute();
-        if (ytP.setVolume) ytP.setVolume(100);
-        ytP.loadVideoById(s.youtubeId);
-        ytP.playVideo();
-      } catch(e) { console.warn('Audio play error:', e); }
-    }
+    playSource(s);
   }
 
   function togglePlay() {
@@ -1837,7 +2156,7 @@ const SONGS = [
   });
 
   let ARTISTS_DATA = [
-  {"name":"Charlie Puth","initials":"CP","tag":"Voicenotes & Studio Cuts","avatarUrl":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Charlie_Puth_2018_by_Glenn_Francis.jpg/400px-Charlie_Puth_2018_by_Glenn_Francis.jpg"},
+  {"name":"Charlie Puth","initials":"CP","tag":"Voicenotes & Studio Cuts","avatarUrl":"/assets/artists/charlie-puth.jpg"},
 ];
 
   function renderArtistCards() {
@@ -1850,7 +2169,7 @@ const SONGS = [
       return `
         <div class="artist-card-item" data-artist="${a.name}">
           <div class="artist-card-avatar" style="overflow:hidden;padding:0;">
-            <img src="${a.avatarUrl}" alt="${a.name}" style="width:100%;height:100%;object-fit:cover;">
+            <img class="av-avatar" src="${a.avatarUrl}" alt="${a.name}" data-fallback="${esc(a.initials || a.name.slice(0, 2))}" style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div style="width:100%;">
             <div class="artist-card-name">${a.name}</div>
@@ -1860,6 +2179,7 @@ const SONGS = [
       `;
     }).join('');
 
+    mountAvatars(grid);
     grid.querySelectorAll('.artist-card-item').forEach(card => {
       card.addEventListener('click', () => {
         const artistName = card.getAttribute('data-artist');
@@ -1881,9 +2201,10 @@ const SONGS = [
     const heroAv = $('artistHeroAvatar');
     if (heroAv) {
       if (artistObj.avatarUrl) {
-        heroAv.innerHTML = `<img src="${artistObj.avatarUrl}" alt="${artistObj.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+        heroAv.innerHTML = `<img class="av-avatar" src="${artistObj.avatarUrl}" alt="${artistObj.name}" data-fallback="${esc(artistObj.initials || artistObj.name.slice(0, 2))}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
         heroAv.style.padding = '0';
         heroAv.style.overflow = 'hidden';
+        mountAvatars(heroAv);
       } else {
         heroAv.textContent = artistObj.initials;
       }
@@ -1915,14 +2236,13 @@ const SONGS = [
     if (!container) return;
     container.innerHTML = displayList.map((s, vi) => {
       const isAct = vi === curIdx;
-      const thumb = `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
       const numStr = (vi + 1).toString().padStart(2, '0');
       return `
         <div class="playlist-row-item${isAct ? ' active' : ''}" data-vi="${vi}">
           <span style="font-family:var(--display-font);font-size:12px;font-weight:700;color:var(--text-muted);width:24px;flex-shrink:0;">#${numStr}</span>
           <div class="row-left-info" style="flex:1;min-width:0;">
             <div class="row-thumb">
-              <img src="${thumb}" alt="" loading="lazy">
+              ${coverEl(s, 'mini')}
             </div>
             <div class="row-details">
               <div class="row-title">${esc(s.title)}</div>
@@ -1956,12 +2276,16 @@ const SONGS = [
   $('reportLinkBtn')?.addEventListener('click', async () => {
     const s = displayList[curIdx];
     if (!s) return;
-    const label = `"${s.title}" by ${s.artist}`;
+    const src = activeVersionList(s).find(x => x.key === curSrcKey);
+    const suffix = src && src.key !== 'canonical' ? ` (${src.num} ${src.name})` : '';
+    const label = `"${s.title}" by ${s.artist}${suffix}`;
+    const payload = { songId: s.id, reason: 'reported by listener' };
+    if (src && src.key !== 'canonical') payload.versionId = src.key;
     try {
       const res = await fetch('/api/report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ songId: s.id, reason: 'reported by listener' }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.ok) {
@@ -2009,10 +2333,14 @@ $('cardChaos')?.addEventListener('click', () => playTrack(1));
         onError(ev) {
           console.warn('YouTube Player Error Code:', ev.data);
           const s = displayList[curIdx];
-          if (s && s.mirrorId && curId !== s.mirrorId) {
-            console.info('Auto-fallback to mirror video ID:', s.mirrorId);
-            curId = s.mirrorId;
-            if (ytP?.loadVideoById) ytP.loadVideoById(s.mirrorId);
+          if (!s) return;
+          const srcs = activeVersionList(s);
+          const pos = srcs.findIndex(x => x.key === curSrcKey);
+          const nextSrc = pos >= 0 ? srcs[pos + 1] : null;
+          if (nextSrc) {
+            console.info('Auto-fallback to alternate version:', nextSrc.num, nextSrc.name);
+            curSrcKey = nextSrc.key;
+            playSource(s);
           } else {
             setTimeout(() => next(), 600);
           }
@@ -2028,7 +2356,7 @@ $('cardChaos')?.addEventListener('click', () => playTrack(1));
     container.innerHTML = picks.map((s, idx) => `
       <div class="quick-pick-card" data-idx="${idx}">
         <div class="quick-pick-thumb">
-          <img src="https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg" alt="" loading="lazy">
+          ${coverEl(s, 'mini')}
         </div>
         <div style="flex:1;min-width:0;">
           <div class="quick-pick-title">${esc(s.title)}</div>
@@ -2059,8 +2387,7 @@ $('cardChaos')?.addEventListener('click', () => playTrack(1));
       if (!s) return;
       setText(`trendTitle${i - 1}`, s.title);
       setText(`trendArtist${i - 1}`, s.artist || 'Vault Outtake');
-      const img = $(`trendCover${i - 1}`);
-      if (img) img.src = s.coverUrl || `https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`;
+      applyCover($(`trendCover${i - 1}`), s, 'label');
     });
   }
 
