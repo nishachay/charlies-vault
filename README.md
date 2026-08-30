@@ -1,6 +1,6 @@
 # { OUTTAKE }
 
-Unreleased music vault with a 3D vinyl / turntable player. 17 verified, playable Charlie Puth unreleased & demo tracks, streamed live through YouTube's official IFrame API (no audio files hosted). Every video is machine-verified before it ships — dead or private links are never surfaced.
+Unreleased music vault with a 3D vinyl / turntable player. **97 verified, playable Charlie Puth unreleased & demo tracks** (recovered and machine-verified from the original 99-track Charlie's Vault), streamed live through YouTube's official IFrame API (no audio files hosted). Every video is machine-verified before it ships — dead or private links are never surfaced.
 
 **Stack:** single-file static frontend (`index.html`, vanilla HTML/CSS/JS) + a tiny DB-backed Node API. Runs anywhere you can run Node — locally on SQLite, in production on Vercel serverless + Postgres (Neon / Supabase).
 
@@ -25,9 +25,13 @@ One portable schema (`src/schema.sql`) for both backends:
 - **Local dev / tests** — SQLite via `node:sqlite`, zero config.
 - **Production** — Postgres: set `DATABASE_URL` (Neon / Supabase, both have free tiers) and the same code runs; `?` placeholders are rewritten to Postgres `$n` automatically.
 
-Tables: `artists` (slug, name, avatar…), `songs` (title, youtube_id, mirror_id, duration, era, category, **status**, report_count, last_checked), `song_reports`.
+Tables:
+- `artists` — slug, name, avatar… (any artist — the whole catalog is multi-artist by design; every song points at one `artist_id`).
+- `songs` — title, youtube_id (best/default source), mirror_id, duration, era, category, **status**, report_count, last_checked.
+- `song_versions` — alternate takes of a song (e.g. studio vs **Acoustic** cut of *I Don't Wanna Hurt You Baby*). Each has its own youtube_id, label, status and report_count. A song is surfaced while its canonical copy **or** any version plays; picking a version is remembered per listener (`m2d_version_pref_v1`).
+- `song_reports` — listener-flagged broken links (optionally scoped to one `version_id`).
 
-`songs.status` is `active` | `dead` | `private`. `/api/songs` and the player surface `active` tracks only.
+`songs.status` is `active` | `dead` | `private`. `/api/songs` and the player surface `active` tracks (plus songs whose versions are still playable).
 
 ## API
 
@@ -38,8 +42,8 @@ Public:
 | `GET /api/health` | service status, db backend, counts |
 | `GET /api/artists` | all artists with song counts |
 | `GET /api/songs` | active songs (`?artist=<slug>` filters, `?all=1` includes dead/private) |
-| `GET /api/songs/:id` | single song |
-| `POST /api/report` | `{ songId, reason? }` — listeners flag broken links |
+| `GET /api/songs/:id` | single song (`?all=1` also returns dead versions for admins) |
+| `POST /api/report` | `{ songId, reason?, versionId? }` — listeners flag broken links (optionally a specific version) |
 
 Admin (`Authorization: Bearer $ADMIN_KEY`):
 
@@ -58,13 +62,15 @@ A song auto-flags `dead` after **3** reports; the daily refresh resurrects it if
 
 ## Extending the catalog
 
-**Add a new track — always verify first (this keeps the vault honest):**
+**New artists and tracks always verify first — this is what keeps the vault honest.**
 
-1. Add the new entry to `scripts/catalog.json` (or edit `SONGS`/`ARTISTS_DATA` in `index.html` and run `npm run db:export`).
-2. `npm run db:verify` — probes every video via `youtube.com/oembed`; only live links survive.
-3. `npm run db:build` — rebuilds `catalog.json` from the verified probe (keeps only playable, deduped videos with clean titles).
+The Charlie Puth side is rebuilt from a recovered legacy source: `scripts/charlie_legacy_tracks.json` (the 98 candidates from the original Charlie's Vault, hand-curated titles). Other artists follow the same pattern — drop candidate links (ids + titles) into a source file, verify, build:
+
+1. **Add candidates.** Edit `scripts/charlie_legacy_tracks.json` (or add a new source file for other artists) with `{ id, title, youtubeId?, versions? }`.
+2. `npm run db:verify` — probes every candidate + version via `youtube.com/oembed`; only live links survive. Writes `scripts/verified_legacy.json` (gitignored).
+3. `npm run db:build` — rebuilds `catalog.json` from the verified probe: playable candidates only (dead/private automatically dropped), old rows keep their real probed durations, alternate takes collapse into `versions`.
 4. `npm run db:sync` — regenerates the bundled `SONGS`/`ARTISTS_DATA` fallback inside `index.html` to match.
-5. `npm run db:seed` — idempotent upsert into the DB; new artists are auto-created from song credits.
+5. `npm run db:seed` — idempotent upsert into the DB; artists are auto-created from song credits.
 
 ## Deploy (Vercel)
 
@@ -82,4 +88,4 @@ Source code: MIT. All audio streams from publicly available YouTube videos and b
 
 ---
 
-Derived from the original **Charlie's Vault** (99 unreleased Charlie Puth tracks). The prior multi-artist "grails" expansion shipped fabricated video links — those were removed in favor of 17 machine-verified, playable tracks.
+Derived from the original **Charlie's Vault** (99 unreleased Charlie Puth tracks): candidate links were recovered from it, machine-verified — **97 remain playable today** (1 now private). The prior multi-artist "grails" expansion shipped fabricated video links — those were removed in favor of only machine-verified, playable tracks.
