@@ -71,6 +71,10 @@ const TITLES = {
     };
     if (r.era) song.era = r.era;
     if (r.category) song.category = r.category;
+    const activeVersions = (r.versions || []).filter(v => v.videoStatus === 'active' && v.youtubeId !== youtubeId);
+    if (activeVersions.length) {
+      song.versions = activeVersions.map(v => ({ label: v.label, youtubeId: v.youtubeId, notes: v.notes || null }));
+    }
     songs.push(song);
   }
   songs.sort((a, b) => a.title.localeCompare(b.title, 'en'));

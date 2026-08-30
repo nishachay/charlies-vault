@@ -5,10 +5,52 @@
       "name": "Charlie Puth",
       "initials": "CP",
       "tag": "Voicenotes & Studio Cuts",
-      "avatarUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Charlie_Puth_2018_by_Glenn_Francis.jpg/400px-Charlie_Puth_2018_by_Glenn_Francis.jpg"
+      "avatarUrl": "/assets/artists/charlie-puth.jpg"
     }
   ],
   "songs": [
+    {
+      "id": "Q-t0214lY5Y",
+      "title": "1984",
+      "artist": "Charlie Puth",
+      "youtubeId": "Q-t0214lY5Y",
+      "duration": 239
+    },
+    {
+      "id": "r03IolEGnXw",
+      "title": "2021",
+      "artist": "Charlie Puth",
+      "youtubeId": "r03IolEGnXw",
+      "duration": 180
+    },
+    {
+      "id": "Oc_TPbvFX1k",
+      "title": "After All (solo version)",
+      "artist": "Charlie Puth",
+      "youtubeId": "Oc_TPbvFX1k",
+      "duration": 180
+    },
+    {
+      "id": "5-cdeDkcips",
+      "title": "All Night",
+      "artist": "Charlie Puth",
+      "youtubeId": "5-cdeDkcips",
+      "duration": 194
+    },
+    {
+      "id": "ooKYtvSRNZ4",
+      "title": "All Of Me (cover)",
+      "artist": "Charlie Puth",
+      "youtubeId": "ooKYtvSRNZ4",
+      "duration": 180
+    },
+    {
+      "id": "2D7iKTIlREw",
+      "title": "Anna",
+      "artist": "Charlie Puth",
+      "youtubeId": "2D7iKTIlREw",
+      "duration": 136
+    },
     {
       "id": "kZAAnbRvids",
       "title": "Back Around",
@@ -46,10 +88,185 @@
     },
     {
       "id": "QSh6giWIvaI",
-      "title": "I Can't Stay Away From Your Baby",
+      "title": "Can't Stay Away From Your Baby",
       "artist": "Charlie Puth",
       "youtubeId": "QSh6giWIvaI",
       "duration": 202
+    },
+    {
+      "id": "QI76xnJefNs",
+      "title": "Chop Like This",
+      "artist": "Charlie Puth",
+      "youtubeId": "QI76xnJefNs",
+      "duration": 196
+    },
+    {
+      "id": "N7U50sKgdp4",
+      "title": "Clarity",
+      "artist": "Charlie Puth",
+      "youtubeId": "N7U50sKgdp4",
+      "duration": 180
+    },
+    {
+      "id": "wd3cYyNs4N0",
+      "title": "Close To You",
+      "artist": "Charlie Puth",
+      "youtubeId": "wd3cYyNs4N0",
+      "duration": 130
+    },
+    {
+      "id": "x80f5TrfWsA",
+      "title": "Collide",
+      "artist": "Charlie Puth",
+      "youtubeId": "x80f5TrfWsA",
+      "duration": 235
+    },
+    {
+      "id": "ClAUUZi1C0c",
+      "title": "Coming Over (Ft. ZAYN & Timbaland)",
+      "artist": "Charlie Puth",
+      "youtubeId": "ClAUUZi1C0c",
+      "duration": 168
+    },
+    {
+      "id": "qu_TytwYoeI",
+      "title": "Could Do Better",
+      "artist": "Charlie Puth",
+      "youtubeId": "qu_TytwYoeI",
+      "duration": 186
+    },
+    {
+      "id": "74CaFfkRQL8",
+      "title": "Dancing With My Ex",
+      "artist": "Charlie Puth",
+      "youtubeId": "74CaFfkRQL8",
+      "duration": 140
+    },
+    {
+      "id": "SaCFuWdBgZM",
+      "title": "Delusional",
+      "artist": "Charlie Puth",
+      "youtubeId": "SaCFuWdBgZM",
+      "duration": 122
+    },
+    {
+      "id": "NxLfrhMKqrg",
+      "title": "Dream",
+      "artist": "Charlie Puth",
+      "youtubeId": "NxLfrhMKqrg",
+      "duration": 177
+    },
+    {
+      "id": "LdJuopXstCA",
+      "title": "Enemy",
+      "artist": "Charlie Puth",
+      "youtubeId": "LdJuopXstCA",
+      "duration": 206
+    },
+    {
+      "id": "XDtVDlSuq7w",
+      "title": "Ex To See",
+      "artist": "Charlie Puth",
+      "youtubeId": "XDtVDlSuq7w",
+      "duration": 135
+    },
+    {
+      "id": "YdqP9xRJ9LE",
+      "title": "Eyes on You (with Camila Cabello)",
+      "artist": "Charlie Puth",
+      "youtubeId": "YdqP9xRJ9LE",
+      "duration": 180
+    },
+    {
+      "id": "iCs3xkZMkJY",
+      "title": "Forgot How to Miss You",
+      "artist": "Charlie Puth",
+      "youtubeId": "iCs3xkZMkJY",
+      "duration": 159
+    },
+    {
+      "id": "VwtZi12bEdA",
+      "title": "Full Of It",
+      "artist": "Charlie Puth",
+      "youtubeId": "VwtZi12bEdA",
+      "duration": 201
+    },
+    {
+      "id": "piumUYPj-QY",
+      "title": "Go Round",
+      "artist": "Charlie Puth",
+      "youtubeId": "piumUYPj-QY",
+      "duration": 217
+    },
+    {
+      "id": "Vs1nAdgAbNE",
+      "title": "Hard",
+      "artist": "Charlie Puth",
+      "youtubeId": "Vs1nAdgAbNE",
+      "duration": 205
+    },
+    {
+      "id": "WL7b30qB7mk",
+      "title": "Heart Go Crazy",
+      "artist": "Charlie Puth",
+      "youtubeId": "WL7b30qB7mk",
+      "duration": 212
+    },
+    {
+      "id": "cK8LuF3SsZM",
+      "title": "Heart Is Bleeding",
+      "artist": "Charlie Puth",
+      "youtubeId": "cK8LuF3SsZM",
+      "duration": 186
+    },
+    {
+      "id": "Sj9NcZxjNec",
+      "title": "Holding Me Back",
+      "artist": "Charlie Puth",
+      "youtubeId": "Sj9NcZxjNec",
+      "duration": 180
+    },
+    {
+      "id": "wI3xCcLW2-Y",
+      "title": "Holding On For Dear Life",
+      "artist": "Charlie Puth",
+      "youtubeId": "wI3xCcLW2-Y",
+      "duration": 197
+    },
+    {
+      "id": "Yyt8tl-mj9w",
+      "title": "Hopes Up",
+      "artist": "Charlie Puth",
+      "youtubeId": "Yyt8tl-mj9w",
+      "duration": 127
+    },
+    {
+      "id": "binVIluvqp8",
+      "title": "How Do You Sleep At Night?",
+      "artist": "Charlie Puth",
+      "youtubeId": "binVIluvqp8",
+      "duration": 180
+    },
+    {
+      "id": "URcdq08KYDU",
+      "title": "Hypnotized",
+      "artist": "Charlie Puth",
+      "youtubeId": "URcdq08KYDU",
+      "duration": 177
+    },
+    {
+      "id": "4h8W07DRKNs",
+      "title": "I Don’t Wanna Hurt You Baby",
+      "artist": "Charlie Puth",
+      "youtubeId": "4h8W07DRKNs",
+      "duration": 180,
+      "versions": [
+        {
+          "label": "Acoustic",
+          "youtubeId": "N4VZ-vQvJ_8",
+          "notes": "Stripped-down take from The Otto Tunes sessions"
+        }
+      ]
     },
     {
       "id": "RbQ1bpBlmp4",
@@ -59,11 +276,144 @@
       "duration": 215
     },
     {
+      "id": "mkNDfa8fRs8",
+      "title": "I'll Be There",
+      "artist": "Charlie Puth",
+      "youtubeId": "mkNDfa8fRs8",
+      "duration": 168
+    },
+    {
+      "id": "4hLBHvEbbKc",
+      "title": "I'm Coming Over (ft. Timbaland)",
+      "artist": "Charlie Puth",
+      "youtubeId": "4hLBHvEbbKc",
+      "duration": 179
+    },
+    {
+      "id": "UdNBenHS2us",
+      "title": "In My Eyes",
+      "artist": "Charlie Puth",
+      "youtubeId": "UdNBenHS2us",
+      "duration": 133
+    },
+    {
+      "id": "7XhZyxx21AA",
+      "title": "In The Dark",
+      "artist": "Charlie Puth",
+      "youtubeId": "7XhZyxx21AA",
+      "duration": 201
+    },
+    {
       "id": "mx51V0WjxJ8",
       "title": "Just Give Me a Reason",
       "artist": "Charlie Puth",
       "youtubeId": "mx51V0WjxJ8",
       "duration": 233
+    },
+    {
+      "id": "Vk_GXjYU6QE",
+      "title": "Keep It Together",
+      "artist": "Charlie Puth",
+      "youtubeId": "Vk_GXjYU6QE",
+      "duration": 206
+    },
+    {
+      "id": "Xf9nNKulmrg",
+      "title": "Keeper",
+      "artist": "Charlie Puth",
+      "youtubeId": "Xf9nNKulmrg",
+      "duration": 138
+    },
+    {
+      "id": "qEyvIFLo_uI",
+      "title": "King of Optimism (Extended)",
+      "artist": "Charlie Puth",
+      "youtubeId": "qEyvIFLo_uI",
+      "duration": 229
+    },
+    {
+      "id": "SbhmPmlZA2k",
+      "title": "Kiss Me",
+      "artist": "Charlie Puth",
+      "youtubeId": "SbhmPmlZA2k",
+      "duration": 227
+    },
+    {
+      "id": "nUk3Mm3DG-U",
+      "title": "Know You By Heart",
+      "artist": "Charlie Puth",
+      "youtubeId": "nUk3Mm3DG-U",
+      "duration": 226
+    },
+    {
+      "id": "uf-woik7sjw",
+      "title": "L U V",
+      "artist": "Charlie Puth",
+      "youtubeId": "uf-woik7sjw",
+      "duration": 261
+    },
+    {
+      "id": "5nGtx9KA8cs",
+      "title": "Lights Go Out",
+      "artist": "Charlie Puth",
+      "youtubeId": "5nGtx9KA8cs",
+      "duration": 180
+    },
+    {
+      "id": "r7nhAe7ViWA",
+      "title": "Like That (demo for BABYMONSTER)",
+      "artist": "Charlie Puth",
+      "youtubeId": "r7nhAe7ViWA",
+      "duration": 166
+    },
+    {
+      "id": "pny5KkZFlD0",
+      "title": "Lips on You (demo for Maroon 5)",
+      "artist": "Charlie Puth",
+      "youtubeId": "pny5KkZFlD0",
+      "duration": 217
+    },
+    {
+      "id": "aqox12aqrFw",
+      "title": "Look Around",
+      "artist": "Charlie Puth",
+      "youtubeId": "aqox12aqrFw",
+      "duration": 180
+    },
+    {
+      "id": "dbuv5vG56AU",
+      "title": "Look At Me Now",
+      "artist": "Charlie Puth",
+      "youtubeId": "dbuv5vG56AU",
+      "duration": 199
+    },
+    {
+      "id": "eQPTRTR-ooc",
+      "title": "Look At My Phone",
+      "artist": "Charlie Puth",
+      "youtubeId": "eQPTRTR-ooc",
+      "duration": 190
+    },
+    {
+      "id": "329PZ0aMOrE",
+      "title": "Look What You Made Me Do",
+      "artist": "Charlie Puth",
+      "youtubeId": "329PZ0aMOrE",
+      "duration": 139
+    },
+    {
+      "id": "l4pkRF2M3uM",
+      "title": "Looking At Me",
+      "artist": "Charlie Puth",
+      "youtubeId": "l4pkRF2M3uM",
+      "duration": 180
+    },
+    {
+      "id": "mhFTTIbSm9E",
+      "title": "Love You In The Day",
+      "artist": "Charlie Puth",
+      "youtubeId": "mhFTTIbSm9E",
+      "duration": 141
     },
     {
       "id": "e8qB2ArqOY4",
@@ -81,7 +431,7 @@
     },
     {
       "id": "eC0cNpiEZ9s",
-      "title": "Make You Say",
+      "title": "Make You Say (with Zedd)",
       "artist": "Charlie Puth",
       "youtubeId": "eC0cNpiEZ9s",
       "duration": 180
@@ -120,6 +470,223 @@
       "artist": "Charlie Puth",
       "youtubeId": "EvJOaKJrVm8",
       "duration": 127
+    },
+    {
+      "id": "zAt4sGyhmoM",
+      "title": "Off The Fence (feat. salem ilese)",
+      "artist": "Charlie Puth",
+      "youtubeId": "zAt4sGyhmoM",
+      "duration": 127
+    },
+    {
+      "id": "XFSC8Q39bvs",
+      "title": "Operator",
+      "artist": "Charlie Puth",
+      "youtubeId": "XFSC8Q39bvs",
+      "duration": 182
+    },
+    {
+      "id": "UMidD0wTgx4",
+      "title": "Over And Over",
+      "artist": "Charlie Puth",
+      "youtubeId": "UMidD0wTgx4",
+      "duration": 215
+    },
+    {
+      "id": "gZAypvYlhZQ",
+      "title": "Picture Perfect",
+      "artist": "Charlie Puth",
+      "youtubeId": "gZAypvYlhZQ",
+      "duration": 199
+    },
+    {
+      "id": "IKAIX6G_IGE",
+      "title": "Power",
+      "artist": "Charlie Puth",
+      "youtubeId": "IKAIX6G_IGE",
+      "duration": 87
+    },
+    {
+      "id": "6WKmqO2I2AU",
+      "title": "Put Me Back Together",
+      "artist": "Charlie Puth",
+      "youtubeId": "6WKmqO2I2AU",
+      "duration": 203
+    },
+    {
+      "id": "5z536_Uil3I",
+      "title": "Quarantine Song",
+      "artist": "Charlie Puth",
+      "youtubeId": "5z536_Uil3I",
+      "duration": 161
+    },
+    {
+      "id": "hLhcTJxZ8_E",
+      "title": "Ride To Melrose (ft. Mike Ballz)",
+      "artist": "Charlie Puth",
+      "youtubeId": "hLhcTJxZ8_E",
+      "duration": 325
+    },
+    {
+      "id": "-ITERYJfDO8",
+      "title": "Saved By The Bell",
+      "artist": "Charlie Puth",
+      "youtubeId": "-ITERYJfDO8",
+      "duration": 217
+    },
+    {
+      "id": "CRkv8vGvFto",
+      "title": "Seventeen",
+      "artist": "Charlie Puth",
+      "youtubeId": "CRkv8vGvFto",
+      "duration": 180
+    },
+    {
+      "id": "HXCKbj4uU4U",
+      "title": "Shadow Days",
+      "artist": "Charlie Puth",
+      "youtubeId": "HXCKbj4uU4U",
+      "duration": 200
+    },
+    {
+      "id": "G6oVJqzKvPU",
+      "title": "Shouldn't I Be In Love",
+      "artist": "Charlie Puth",
+      "youtubeId": "G6oVJqzKvPU",
+      "duration": 214
+    },
+    {
+      "id": "yS_j1z63Jrc",
+      "title": "Sick",
+      "artist": "Charlie Puth",
+      "youtubeId": "yS_j1z63Jrc",
+      "duration": 187
+    },
+    {
+      "id": "ZMWOtyHRjJo",
+      "title": "Slow Motion",
+      "artist": "Charlie Puth",
+      "youtubeId": "ZMWOtyHRjJo",
+      "duration": 211
+    },
+    {
+      "id": "rBpVtdB1a6w",
+      "title": "Sober (Solo Version)",
+      "artist": "Charlie Puth",
+      "youtubeId": "rBpVtdB1a6w",
+      "duration": 198
+    },
+    {
+      "id": "gBzkYK78KMI",
+      "title": "Somebody's Watching Me",
+      "artist": "Charlie Puth",
+      "youtubeId": "gBzkYK78KMI",
+      "duration": 117
+    },
+    {
+      "id": "NUVsRXKqJfw",
+      "title": "Stay Away (Extended)",
+      "artist": "Charlie Puth",
+      "youtubeId": "NUVsRXKqJfw",
+      "duration": 130
+    },
+    {
+      "id": "c4HbNc8-mF8",
+      "title": "Stop",
+      "artist": "Charlie Puth",
+      "youtubeId": "c4HbNc8-mF8",
+      "duration": 172
+    },
+    {
+      "id": "pAB8abV8BmY",
+      "title": "Suprise Me",
+      "artist": "Charlie Puth",
+      "youtubeId": "pAB8abV8BmY",
+      "duration": 180
+    },
+    {
+      "id": "eCUOV4pvRrE",
+      "title": "Take It All In",
+      "artist": "Charlie Puth",
+      "youtubeId": "eCUOV4pvRrE",
+      "duration": 133
+    },
+    {
+      "id": "eLCgyLhIKi8",
+      "title": "Tangerine Dreams",
+      "artist": "Charlie Puth",
+      "youtubeId": "eLCgyLhIKi8",
+      "duration": 231
+    },
+    {
+      "id": "8nAqrW5mRqc",
+      "title": "Tears on my shoulder",
+      "artist": "Charlie Puth",
+      "youtubeId": "8nAqrW5mRqc",
+      "duration": 176
+    },
+    {
+      "id": "VfcnPbmnXu0",
+      "title": "That Was Embarrassing (Extended)",
+      "artist": "Charlie Puth",
+      "youtubeId": "VfcnPbmnXu0",
+      "duration": 148
+    },
+    {
+      "id": "koNSQPedKyg",
+      "title": "The Moment",
+      "artist": "Charlie Puth",
+      "youtubeId": "koNSQPedKyg",
+      "duration": 180
+    },
+    {
+      "id": "5NCcbx03rXA",
+      "title": "The Way",
+      "artist": "Charlie Puth",
+      "youtubeId": "5NCcbx03rXA",
+      "duration": 180
+    },
+    {
+      "id": "tGyDu6Hzi0s",
+      "title": "Time Passes By",
+      "artist": "Charlie Puth",
+      "youtubeId": "tGyDu6Hzi0s",
+      "duration": 180
+    },
+    {
+      "id": "_LcP_NHW0zM",
+      "title": "Trampoline Gasoline (with B.o.B)",
+      "artist": "Charlie Puth",
+      "youtubeId": "_LcP_NHW0zM",
+      "duration": 214
+    },
+    {
+      "id": "HhSuX7MYiRE",
+      "title": "Used All My Love",
+      "artist": "Charlie Puth",
+      "youtubeId": "HhSuX7MYiRE",
+      "duration": 180
+    },
+    {
+      "id": "gAZMbK4Yozo",
+      "title": "We're going home",
+      "artist": "Charlie Puth",
+      "youtubeId": "gAZMbK4Yozo",
+      "duration": 211
+    },
+    {
+      "id": "teVWsgI0_yc",
+      "title": "What Makes You Beautiful",
+      "artist": "Charlie Puth",
+      "youtubeId": "teVWsgI0_yc",
+      "duration": 180
+    },
+    {
+      "id": "9cNItnEbDa0",
+      "title": "Yellow Hearts  (Demo for Ant Saunders)",
+      "artist": "Charlie Puth",
+      "youtubeId": "9cNItnEbDa0",
+      "duration": 180
     },
     {
       "id": "ZorWVKNcTQc",
