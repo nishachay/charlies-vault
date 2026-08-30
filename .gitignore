@@ -45,5 +45,8 @@ fetch_durations.js
 # Raw scraped data (large file, not needed by users)
 yt_data.json
 
+# Verified-video probe results (derived data; regenerate with npm run db:verify)
+scripts/verified.json
+
 # Internal tooling lock file
 skills-lock.json

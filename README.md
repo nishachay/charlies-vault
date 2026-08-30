@@ -1,6 +1,6 @@
 # { OUTTAKE }
 
-Multi-artist unreleased music vault with a 3D vinyl / turntable player. ~128 unreleased & demo tracks across 13 artists, streamed live through YouTube's official IFrame API (no audio files hosted).
+Unreleased music vault with a 3D vinyl / turntable player. 17 verified, playable Charlie Puth unreleased & demo tracks, streamed live through YouTube's official IFrame API (no audio files hosted). Every video is machine-verified before it ships — dead or private links are never surfaced.
 
 **Stack:** single-file static frontend (`index.html`, vanilla HTML/CSS/JS) + a tiny DB-backed Node API. Runs anywhere you can run Node — locally on SQLite, in production on Vercel serverless + Postgres (Neon / Supabase).
 
@@ -58,8 +58,13 @@ A song auto-flags `dead` after **3** reports; the daily refresh resurrects it if
 
 ## Extending the catalog
 
-1. Edit `scripts/catalog.json` (or edit `SONGS`/`ARTISTS_DATA` in `index.html` and run `npm run db:export`), then
-2. `npm run db:seed` — idempotent upsert, artists auto-created from song credits if missing.
+**Add a new track — always verify first (this keeps the vault honest):**
+
+1. Add the new entry to `scripts/catalog.json` (or edit `SONGS`/`ARTISTS_DATA` in `index.html` and run `npm run db:export`).
+2. `npm run db:verify` — probes every video via `youtube.com/oembed`; only live links survive.
+3. `npm run db:build` — rebuilds `catalog.json` from the verified probe (keeps only playable, deduped videos with clean titles).
+4. `npm run db:sync` — regenerates the bundled `SONGS`/`ARTISTS_DATA` fallback inside `index.html` to match.
+5. `npm run db:seed` — idempotent upsert into the DB; new artists are auto-created from song credits.
 
 ## Deploy (Vercel)
 
@@ -77,4 +82,4 @@ Source code: MIT. All audio streams from publicly available YouTube videos and b
 
 ---
 
-Derived from the original **Charlie's Vault** (99 unreleased Charlie Puth tracks).
+Derived from the original **Charlie's Vault** (99 unreleased Charlie Puth tracks). The prior multi-artist "grails" expansion shipped fabricated video links — those were removed in favor of 17 machine-verified, playable tracks.

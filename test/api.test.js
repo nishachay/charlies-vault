@@ -7,6 +7,10 @@ const { createDb } = require('../src/db');
 const { upsertCatalog } = require('../src/seeder');
 const { createApp } = require('../server');
 
+const catalog = require('../scripts/catalog.json');
+const firstArtist = catalog.artists[0];
+const firstSong = catalog.songs[0];
+
 // Probe stub: resolves like a fetch() Response. Configurable per-app instance.
 const okProbe = async () => ({ ok: true, status: 200 });
 const goneProbe = async () => ({ ok: false, status: 404 });
@@ -33,37 +37,37 @@ describe('public API', () => {
     const body = await res.json();
     assert.equal(body.ok, true);
     assert.equal(body.backend, 'sqlite');
-    assert.equal(body.songs, 128);
-    assert.equal(body.artists, 13);
-    assert.equal(body.byStatus.active, 128);
+    assert.equal(body.songs, catalog.songs.length);
+    assert.equal(body.artists, 1);
+    assert.equal(body.byStatus.active, catalog.songs.length);
   });
 
   it('serves /api/artists', async t => {
     const { base } = await withApp(t);
     const { artists, count } = await (await fetch(`${base}/api/artists`)).json();
-    assert.equal(count, 13);
-    assert.equal(artists.length, 13);
-    const kanye = artists.find(a => a.slug === 'kanye-west');
-    assert.equal(kanye.songCount, 5);
+    assert.equal(count, 1);
+    assert.equal(artists.length, 1);
+    assert.equal(artists[0].name, firstArtist.name);
+    assert.equal(artists[0].songCount, catalog.songs.length);
   });
 
   it('serves /api/songs and respects the artist filter', async t => {
     const { base } = await withApp(t);
     const all = await (await fetch(`${base}/api/songs`)).json();
-    assert.equal(all.count, 128);
+    assert.equal(all.count, catalog.songs.length);
     assert.ok(all.songs.every(s => s.status === 'active'));
 
-    const filtered = await (await fetch(`${base}/api/songs?artist=drake`)).json();
-    assert.equal(filtered.count, 4);
-    assert.ok(filtered.songs.every(s => s.artist === 'Drake'));
+    const filtered = await (await fetch(`${base}/api/songs?artist=${firstArtist.slug}`)).json();
+    assert.equal(filtered.count, catalog.songs.length);
+    assert.ok(filtered.songs.every(s => s.artist === firstArtist.name));
   });
 
   it('serves /api/songs/:id and 404s unknown ids', async t => {
     const { base } = await withApp(t);
-    const res = await fetch(`${base}/api/songs/arg01`);
+    const res = await fetch(`${base}/api/songs/${firstSong.id}`);
     assert.equal(res.status, 200);
     const { song } = await res.json();
-    assert.equal(song.title, 'Fantasize');
+    assert.equal(song.title, firstSong.title);
 
     const miss = await fetch(`${base}/api/songs/zzz`);
     assert.equal(miss.status, 404);
@@ -85,29 +89,30 @@ describe('public API', () => {
 describe('report flow', () => {
   it('collects reports and auto-flags dead at the threshold', async t => {
     const { base } = await withApp(t);
+    const id = catalog.songs[1].id;
 
     assert.equal((await (await fetch(`${base}/api/report`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ songId: 'drk02' }),
+      body: JSON.stringify({ songId: id }),
     })).json()).status, 'active');
 
     assert.equal((await (await fetch(`${base}/api/report`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ songId: 'drk02' }),
+      body: JSON.stringify({ songId: id }),
     })).json()).status, 'active');
 
     const third = await (await fetch(`${base}/api/report`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ songId: 'drk02' }),
+      body: JSON.stringify({ songId: id }),
     })).json();
     assert.equal(third.status, 'dead');
     assert.equal(third.reportCount, 3);
 
     const live = await (await fetch(`${base}/api/songs`)).json();
-    assert.ok(!live.songs.some(s => s.id === 'drk02'), 'flagged song hidden from players');
+    assert.ok(!live.songs.some(s => s.id === id), 'flagged song hidden from players');
   });
 
   it('validates input', async t => {
@@ -131,17 +136,14 @@ describe('admin refresh', () => {
 
   it('probes videos, persists status, and can resurrect dead songs', async t => {
     const { base, db } = await withApp(t);
+    const id = catalog.songs[2].id;
 
     // Kill a song first, then let the refresh bring it back (video is fine).
-    await fetch(`${base}/api/report`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{"songId":"bel01"}',
-    });
-    await fetch(`${base}/api/report`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{"songId":"bel01"}',
-    });
-    await fetch(`${base}/api/report`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{"songId":"bel01"}',
-    });
+    for (let i = 0; i < 3; i++) {
+      await fetch(`${base}/api/report`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ songId: id }),
+      });
+    }
 
     const res = await fetch(`${base}/api/refresh`, {
       method: 'POST',
@@ -150,10 +152,10 @@ describe('admin refresh', () => {
     });
     assert.equal(res.status, 200);
     const body = await res.json();
-    assert.equal(body.summary.checked, 128);
-    assert.equal(body.summary.active, 128, 'all probed videos play again');
+    assert.equal(body.summary.checked, catalog.songs.length);
+    assert.equal(body.summary.active, catalog.songs.length, 'all probed videos play again');
 
-    const song = await (await fetch(`${base}/api/songs/bel01`)).json();
+    const song = await (await fetch(`${base}/api/songs/${id}`)).json();
     assert.equal(song.song.status, 'active');
     assert.ok(song.song.lastChecked);
   });
@@ -165,13 +167,13 @@ describe('admin refresh', () => {
       headers: { 'Authorization': 'Bearer test-key' },
       body: '{"force":true}',
     })).json();
-    assert.equal(body.summary.checked, 128);
-    assert.equal(body.summary.dead, 128);
+    assert.equal(body.summary.checked, catalog.songs.length);
+    assert.equal(body.summary.dead, catalog.songs.length);
 
     const live = await (await fetch(`${base}/api/songs`)).json();
     assert.equal(live.count, 0, 'nothing playable when all videos are gone');
     const all = await (await fetch(`${base}/api/songs?all=1`)).json();
-    assert.equal(all.count, 128);
+    assert.equal(all.count, catalog.songs.length);
   });
 });
 
