@@ -2,13 +2,16 @@
 
 // { OUTTAKE } local dev server and shared HTTP factory.
 //
-//   node server.js                    -> http://localhost:8080
-//   PORT=9000 ADMIN_KEY=abc node server.js
+//   node server.local.js            -> http://localhost:8080
+//   PORT=9000 ADMIN_KEY=abc node server.local.js
 //
-// Serves the static frontend (index.html with no-store cache so edits show up
-// instantly) and mounts the same API handlers used by the Vercel functions in
-// api/ on a database that defaults to local SQLite. On first boot an empty DB
-// is auto-seeded from scripts/catalog.json.
+// Note: this file is named server.local.js (not server.js) specifically so
+// Vercel's Node-server preset does NOT treat it as the deploy entrypoint; the
+// deployed app is the static bundle + api/[...slug].js filesystem-router
+// function. It serves the static frontend (index.html with no-store cache so
+// edits show up instantly) and mounts the same API handlers used by the Vercel
+// function (lib/apiHandlers) on a database that defaults to local SQLite. On
+// first boot an empty DB is auto-seeded from scripts/catalog.json.
 //
 // Tests import createApp() with an in-memory DB — no ports or files needed.
 
@@ -116,12 +119,11 @@ function handleUpload(req, res) {
   target.on('finish', () => json(res, 200, { url: `/local_uploads/${cleanName}` }));
 }
 
-if (require.main === module && !process.env.VERCEL) {
-  // Local dev boot: SQLite + auto-seed. On a serverless platform where the
-  // root entrypoint is invoked this way but no persistent DB is available,
-  // createApp() already degrades gracefully; if a local SQLite DB can't be
-  // made (e.g. read-only filesystem), still serve the static site with a 503
-  // API rather than crash the process.
+if (require.main === module) {
+  // Local dev boot: SQLite + auto-seed. This file never deploys (Vercel serves
+  // the static bundle + api/ functions via the filesystem router); it is only
+  // for `node server.local.js`. If a local SQLite DB can't be made, still serve
+  // the static site with a 503 API rather than crash.
   let db = null;
   try { db = createDb(); if (db && typeof db.migrate === 'function') db.migrate(); }
   catch (err) { console.warn('[boot] local SQLite unavailable:', err.message); }
@@ -136,19 +138,4 @@ if (require.main === module && !process.env.VERCEL) {
   server.listen(port, () => console.log(`OUTTAKE dev server: http://localhost:${port} (${db ? db.adapter.kind : 'static-only'})`));
 }
 
-// Vercel entrypoint: serve the whole app (static + /api/*) through one Node
-// serverless function. Uses DATABASE_URL (Postgres) when set, else degrades to
-// static + 503 API. Exported as a callable (req,res); createApp/API_ROUTES stay
-// available for local dev and tests.
-const vercelHandler = (req, res) => {
-  const ctx = { db: null, adminKey: process.env.ADMIN_KEY || '', apiKey: process.env.YOUTUBE_API_KEY || '' };
-  if (process.env.DATABASE_URL) {
-    try { const db = createDb(); if (db && typeof db.migrate === 'function') db.migrate(); ctx.db = db; }
-    catch (err) { console.warn('[vercel] DB unavailable:', err.message); }
-  }
-  createApp({ db: ctx.db, adminKey: ctx.adminKey, apiKey: ctx.apiKey })(req, res);
-};
-
-vercelHandler.createApp = createApp;
-vercelHandler.API_ROUTES = API_ROUTES;
-module.exports = vercelHandler;
+module.exports = { createApp, API_ROUTES };

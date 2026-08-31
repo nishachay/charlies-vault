@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 
 const { createDb } = require('../src/db');
 const { upsertCatalog } = require('../src/seeder');
-const { createApp } = require('../server');
+const { createApp } = require('../server.local');
 
 const catalog = require('../scripts/catalog.json');
 const firstArtist = catalog.artists[0];

@@ -19,7 +19,7 @@ Bugs, track suggestions, and UI fixes are welcome. Here's how.
 ```bash
 git clone https://github.com/nishachay/charlies-vault.git
 cd charlies-vault
-node server.js
+node server.local.js
 # http://localhost:8080
 ```
 

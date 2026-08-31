@@ -40,7 +40,7 @@ This is a static site. No backend in production. The attack surface is small by 
 | Database | None. All data lives in `index.html`. |
 | External API keys | None. YouTube IFrame API needs no credentials. |
 | `eval()` or `innerHTML` with user input | None. Search runs as a plain `.filter()` string match. |
-| File uploads in production | None. The upload endpoint only exists in `server.js`, which never deploys. |
+| File uploads in production | None. The upload endpoint only exists in `server.local.js`, which never deploys. |
 | User data collected | None. `localStorage` stores liked track IDs and theme preference. That's it. |
 | Content Security Policy | Set via meta tag. Restricts what external resources can load. |
 
@@ -48,7 +48,7 @@ This is a static site. No backend in production. The attack surface is small by 
 
 ## Known intentional limits
 
-`server.js` uses `CORS: *`. Intentional for local development. Never sees production.
+`server.local.js` uses `CORS: *`. Intentional for local development. Never sees production.
 
 The local `/api/save` endpoint writes to disk. Developer tool only, never deployed.
 

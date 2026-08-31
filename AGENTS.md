@@ -4,7 +4,7 @@
 
 ## Run & verify
 
-- Dev server: `node server.js` → http://localhost:8080. First boot auto-creates `data/vault.db` (SQLite, gitignored) and seeds it from `scripts/catalog.json`.
+- Dev server: `node server.local.js` → http://localhost:8080. First boot auto-creates `data/vault.db` (SQLite, gitignored) and seeds it from `scripts/catalog.json`.
 - Tests: `npm test` (`node --test "test/*.test.js"`). No lint/typecheck — verify frontend by manual browser testing (desktop + mobile, dark + light).
 - Data scripts (try to keep catalog.json/index.html/DB in sync, always **verify before shipping**):
   - Charlie legacy flow: `npm run db:verify` — probe every candidate in `scripts/charlie_legacy_tracks.json` (+ alternate versions) → `scripts/verified_legacy.json` (gitignored). This is the recovered Charlie's Vault source.
@@ -26,7 +26,7 @@
 - `src/schema.sql` + `src/db.js` — one portable schema; `DATABASE_URL` unset → SQLite (`node:sqlite`), set → Postgres (`pg`, `?` placeholders rewritten to `$n`). Timestamps are ISO TEXT written by the app (no dialect-specific defaults).
 - `src/models.js` — repository functions (artists/songs/reports/refresh selection); never raw SQL outside it.
 - `src/seeder.js` — idempotent `upsertCatalog`, auto-registers song-only collab artists, used by the seed CLI and server bootstrap.
-- `api/handlers.js` — all endpoint logic, shared by local `server.js` and the Vercel functions (`api/*.js` are thin wrappers via `api/_lib.js` `wrap`).
+- `lib/apiHandlers.js` — all endpoint logic, shared by local `server.local.js` and the Vercel function (`api/[...slug].js` is the single filesystem-router function via `lib/apiLib.js` `wrap`).
 - `lib/checkYouTube.js` — video probe: YouTube Data API v3 when `YOUTUBE_API_KEY` is set, otherwise the keyless `youtube.com/oembed` probe (200→active, 404→dead, 401→private, 403→dead-as-embed-disabled). Network failures degrade to `dead` (never throws).
 
 **Endpoints** (`ctx` = `{ db, adminKey, apiKey }`; admin = `Authorization: Bearer $ADMIN_KEY`):
@@ -40,7 +40,7 @@
 
 - `songs.status`: `active` | `dead` | `private` — the **canonical copy's** verdict, never mutated by versions. `/api/songs` surfaces a song when its canonical copy OR any version is `active` (`EXISTS` subquery in `listSongs`); do not add status-mutation "recompute" logic — it loses the canonical verdict.
 - Versions: derived id = `${songId}__v${n}` (`versionIdOf`), 1-based, seeded from `catalog.songs[].versions`; a version whose `youtubeId` equals the canonical id is skipped. Each version has its own `status`/`report_count`/`last_checked` and is probed on refresh.
-- A canonical song (or version) is auto-flagged `dead` after **3** listener reports (`REPORT_THRESHOLD` in `api/handlers.js`); the daily refresh resurrects it if the video plays again. Reporting an already-dead version 404s (dead versions are hidden from `getSong`).
+- A canonical song (or version) is auto-flagged `dead` after **3** listener reports (`REPORT_THRESHOLD` in `lib/apiHandlers.js`); the daily refresh resurrects it if the video plays again. Reporting an already-dead version 404s (dead versions are hidden from `getSong`).
 - Artist lookup is by `slug` (lowercased name, dashes). Song ids are stable strings; Charlie entries use the YouTube id.
 - The curated `catalog.json` only ever contains **verified, playable** videos (see `npm run db:verify`/`db:build`). A YouTube id can legitimately appear in two song entries shared between different artists (e.g. a collab reused as a demo) — do not dedupe on id, and never assume an id maps to one artist.
 - Frontend fallback: `index.html` bundles a `SONGS`/`ARTISTS_DATA` copy and uses it when the API is unreachable (e.g. static deploy without a DB). Keep it in sync via `npm run db:sync` (from catalog.json → index.html) or `npm run db:export` (index.html → catalog.json); tests assert the two stay deep-equal after a fresh sync.
