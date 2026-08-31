@@ -2,10 +2,10 @@
 
 // { OUTTAKE } local dev server and shared HTTP factory.
 //
-//   node server.local.js            -> http://localhost:8080
-//   PORT=9000 ADMIN_KEY=abc node server.local.js
+//   node dev.js            -> http://localhost:8080
+//   PORT=9000 ADMIN_KEY=abc node dev.js
 //
-// Note: this file is named server.local.js (not server.js) specifically so
+// Note: this file is named dev.js (not server.js) specifically so
 // Vercel's Node-server preset does NOT treat it as the deploy entrypoint; the
 // deployed app is the static bundle + api/[...slug].js filesystem-router
 // function. It serves the static frontend (index.html with no-store cache so
@@ -122,7 +122,7 @@ function handleUpload(req, res) {
 if (require.main === module) {
   // Local dev boot: SQLite + auto-seed. This file never deploys (Vercel serves
   // the static bundle + api/ functions via the filesystem router); it is only
-  // for `node server.local.js`. If a local SQLite DB can't be made, still serve
+  // for `node dev.js`. If a local SQLite DB can't be made, still serve
   // the static site with a 503 API rather than crash.
   let db = null;
   try { db = createDb(); if (db && typeof db.migrate === 'function') db.migrate(); }

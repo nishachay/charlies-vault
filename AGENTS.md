@@ -4,7 +4,7 @@
 
 ## Run & verify
 
-- Dev server: `node server.local.js` → http://localhost:8080. First boot auto-creates `data/vault.db` (SQLite, gitignored) and seeds it from `scripts/catalog.json`.
+- Dev server: `node dev.js` → http://localhost:8080. First boot auto-creates `data/vault.db` (SQLite, gitignored) and seeds it from `scripts/catalog.json`.
 - Tests: `npm test` (`node --test "test/*.test.js"`). No lint/typecheck — verify frontend by manual browser testing (desktop + mobile, dark + light).
 - Data scripts (try to keep catalog.json/index.html/DB in sync, always **verify before shipping**):
   - Charlie legacy flow: `npm run db:verify` — probe every candidate in `scripts/charlie_legacy_tracks.json` (+ alternate versions) → `scripts/verified_legacy.json` (gitignored). This is the recovered Charlie's Vault source.
@@ -26,7 +26,7 @@
 - `src/schema.sql` + `src/db.js` — one portable schema; `DATABASE_URL` unset → SQLite (`node:sqlite`), set → Postgres (`pg`, `?` placeholders rewritten to `$n`). Timestamps are ISO TEXT written by the app (no dialect-specific defaults).
 - `src/models.js` — repository functions (artists/songs/reports/refresh selection); never raw SQL outside it.
 - `src/seeder.js` — idempotent `upsertCatalog`, auto-registers song-only collab artists, used by the seed CLI and server bootstrap.
-- `lib/apiHandlers.js` — all endpoint logic, shared by local `server.local.js` and the Vercel function (`api/[...slug].js` is the single filesystem-router function via `lib/apiLib.js` `wrap`).
+- `lib/apiHandlers.js` — all endpoint logic, shared by local `dev.js` and the Vercel function (`api/[...slug].js` is the single filesystem-router function via `lib/apiLib.js` `wrap`).
 - `lib/checkYouTube.js` — video probe: YouTube Data API v3 when `YOUTUBE_API_KEY` is set, otherwise the keyless `youtube.com/oembed` probe (200→active, 404→dead, 401→private, 403→dead-as-embed-disabled). Network failures degrade to `dead` (never throws).
 
 **Endpoints** (`ctx` = `{ db, adminKey, apiKey }`; admin = `Authorization: Bearer $ADMIN_KEY`):

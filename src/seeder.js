@@ -1,7 +1,7 @@
 'use strict';
 
 // Idempotent catalog seeding — shared by the CLI (scripts/import_catalog.js)
-// and the dev server bootstrap (seeds an empty database so `node server.js`
+// and the dev server bootstrap (seeds an empty database so `node dev.js`
 // "just works").
 
 const { upsertArtist, upsertSong, upsertSongVersion, versionIdOf, listArtists, listSongs } = require('./models');
