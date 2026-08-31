@@ -4,8 +4,10 @@
   "regions": ["iad1"],
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
+    { "src": "admin.html", "use": "@vercel/static" },
     { "src": "assets/**", "use": "@vercel/static" },
     { "src": "api/*.js", "use": "@vercel/node" },
+    { "src": "api/admin/*.js", "use": "@vercel/node" },
     { "src": "api/songs/[id].js", "use": "@vercel/node" }
   ],
   "headers": [

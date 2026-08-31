@@ -174,3 +174,27 @@ describe('stale-songs refresh selection', () => {
     assert.ok(full.some(s => s.id === songId), 'force re-checks everything');
   });
 });
+describe('pending-tracks admin queue', () => {
+  it('queues a track and lists it as unapplied', async () => {
+    const row = await M.queuePendingTrack(db, {
+      url: 'https://www.youtube.com/watch?v=8vWJBNc5Q4E',
+      artist: 'Kanye West',
+      realTitle: 'Can U Be',
+      realAuthor: 'Kanye',
+      playable: true,
+    });
+    assert.ok(row.id > 0);
+    const pending = await M.listPendingTracks(db);
+    assert.ok(pending.some(t => t.id === row.id));
+    const applied = await M.listPendingTracks(db, { includeApplied: true });
+    assert.ok(applied.some(t => t.id === row.id && !t.appliedAt));
+  });
+
+  it('hides applied tracks by default and clears on demand', async () => {
+    await M.clearAppliedPending(db);
+    const pending = await M.listPendingTracks(db);
+    assert.equal(pending.length, 0, 'all cleared tracks are hidden by default');
+    const all = await M.listPendingTracks(db, { includeApplied: true });
+    assert.ok(all.some(t => t.appliedAt), 'applied tracks still visible with includeApplied');
+  });
+});

@@ -245,10 +245,36 @@ async function stats(db) {
   };
 }
 
+// ---- Pending track queue (admin content additions) -------------------------
+
+async function queuePendingTrack(db, t = {}) {
+  const nowIso = now();
+  await db.adapter.run(
+    'INSERT INTO pending_tracks (url, artist, requested_title, title, real_title, real_author, playable, note, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [t.url, t.artist || null, t.requestedTitle || null, t.title || null, t.realTitle || null, t.realAuthor || null, t.playable ? 1 : 0, t.note || null, nowIso]);
+  return db.adapter.get('SELECT id, created_at AS createdAt FROM pending_tracks ORDER BY id DESC LIMIT 1');
+}
+
+async function listPendingTracks(db, { includeApplied = false } = {}) {
+  const rows = await db.adapter.all(
+    `SELECT id, url, artist, requested_title AS requestedTitle, title, real_title AS realTitle,
+            real_author AS realAuthor, playable, note, created_at AS createdAt, applied_at AS appliedAt
+     FROM pending_tracks ${includeApplied ? '' : 'WHERE applied_at IS NULL'}
+     ORDER BY applied_at IS NOT NULL ASC, id ASC`);
+  return rows;
+}
+
+async function clearAppliedPending(db) {
+  const t = now();
+  await db.adapter.run('UPDATE pending_tracks SET applied_at = ? WHERE applied_at IS NULL', [t]);
+  return t;
+}
+
 module.exports = {
   upsertArtist, upsertSong, upsertSongVersion, versionIdOf,
   listArtists, listSongs, getSong, versionsForSongs,
   setSongStatus, setSongVersionStatus, touchChecked, touchVersionChecked,
   addReport, addVersionReport, reportCount, versionReportCount,
   staleSongs, staleVersions, stats,
+  queuePendingTrack, listPendingTracks, clearAppliedPending,
 };

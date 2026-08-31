@@ -18,7 +18,9 @@
     "db:verify": "node scripts/verify_legacy.js",
     "db:build": "node scripts/build_catalog.js",
     "db:discover": "node scripts/discover_youtube.js",
-    "db:sync": "node scripts/sync_bundled.js"
+    "db:sync": "node scripts/sync_bundled.js",
+    "db:add": "node scripts/add_tracks.js",
+    "db:apply": "node scripts/apply_pending.js"
   },
   "dependencies": {
     "pg": "^8.13.1"

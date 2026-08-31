@@ -29,6 +29,10 @@ const API_ROUTES = [
   { re: /^\/api\/report$/, handler: handlers.reportHandler },
   { re: /^\/api\/refresh$/, handler: handlers.refreshHandler },
   { re: /^\/api\/save$/, handler: handlers.saveHandler },
+  { re: /^\/api\/admin\/verify$/, handler: handlers.adminVerifyHandler },
+  { re: /^\/api\/admin\/pending$/, handler: handlers.adminListHandler },
+  { re: /^\/api\/admin\/queue$/, handler: handlers.adminQueueHandler },
+  { re: /^\/api\/admin\/clear$/, handler: handlers.adminClearHandler },
 ];
 
 const CONTENT_TYPES = {

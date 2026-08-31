@@ -45,10 +45,12 @@ fetch_durations.js
 # Raw scraped data (large file, not needed by users)
 yt_data.json
 
-# Discovery shortlist (harvested candidates awaiting human curation)
+# Discovery shortlists (harvested candidates awaiting human curation)
 scripts/candidates.json
 scripts/weeknd_candidates.json
-scripts/harvested.json
+# NOTE: scripts/harvested.json is COMMITTED on purpose — build_catalog.js aborts
+# unless every roster id has an active probe there, and the apply pipeline needs
+# it on a fresh CI checkout. It's the machine-verified evidence base for the catalog.
 scripts/.probe_cache.json
 
 # Verified-video probe results (derived data; regenerate with npm run db:verify)

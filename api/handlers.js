@@ -15,7 +15,8 @@
 
 const { json, readBody, parseUrl, isAdmin } = require('./_lib');
 const M = require('../src/models');
-const { runRefresh } = require('../lib/checkYouTube');
+const { runRefresh, probeVideo } = require('../lib/checkYouTube');
+const { parseVideoRef } = require('../scripts/add_tracks');
 
 const REPORT_THRESHOLD = 3; // reports before a song/version auto-flags as dead
 
@@ -157,8 +158,75 @@ async function saveHandler(req, res, ctx) {
   json(res, 200, { ok: true, artists: artistCount, songs: songCount, skipped });
 }
 
+// ---- Admin content pipeline (verify -> queue -> applied by CI) -------------
+
+// GET /api/admin/verify?url=...   look up a URL: real title/author, playable.
+// Never mutates anything; this is the preview the admin page shows.
+async function adminVerifyHandler(req, res, ctx) {
+  if (!isAdmin(req, ctx.adminKey)) return json(res, 401, { error: 'unauthorized' });
+  const { query } = parseUrl(req);
+  const url = (query.url || '').trim();
+  if (!url) return json(res, 400, { error: 'missing url' });
+  const id = parseVideoRef(url);
+  if (!id) return json(res, 400, { error: 'could not parse a YouTube URL' });
+  const probe = await probeVideo(id, {});
+  const oembed = await (await fetch(`https://www.youtube.com/oembed?format=json&url=${encodeURIComponent('https://www.youtube.com/watch?v=' + id)}`)).json().catch(() => ({}));
+  json(res, 200, {
+    id,
+    playable: probe.status === 'active',
+    status: probe.status,
+    realTitle: (oembed.title || '').replace(/\n/g, ' '),
+    realAuthor: oembed.author_name || null,
+    duration: probe.duration != null ? probe.duration : null,
+  });
+}
+
+// GET /api/admin/pending   list queued (unapplied) track additions.
+async function adminListHandler(req, res, ctx) {
+  if (!isAdmin(req, ctx.adminKey)) return json(res, 401, { error: 'unauthorized' });
+  const { query } = parseUrl(req);
+  const includeApplied = query.all === '1';
+  const rows = await M.listPendingTracks(ctx.db, { includeApplied });
+  json(res, 200, { pending: rows });
+}
+
+// POST /api/admin/queue   add a verified/approved track to the queue.
+// body: { url, artist?, title?, playable? }  -> previews again by default.
+async function adminQueueHandler(req, res, ctx) {
+  if (!isAdmin(req, ctx.adminKey)) return json(res, 401, { error: 'unauthorized' });
+  const body = await readBody(req);
+  const url = (body.url || '').trim();
+  if (!url) return json(res, 400, { error: 'missing url' });
+  const id = parseVideoRef(url);
+  if (!id) return json(res, 400, { error: 'could not parse a YouTube URL' });
+
+  // Auto-verify so only playable tracks make it into the queue.
+  const probe = await probeVideo(id, {});
+  const oembed = await (await fetch(`https://www.youtube.com/oembed?format=json&url=${encodeURIComponent('https://www.youtube.com/watch?v=' + id)}`)).json().catch(() => ({}));
+  const realTitle = (oembed.title || '').replace(/\n/g, ' ');
+  const row = await M.queuePendingTrack(ctx.db, {
+    url,
+    artist: body.artist,
+    requestedTitle: body.title,
+    title: body.title || realTitle,
+    realTitle,
+    realAuthor: oembed.author_name || null,
+    playable: probe.status === 'active',
+    note: body.note,
+  });
+  json(res, 200, { ok: true, id: row.id, status: probe.status });
+}
+
+// POST /api/admin/clear   mark all current pending as applied (after CI ships).
+async function adminClearHandler(req, res, ctx) {
+  if (!isAdmin(req, ctx.adminKey)) return json(res, 401, { error: 'unauthorized' });
+  await M.clearAppliedPending(ctx.db);
+  json(res, 200, { ok: true });
+}
+
 module.exports = {
   healthHandler, artistsHandler, songsHandler, songByIdHandler,
   reportHandler, refreshHandler, saveHandler,
+  adminVerifyHandler, adminListHandler, adminQueueHandler, adminClearHandler,
   REPORT_THRESHOLD,
 };

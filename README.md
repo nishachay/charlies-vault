@@ -92,7 +92,22 @@ The Charlie Puth side is rebuilt from a recovered legacy source: `scripts/charli
 2. `npm run db:verify` — probes every candidate + version via `youtube.com/oembed`; only live links survive. Writes `scripts/verified_legacy.json` (gitignored).
 3. `npm run db:build` — rebuilds `catalog.json` from the verified probe: playable candidates only (dead/private automatically dropped), old rows keep their real probed durations, alternate takes collapse into `versions`.
 4. `npm run db:sync` — regenerates the bundled `SONGS`/`ARTISTS_DATA` fallback inside `index.html` to match.
-5. `npm run db:seed` — idempotent upsert into the DB; artists are auto-created from song credits.
+ 5. `npm run db:seed` — idempotent upsert into the DB; artists are auto-created from song credits.
+
+### Adding one track fast (the easiest path)
+
+`npm run db:add -- "<youtube-url-or-id>" [--artist="Artist Name"]` verifies a single link via the same keyless oEmbed truth-check (real title/author + playable), appends it to the roster, and records the probe so builds accept it. Nothing unplayable ever ships. Batch too:
+
+```bash
+# tracks.json → [{ "url": "...", "artist": "Travis Scott", "title"? }]
+npm run db:add -- --file=tracks.json
+npm run db:build && npm run db:sync && npm run db:seed && npm test
+```
+
+### Self-serve admin (no code, no commands)
+
+Open **`/admin.html`** on a configured backend (password = your `ADMIN_KEY`). Paste a YouTube link → it verifies and shows the real title/author + playability → pick/type an artist → **Queue**. Queued tracks are stored in the `pending_tracks` DB table, and the **apply workflow** (`.github/workflows/apply_pending.yml`, manual or every 4h) fetches the queue, runs the same `add_tracks.js` engine, rebuilds + re-syncs, commits, and pushes → Vercel redeploys. Uses `PROD_URL` + `ADMIN_KEY` action secrets.
+
 
 ## Deploy (Vercel)
 
@@ -102,8 +117,8 @@ To also enable the live-enrichment + report-sync API, deploy the `/api/*` functi
 
 | Variable | Notes |
 | --- | --- |
-| `DATABASE_URL` | **Required to run `/api/*`** — Postgres connection string (SQLite won't persist on Vercel). Without it the API 500s, but the **static frontend still works**. |
-| `ADMIN_KEY` | Required for `/api/refresh` & `/api/save` |
+| `DATABASE_URL` | **Required to run `/api/*`** — Postgres connection string (SQLite won't persist on Vercel). Without it the API returns a clean **503** ("database not configured") but the **static frontend still works**. Also enables the admin content pipeline (`/admin.html`, pending queue). |
+| `ADMIN_KEY` | Required for `/api/refresh`, `/api/save`, and the admin `/api/admin/*` endpoints |
 | `YOUTUBE_API_KEY` | Optional; enables authoritative YouTube API checks |
 
 ## License

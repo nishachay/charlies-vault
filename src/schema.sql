@@ -64,3 +64,22 @@ CREATE TABLE IF NOT EXISTS song_reports (
 );
 
 CREATE INDEX IF NOT EXISTS idx_reports_song ON song_reports(song_id);
+
+-- Admin content queue: tracks a curator verified on the admin page, awaiting
+-- auto-application by the GitHub Action (scripts/add_tracks.js + build/sync).
+-- Stored in the DB so serverless (Vercel) can write it without touching the
+-- repo filesystem; the Action reads it via the authed API, applies the change,
+-- then clears the queue.
+CREATE TABLE IF NOT EXISTS pending_tracks (
+  id         INTEGER PRIMARY KEY,
+  url        TEXT NOT NULL,
+  artist     TEXT,
+  requested_title TEXT,
+  title      TEXT,
+  real_title TEXT,
+  real_author TEXT,
+  playable   INTEGER NOT NULL DEFAULT 0,
+  note       TEXT,
+  created_at TEXT NOT NULL,
+  applied_at TEXT
+);
