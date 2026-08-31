@@ -53,18 +53,22 @@ function isAdmin(req, adminKey) {
 }
 
 // Production DB instance, cached per process so SQLite file locks stay single
-// and the pg pool is reused across warm invocations.
+// and the pg pool is reused across warm invocations. If no database is
+// configured (e.g. a static Vercel deploy without DATABASE_URL), this returns
+// null and the API responds with a graceful "database not configured" 503 —
+// it must never crash the function, because the static frontend serves the
+// full catalog without the API and only pings it as an optional enhancement.
 function getDb() {
-  if (!globalThis.__outtakeDb) {
-    if (process.env.VERCEL && !process.env.DATABASE_URL) {
-      throw new Error('DATABASE_URL is required on Vercel (Neon/Supabase Postgres). Set it in project env vars.');
+  if (process.env.DATABASE_URL) {
+    if (!globalThis.__outtakeDb) {
+      const { createDb } = require('../src/db');
+      const db = createDb();
+      db.migrate();
+      globalThis.__outtakeDb = db;
     }
-    const { createDb } = require('../src/db');
-    const db = createDb();
-    db.migrate();
-    globalThis.__outtakeDb = db;
+    return globalThis.__outtakeDb;
   }
-  return globalThis.__outtakeDb;
+  return null;
 }
 
 function createCtx() {
@@ -78,9 +82,16 @@ function createCtx() {
 function wrap(handler) {
   return async function (req, res) {
     try {
-      await handler(req, res, createCtx());
+      const ctx = createCtx();
+      if (!ctx.db || !ctx.db.adapter) {
+        return json(res, 503, {
+          error: 'database not configured',
+          detail: 'Latency-free static catalog is bundled in the frontend; set DATABASE_URL only if you want this write/enrichment API.',
+        });
+      }
+      await handler(req, res, ctx);
     } catch (err) {
-      console.error('[api]', err);
+      console.error('[api]', err && err.stack ? err.stack : err);
       json(res, 500, { error: err.message || 'internal error' });
     }
   };
