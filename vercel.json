@@ -2,10 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "regions": ["iad1"],
-  "functions": {
-    "api/*.js": { "maxDuration": 60 },
-    "api/songs/[id].js": { "maxDuration": 60 }
-  },
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "assets/**", "use": "@vercel/static" },
+    { "src": "api/*.js", "use": "@vercel/node" },
+    { "src": "api/songs/[id].js", "use": "@vercel/node" }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",

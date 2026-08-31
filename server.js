@@ -39,8 +39,27 @@ const CONTENT_TYPES = {
 };
 
 function createApp({ db, adminKey, apiKey, probe } = {}) {
-  const database = db || createDb();
-  if (typeof database.migrate === 'function') database.migrate();
+  // In a serverless deployment (Vercel) without DATABASE_URL, Postgres isn't
+  // configured and SQLite on the instance is throwaway — so the root entrypoint
+  // must still serve the static frontend (which plays from its bundled catalog)
+  // and answer the API gracefully instead of crashing. A missing DB means the
+  // API returns a clean 503; the site is never blocked.
+  let database = null;
+  if (db) {
+    database = db;
+  } else if (process.env.DATABASE_URL) {
+    try {
+      database = createDb();
+      database.migrate();
+    } catch (err) { console.warn('[boot] DB unavailable:', err.message); database = null; }
+  }
+
+  const ctxBase = {
+    db: database,
+    adminKey: adminKey || process.env.ADMIN_KEY || '',
+    apiKey: apiKey || process.env.YOUTUBE_API_KEY || '',
+    probe,
+  };
 
   return http.createServer((req, res) => {
     const url = new URL(req.url, 'http://localhost');
@@ -50,12 +69,13 @@ function createApp({ db, adminKey, apiKey, probe } = {}) {
     if (pathname === '/api/upload' && req.method === 'POST') return handleUpload(req, res);
 
     if (pathname.startsWith('/api/')) {
-      const ctx = {
-        db: database,
-        adminKey: adminKey || process.env.ADMIN_KEY || '',
-        apiKey: apiKey || process.env.YOUTUBE_API_KEY || '',
-        probe,
-      };
+      if (!database) {
+        return json(res, 503, {
+          error: 'database not configured',
+          detail: 'The static catalog is bundled in the frontend; set DATABASE_URL only if you want this write/enrichment API.',
+        });
+      }
+      const ctx = { ...ctxBase, db: database };
       const route = API_ROUTES.find(r => r.re.test(pathname));
       if (!route) return json(res, 404, { error: 'endpoint not found' });
       return Promise.resolve(route.handler(req, res, ctx))
@@ -93,15 +113,23 @@ function handleUpload(req, res) {
 }
 
 if (require.main === module) {
-  const db = createDb();
-  db.migrate();
+  // Local dev boot: SQLite + auto-seed. On a serverless platform where the
+  // root entrypoint is invoked this way but no persistent DB is available,
+  // createApp() already degrades gracefully; if a local SQLite DB can't be
+  // made (e.g. read-only filesystem), still serve the static site with a 503
+  // API rather than crash the process.
+  let db = null;
+  try { db = createDb(); if (db && typeof db.migrate === 'function') db.migrate(); }
+  catch (err) { console.warn('[boot] local SQLite unavailable:', err.message); }
   const server = createApp({ db });
-  seedIfEmpty(db).then(seeded => {
-    if (seeded !== null) console.log(`[boot] auto-seeded ${seeded} songs into local SQLite`);
-  }).catch(err => console.warn('[boot] seed skipped:', err.message));
+  if (db) {
+    seedIfEmpty(db).then(seeded => {
+      if (seeded !== null) console.log(`[boot] auto-seeded ${seeded} songs into local SQLite`);
+    }).catch(err => console.warn('[boot] seed skipped:', err.message));
+  }
 
   const port = process.env.PORT || 8080;
-  server.listen(port, () => console.log(`OUTTAKE dev server: http://localhost:${port} (${db.adapter.kind})`));
+  server.listen(port, () => console.log(`OUTTAKE dev server: http://localhost:${port} (${db ? db.adapter.kind : 'static-only'})`));
 }
 
 module.exports = { createApp, API_ROUTES };
