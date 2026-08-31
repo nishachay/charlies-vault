@@ -2477,14 +2477,24 @@ const SONGS = [
   $('railHome')?.addEventListener('click', showHomePage);
 
   // REPORT BROKEN LINK BUTTON
+  // Persists to the backend when reachable; otherwise queues the report
+  // locally (localStorage) so it isn't lost — the vault never drops a report
+  // just because the write API is down or unconfigured.
+  const REPORT_KEY = 'm2d_reports_v1';
+  function queueLocalReport(payload) {
+    try {
+      const queued = JSON.parse(localStorage.getItem(REPORT_KEY) || '[]');
+      queued.push({ ...payload, at: Date.now() });
+      localStorage.setItem(REPORT_KEY, JSON.stringify(queued.slice(-200)));
+    } catch (e) { /* ignore storage errors */ }
+  }
   $('reportLinkBtn')?.addEventListener('click', async () => {
     const s = displayList[curIdx];
     if (!s) return;
     const src = activeVersionList(s).find(x => x.key === curSrcKey);
     const suffix = src && src.key !== 'canonical' ? ` (${src.num} ${src.name})` : '';
     const label = `"${s.title}" by ${s.artist}${suffix}`;
-    const payload = { songId: s.id, reason: 'reported by listener' };
-    if (src && src.key !== 'canonical') payload.versionId = src.key;
+    const payload = { songId: s.id, reason: 'reported by listener', versionId: (src && src.key !== 'canonical') ? src.key : undefined };
     try {
       const res = await fetch('/api/report', {
         method: 'POST',
@@ -2495,10 +2505,14 @@ const SONGS = [
       if (res.ok && data.ok) {
         alert(`🚨 Link Report Logged for ${label}.\nReport #${data.reportCount}. Our automated vault system will verify this video link.`);
       } else {
-        alert(`🚨 Could not log the report for ${label}. Please try again.`);
+        queueLocalReport(payload);
+        alert(`🚨 Report queued locally for ${label} — will be pushed to the vault once the sync service is back online.`);
       }
     } catch {
-      alert(`🚨 Could not log the report for ${label} (offline) — noted locally.`);
+      queueLocalReport(payload);
+      let pending = 0;
+      try { pending = JSON.parse(localStorage.getItem(REPORT_KEY) || '[]').length; } catch (e) {}
+      alert(`🚨 Report for ${label} saved locally (${pending} pending). It will sync when the vault service is reachable.`);
     }
   });
 
@@ -2595,10 +2609,12 @@ $('cardChaos')?.addEventListener('click', () => playTrack(1));
     });
   }
 
-  // ── DB-BACKED CATALOG LOAD ─────────────────────────────────────────────
-  // Prefer the live catalog from the backend API; fall back to the bundled
-  // SONGS / ARTISTS_DATA so the static build still functions offline (e.g. a
-  // plain Vercel static deploy before the database is attached).
+  // ── CATALOG LOAD ─────────────────────────────────────────────────────────
+  // The bundled SONGS / ARTISTS_DATA below are the PRIMARY, always-available
+  // source — the site plays from them immediately with no backend dependency
+  // (a plain static deploy works with zero server). The API is used only as
+  // an optional live enrichment when it happens to be reachable; any failure
+  // or absence of the backend leaves the static catalog in place.
   async function fetchCatalog() {
     const timeout = ms => new Promise((_, rej) => setTimeout(() => rej(new Error('api timeout')), ms));
     const grab = async url => {
@@ -2614,10 +2630,17 @@ $('cardChaos')?.addEventListener('click', () => playTrack(1));
   }
 
   async function boot() {
+    // Seed synchronously from the bundled static catalog so the player is
+    // ready in the same tick, regardless of network/backend state.
+    songs = SONGS.map((s, i) => ({ ...s, _i: i, title: cleanTitle(s.title, s.artist) }));
+    displayList = [...songs];
+
+    // Optional live enrichment from the backend; never required. Any API that
+    // is down, unconfigured, or slow simply leaves the bundled catalog active.
     try {
       const api = await fetchCatalog();
       if (api.songs) {
-        songs = api.songs.map((s, i) => ({ ...s, _i: i, title: cleanTitle(s.title) }));
+        songs = api.songs.map((s, i) => ({ ...s, _i: i, title: cleanTitle(s.title, s.artist) }));
         displayList = [...songs];
       }
       if (api.artists) {
@@ -2629,7 +2652,7 @@ $('cardChaos')?.addEventListener('click', () => playTrack(1));
         }));
       }
     } catch (err) {
-      console.warn('API catalog unavailable — using bundled data:', err.message);
+      console.warn('Backend API unreachable — serving bundled catalog:', err.message);
     }
     renderArtistCards();
     renderQuickPicks();

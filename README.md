@@ -1,8 +1,30 @@
 # { OUTTAKE }
 
-Unreleased music vault with a 3D vinyl / turntable player. **97 verified, playable Charlie Puth unreleased & demo tracks** (recovered and machine-verified from the original 99-track Charlie's Vault), streamed live through YouTube's official IFrame API (no audio files hosted). Every video is machine-verified before it ships — dead or private links are never surfaced.
+Unreleased music vault with a 3D vinyl / turntable player. **288 verified, playable unreleased & demo tracks across 12 artists** (97 Charlie Puth recovered from the original 99-track Charlie's Vault, 50 The Weeknd vault tracks, and 141 more across Kanye, Travis Scott, Drake, Justin Bieber, Post Malone, XXXTentacion, Lil Uzi Vert, Ariana Grande, Juice WRLD, Billie Eilish). Streamed live through YouTube's official IFrame API (no audio files hosted). Every video is machine-verified before it ships — dead or private links are never surfaced. Loves are stored in the browser (`localStorage`).
 
-**Stack:** single-file static frontend (`index.html`, vanilla HTML/CSS/JS) + a tiny DB-backed Node API. Runs anywhere you can run Node — locally on SQLite, in production on Vercel serverless + Postgres (Neon / Supabase).
+## Architecture: static-first
+
+This site is built the way a YouTube-iframe listening site should be: **the catalog is static data; a server is optional.**
+
+- **Plays from a bundled static catalog.** `index.html` embeds the full `SONGS`/`ARTISTS_DATA` arrays (regenerated from `scripts/catalog.json` via `npm run db:sync`). Opening the file on any static host immediately shows all 288 tracks and plays them through the official YouTube IFrame API — **no backend required**.
+- **Live API is an optional enhancement.** If `/api/*` is reachable, the frontend enriches from it; if it isn't (unconfigured, down, or a pure static deploy), the page still boots and plays instantly from its bundle. The player never blocks on the network.
+- **Reports degrade gracefully.** The "report broken link" button posts to `/api/report` when the API is up; otherwise the report is queued in `localStorage` so it's never lost.
+
+## Run the optional backend
+
+```bash
+node server.js
+# → http://localhost:8080  (frontend + the /api/* write/enrichment API)
+```
+
+First boot creates `data/vault.db` (SQLite) and seeds it from `scripts/catalog.json`. No `npm install` needed for local dev — SQLite uses Node's built-in `node:sqlite` (Node ≥ 22.5).
+
+```bash
+npm install   # optional — only for the Postgres backend path (installs `pg`)
+npm test      # node:test suite — models, API, video probe
+```
+
+> Deploying as a **pure static site** (no Node)? Just drop `index.html` on any static host. The site is fully functional; only the live-enrichment and report-sync features go dormant.
 
 ## Local setup
 
@@ -18,9 +40,9 @@ npm install   # only needed to deploy (installs `pg` for Postgres)
 npm test      # node:test suite — models, API, video probe
 ```
 
-## The database
+## The database (optional, backend only)
 
-One portable schema (`src/schema.sql`) for both backends:
+The catalog itself is static and needs no database. If you run the optional backend, it uses one portable schema (`src/schema.sql`) for either backend:
 
 - **Local dev / tests** — SQLite via `node:sqlite`, zero config.
 - **Production** — Postgres: set `DATABASE_URL` (Neon / Supabase, both have free tiers) and the same code runs; `?` placeholders are rewritten to Postgres `$n` automatically.
@@ -74,11 +96,13 @@ The Charlie Puth side is rebuilt from a recovered legacy source: `scripts/charli
 
 ## Deploy (Vercel)
 
-Static `index.html` + serverless API under `/api/*`. Set these project env vars (see `.env.example`):
+The frontend is **static** — the simplest correct deploy is to serve `index.html` as a static site, which works with no env vars and no build (songs play from the bundled catalog).
+
+To also enable the live-enrichment + report-sync API, deploy the `/api/*` functions and set:
 
 | Variable | Notes |
 | --- | --- |
-| `DATABASE_URL` | **Required** — Postgres connection string (SQLite won't persist on Vercel) |
+| `DATABASE_URL` | **Required to run `/api/*`** — Postgres connection string (SQLite won't persist on Vercel). Without it the API 500s, but the **static frontend still works**. |
 | `ADMIN_KEY` | Required for `/api/refresh` & `/api/save` |
 | `YOUTUBE_API_KEY` | Optional; enables authoritative YouTube API checks |
 
@@ -88,4 +112,4 @@ Source code: MIT. All audio streams from publicly available YouTube videos and b
 
 ---
 
-Derived from the original **Charlie's Vault** (99 unreleased Charlie Puth tracks): candidate links were recovered from it, machine-verified — **97 remain playable today** (1 now private). The prior multi-artist "grails" expansion shipped fabricated video links — those were removed in favor of only machine-verified, playable tracks.
+Derived from the original **Charlie's Vault** (99 unreleased Charlie Puth tracks): candidate links were recovered from it, machine-verified — **97 remain playable today** (1 now private). The prior multi-artist "grails" expansion shipped fabricated video links — those were removed in favor of only machine-verified, playable tracks, verified keyless via YouTube's oEmbed truth-check (real title/author) before anything ships.
