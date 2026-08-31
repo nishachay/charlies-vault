@@ -16,8 +16,8 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const { json } = require('./api/_lib');
-const handlers = require('./api/handlers');
+const { json } = require('./lib/apiLib');
+const handlers = require('./lib/apiHandlers');
 const { createDb } = require('./src/db');
 const { seedIfEmpty } = require('./src/seeder');
 

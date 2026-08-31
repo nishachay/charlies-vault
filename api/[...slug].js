@@ -1,8 +1,8 @@
 'use strict';
 // Single catch-all API function so the Hobby plan (max 12 functions) sees ONE,
 // not one per endpoint. All /api/* routes dispatch through handlers here.
-const { json, readBody, parseUrl, createCtx, wrap } = require('./_lib');
-const H = require('./handlers');
+const { json, readBody, parseUrl, createCtx, wrap } = require('../lib/apiLib');
+const H = require('../lib/apiHandlers');
 
 const ROUTES = [
   { re: /^\/api\/admin\/verify$/, handler: H.adminVerifyHandler },
