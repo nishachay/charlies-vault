@@ -116,7 +116,7 @@ function handleUpload(req, res) {
   target.on('finish', () => json(res, 200, { url: `/local_uploads/${cleanName}` }));
 }
 
-if (require.main === module) {
+if (require.main === module && !process.env.VERCEL) {
   // Local dev boot: SQLite + auto-seed. On a serverless platform where the
   // root entrypoint is invoked this way but no persistent DB is available,
   // createApp() already degrades gracefully; if a local SQLite DB can't be
@@ -136,4 +136,19 @@ if (require.main === module) {
   server.listen(port, () => console.log(`OUTTAKE dev server: http://localhost:${port} (${db ? db.adapter.kind : 'static-only'})`));
 }
 
-module.exports = { createApp, API_ROUTES };
+// Vercel entrypoint: serve the whole app (static + /api/*) through one Node
+// serverless function. Uses DATABASE_URL (Postgres) when set, else degrades to
+// static + 503 API. Exported as a callable (req,res); createApp/API_ROUTES stay
+// available for local dev and tests.
+const vercelHandler = (req, res) => {
+  const ctx = { db: null, adminKey: process.env.ADMIN_KEY || '', apiKey: process.env.YOUTUBE_API_KEY || '' };
+  if (process.env.DATABASE_URL) {
+    try { const db = createDb(); if (db && typeof db.migrate === 'function') db.migrate(); ctx.db = db; }
+    catch (err) { console.warn('[vercel] DB unavailable:', err.message); }
+  }
+  createApp({ db: ctx.db, adminKey: ctx.adminKey, apiKey: ctx.apiKey })(req, res);
+};
+
+vercelHandler.createApp = createApp;
+vercelHandler.API_ROUTES = API_ROUTES;
+module.exports = vercelHandler;
