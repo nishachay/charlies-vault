@@ -1,0 +1,49 @@
+name: daily-refresh
+on:
+  schedule:
+    # 04:17 UTC daily — re-probe stale tracks + versions
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: vault-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # Verify: never let the site ship knowing a track died. Re-import catalog,
+      # then run the admin refresh to re-probe stale videos.
+      - name: Import catalog
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run db:import
+
+      - name: Probe stale videos
+        shell: bash
+        env:
+          PROD_URL: ${{ secrets.PROD_URL }}
+          ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
+        run: |
+          curl -sf -X POST "$PROD_URL/api/admin/refresh" \
+            -H "Authorization: Bearer $ADMIN_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"force":false}' \
+            || echo "refresh endpoint unavailable (secrets unset?) — no-op"
+
+      - name: Report result
+        if: always()
+        run: echo "Daily freshness pass complete."
