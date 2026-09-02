@@ -66,27 +66,32 @@ export async function handleArtists(ctx: Ctx) {
   if (!ctx.db) {
     return { artists: getCatalog().artists };
   }
-  const rows = await ctx.db
-    .select({
-      slug: artists.slug,
-      name: artists.name,
-      avatarUrl: artists.avatarUrl,
-      bio: artists.bio,
-      trackCount: count(songs.id),
-    })
-    .from(artists)
-    .leftJoin(songs, eq(songs.artistId, artists.id))
-    .groupBy(artists.id)
-    .orderBy(asc(artists.name));
-  return {
-    artists: rows.map((r) => ({
-      slug: r.slug,
-      name: r.name,
-      avatarUrl: r.avatarUrl,
-      bio: r.bio,
-      trackCount: r.trackCount,
-    })),
-  };
+  try {
+    const rows = await ctx.db
+      .select({
+        slug: artists.slug,
+        name: artists.name,
+        avatarUrl: artists.avatarUrl,
+        bio: artists.bio,
+        trackCount: count(songs.id),
+      })
+      .from(artists)
+      .leftJoin(songs, eq(songs.artistId, artists.id))
+      .groupBy(artists.id)
+      .orderBy(asc(artists.name));
+    return {
+      artists: rows.map((r) => ({
+        slug: r.slug,
+        name: r.name,
+        avatarUrl: r.avatarUrl,
+        bio: r.bio,
+        trackCount: r.trackCount,
+      })),
+    };
+  } catch {
+    // DB set but momentarily unreachable — never 500 the public site.
+    return { artists: getCatalog().artists };
+  }
 }
 
 export async function handleSongs(ctx: Ctx, opts: { all?: boolean } = {}) {
@@ -97,84 +102,100 @@ export async function handleSongs(ctx: Ctx, opts: { all?: boolean } = {}) {
       : bundle.tracks.filter((t) => t.status === "active");
     return { songs: tracks };
   }
-  return { songs: await dbSongs(ctx.db, opts.all ?? false) };
+  try {
+    return { songs: await dbSongs(ctx.db, opts.all ?? false) };
+  } catch {
+    const bundle = getCatalog();
+    const tracks = opts.all
+      ? bundle.tracks
+      : bundle.tracks.filter((t) => t.status === "active");
+    return { songs: tracks };
+  }
 }
 
 export async function handleSongById(ctx: Ctx, id: string, opts: { all?: boolean } = {}) {
   const canon = id.includes("__v") ? id.split("__v")[0]! : id;
 
-  if (!ctx.db) {
-    const bundle = getCatalog();
-    const variant = bundle.tracks.find((t) => t.id === id);
-    if (!variant) throw new ApiError(404, "song not found");
-    const versions = bundle.tracks.filter(
-      (t) => t.songId === canon && t.id !== canon && (opts.all || t.status === "active"),
-    );
-    return { song: variant, versions };
+  if (!ctx.db) return staticSongById(id, canon, opts.all ?? false);
+
+  try {
+    const songRow = await ctx.db.query.songs.findFirst({
+      with: { artist: true },
+      where: (s, { eq: e }) => e(s.id, canon),
+    });
+    if (!songRow) throw new ApiError(404, "song not found");
+
+    const versionRows = await ctx.db.query.songVersions.findMany({
+      where: (v, { eq: e }) => e(v.songId, canon),
+      orderBy: (v, { asc: a }) => a(v.sortOrder),
+    });
+
+    const playableVersions = versionRows.filter((v) => opts.all || v.status === "active");
+
+    const wantedVersion =
+      id.includes("__v") && !opts.all
+        ? playableVersions.find((v) => v.id === id) ?? null
+        : null;
+
+    const artistName = songRow.artist.name;
+    const artistSlug = songRow.artist.slug;
+
+    const song: Variant = wantedVersion
+      ? {
+          id: wantedVersion.id,
+          songId: canon,
+          title: wantedVersion.label || songRow.title,
+          youtubeId: wantedVersion.youtubeId,
+          artistName,
+          artistSlug,
+          durationSec: songRow.durationSec,
+          label: wantedVersion.label ?? null,
+          status: wantedVersion.status as SongStatus,
+          reportCount: wantedVersion.reportCount,
+        }
+      : {
+          id: songRow.id,
+          songId: canon,
+          title: songRow.title,
+          youtubeId: songRow.youtubeId,
+          artistName,
+          artistSlug,
+          durationSec: songRow.durationSec,
+          label: null,
+          status: songRow.status as SongStatus,
+          reportCount: songRow.reportCount,
+        };
+
+    return {
+      song,
+      versions: playableVersions.map((v) => ({
+        id: v.id,
+        songId: canon,
+        title: v.label || songRow.title,
+        youtubeId: v.youtubeId,
+        artistName,
+        artistSlug,
+        durationSec: songRow.durationSec,
+        label: v.label ?? null,
+        status: v.status as SongStatus,
+        reportCount: v.reportCount,
+      })),
+    };
+  } catch (err) {
+    if (err instanceof ApiError) throw err;
+    // DB set but momentarily unreachable — never 500 the public site.
+    return staticSongById(id, canon, opts.all ?? false);
   }
+}
 
-  const songRow = await ctx.db.query.songs.findFirst({
-    with: { artist: true },
-    where: (s, { eq: e }) => e(s.id, canon),
-  });
-  if (!songRow) throw new ApiError(404, "song not found");
-
-  const versionRows = await ctx.db.query.songVersions.findMany({
-    where: (v, { eq: e }) => e(v.songId, canon),
-    orderBy: (v, { asc: a }) => a(v.sortOrder),
-  });
-
-  const playableVersions = versionRows.filter((v) => opts.all || v.status === "active");
-
-  const wantedVersion =
-    id.includes("__v") && !opts.all
-      ? playableVersions.find((v) => v.id === id) ?? null
-      : null;
-
-  const artistName = songRow.artist.name;
-  const artistSlug = songRow.artist.slug;
-
-  const song: Variant = wantedVersion
-    ? {
-        id: wantedVersion.id,
-        songId: canon,
-        title: wantedVersion.label || songRow.title,
-        youtubeId: wantedVersion.youtubeId,
-        artistName,
-        artistSlug,
-        durationSec: songRow.durationSec,
-        label: wantedVersion.label ?? null,
-        status: wantedVersion.status as SongStatus,
-        reportCount: wantedVersion.reportCount,
-      }
-    : {
-        id: songRow.id,
-        songId: canon,
-        title: songRow.title,
-        youtubeId: songRow.youtubeId,
-        artistName,
-        artistSlug,
-        durationSec: songRow.durationSec,
-        label: null,
-        status: songRow.status as SongStatus,
-        reportCount: songRow.reportCount,
-      };
-
-  return {
-    song,
-    versions: playableVersions.map((v) => ({
-      id: v.id,
-      songId: canon,
-      title: v.label || songRow.title,
-      youtubeId: v.youtubeId,
-      artistName,
-      artistSlug,
-      durationSec: songRow.durationSec,
-      label: v.label ?? null,
-      status: v.status as SongStatus,
-      reportCount: v.reportCount,
-    })),
-  };
+function staticSongById(id: string, canon: string, all: boolean) {
+  const bundle = getCatalog();
+  const variant = bundle.tracks.find((t) => t.id === id);
+  if (!variant) throw new ApiError(404, "song not found");
+  const versions = bundle.tracks.filter(
+    (t) => t.songId === canon && t.id !== canon && (all || t.status === "active"),
+  );
+  return { song: variant, versions };
 }
 
 export async function handleReport(
@@ -185,7 +206,12 @@ export async function handleReport(
   const songId = body.songId;
   if (!songId) throw new ApiError(400, "songId is required");
 
-  const songRow = await ctx.db.query.songs.findFirst({ where: (s, { eq: e }) => e(s.id, songId) });
+  let songRow;
+  try {
+    songRow = await ctx.db.query.songs.findFirst({ where: (s, { eq: e }) => e(s.id, songId) });
+  } catch {
+    throw new ApiError(503, "database unavailable");
+  }
   if (!songRow) throw new ApiError(404, "song not found");
 
   const versionId = body.versionId ?? null;
@@ -237,17 +263,22 @@ export async function handleSubmit(
   const id = extractYouTubeId(youtubeUrl);
   if (!id) throw new ApiError(400, "not a valid YouTube url or id");
 
-  const inserted = await ctx.db
-    .insert(pendingSubmissions)
-    .values({
-      id: crypto.randomUUID(),
-      youtubeUrl,
-      suggestedArtist: body.suggestedArtist?.trim() ?? null,
-      suggestedTitle: body.suggestedTitle?.trim() ?? null,
-      note: body.note?.trim() ?? null,
-      status: "pending",
-    })
-    .returning();
+  let inserted;
+  try {
+    inserted = await ctx.db
+      .insert(pendingSubmissions)
+      .values({
+        id: crypto.randomUUID(),
+        youtubeUrl,
+        suggestedArtist: body.suggestedArtist?.trim() ?? null,
+        suggestedTitle: body.suggestedTitle?.trim() ?? null,
+        note: body.note?.trim() ?? null,
+        status: "pending",
+      })
+      .returning();
+  } catch {
+    throw new ApiError(503, "database unavailable");
+  }
 
   return { ok: true, id: inserted[0]?.id };
 }
