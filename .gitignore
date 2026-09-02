@@ -61,3 +61,4 @@ scripts/curate_report.txt
 
 # Tooling lock file
 skills-lock.json
+.neon
