@@ -287,9 +287,14 @@ export async function handleSubmit(
 // Admin
 // ---------------------------------------------------------------------------
 
-function requireAdmin(ctx: Ctx) {
+async function requireAdmin(ctx: Ctx) {
   if (!ctx.admin) throw new ApiError(401, "unauthorized");
   if (!ctx.db) throw new ApiError(503, "database unavailable");
+  try {
+    await ctx.db.execute(sql`select 1`);
+  } catch {
+    throw new ApiError(503, "database unavailable");
+  }
 }
 
 export async function handleAdminVerify(_ctx: Ctx, url: string) {
@@ -298,7 +303,7 @@ export async function handleAdminVerify(_ctx: Ctx, url: string) {
 }
 
 export async function handleAdminPending(ctx: Ctx, opts: { all?: boolean } = {}) {
-  requireAdmin(ctx);
+  await requireAdmin(ctx);
   const rows = await ctx.db!.query.pendingSubmissions.findMany({
     orderBy: (p, { asc: a }) => a(p.createdAt),
     ...(opts.all ? {} : { where: (p, { eq: e }) => e(p.status, "pending") }),
@@ -307,7 +312,7 @@ export async function handleAdminPending(ctx: Ctx, opts: { all?: boolean } = {})
 }
 
 export async function handleAdminApprove(ctx: Ctx, body: { id?: string }) {
-  requireAdmin(ctx);
+  await requireAdmin(ctx);
   const id = body.id;
   if (!id) throw new ApiError(400, "id is required");
 
@@ -346,7 +351,7 @@ export async function handleAdminApprove(ctx: Ctx, body: { id?: string }) {
 }
 
 export async function handleAdminReject(ctx: Ctx, body: { id?: string }) {
-  requireAdmin(ctx);
+  await requireAdmin(ctx);
   const id = body.id;
   if (!id) throw new ApiError(400, "id is required");
   const updated = await ctx.db!
@@ -362,7 +367,7 @@ export async function handleAdminAddArtist(
   ctx: Ctx,
   body: { name?: string; slug?: string; avatarUrl?: string; bio?: string },
 ) {
-  requireAdmin(ctx);
+  await requireAdmin(ctx);
   const name = body.name?.trim();
   if (!name) throw new ApiError(400, "name is required");
   const slug = body.slug?.trim() || slugify(name);
@@ -397,7 +402,7 @@ export async function handleAdminAddSong(
     versionLabel?: string;
   },
 ) {
-  requireAdmin(ctx);
+  await requireAdmin(ctx);
   const url = body.youtubeUrl?.trim();
   if (!url) throw new ApiError(400, "youtubeUrl is required");
   const artistName = body.artist?.trim();
@@ -423,7 +428,7 @@ export async function handleAdminRefresh(
   body: { force?: boolean } = {},
   limit = 60,
 ) {
-  requireAdmin(ctx);
+  await requireAdmin(ctx);
   const staleness = body.force
     ? new Date(0)
     : new Date(Date.now() - 6 * 60 * 60 * 1000);
@@ -552,7 +557,7 @@ async function upsertSongFromProbe(
   ctx: Ctx,
   args: UpsertSongArgs,
 ): Promise<{ songId: string; versionId: string | null }> {
-  requireAdmin(ctx);
+  await requireAdmin(ctx);
   const db = ctx.db!;
   const { probe, artistName, versionLabel } = args;
   const title = args.title?.trim() || probe.title || `Untitled (${probe.youtubeId})`;
